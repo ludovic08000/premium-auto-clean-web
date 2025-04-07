@@ -1,7 +1,8 @@
 
 import { useState } from "react";
-import { Phone, Mail, Home, Calendar, AlertTriangle } from "lucide-react";
+import { Phone, Mail, Home, Calendar } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { sendEmail } from "@/services/EmailService";
 
 const ContactForm = () => {
   const { toast } = useToast();
@@ -23,39 +24,66 @@ const ContactForm = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setSubmitMessage(null);
     
-    // Simuler l'envoi du formulaire
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      // Envoi du formulaire via le service email
+      const success = await sendEmail(formData);
+      
+      if (success) {
+        setSubmitMessage({
+          type: "success",
+          text: "Votre demande a été envoyée avec succès. Nous vous contacterons dans les plus brefs délais."
+        });
+        
+        toast({
+          title: "Demande envoyée",
+          description: "Nous avons bien reçu votre demande et vous contacterons prochainement.",
+          duration: 5000,
+        });
+        
+        // Reset form after successful submission
+        setFormData({
+          nom: "",
+          email: "",
+          telephone: "",
+          vehicule: "",
+          service: "",
+          date: "",
+          message: "",
+        });
+      } else {
+        setSubmitMessage({
+          type: "error",
+          text: "Une erreur est survenue lors de l'envoi de votre demande. Veuillez réessayer ou nous contacter par téléphone."
+        });
+        
+        toast({
+          title: "Erreur",
+          description: "Problème lors de l'envoi du formulaire. Veuillez réessayer.",
+          variant: "destructive",
+          duration: 5000,
+        });
+      }
+    } catch (error) {
+      console.error("Erreur lors de la soumission du formulaire:", error);
       setSubmitMessage({
-        type: "success",
-        text: "Votre demande a été envoyée avec succès. Nous vous contacterons dans les plus brefs délais."
+        type: "error",
+        text: "Une erreur est survenue lors de l'envoi de votre demande. Veuillez réessayer ou nous contacter par téléphone."
       });
       
-      // Show toast notification
       toast({
-        title: "Demande envoyée",
-        description: "Nous avons bien reçu votre demande et vous contacterons prochainement.",
+        title: "Erreur",
+        description: "Problème lors de l'envoi du formulaire. Veuillez réessayer.",
+        variant: "destructive",
         duration: 5000,
       });
-      
-      // Reset form after successful submission
-      setFormData({
-        nom: "",
-        email: "",
-        telephone: "",
-        vehicule: "",
-        service: "",
-        date: "",
-        message: "",
-      });
-      
-      // Clear success message after 5 seconds
-      setTimeout(() => setSubmitMessage(null), 5000);
-    }, 1500);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -66,18 +94,6 @@ const ContactForm = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
           {/* Contact Form */}
           <div className="bg-dark p-6 rounded-lg border border-gold/30">
-            {/* Demo mode notification banner */}
-            <div className="mb-6 p-4 border border-amber-500/30 bg-amber-900/20 rounded-md flex items-start gap-3">
-              <AlertTriangle className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
-              <div>
-                <h4 className="font-bold text-amber-500 mb-1">Mode démonstration</h4>
-                <p className="text-sm text-gold/80">
-                  Ce formulaire est actuellement en mode démonstration. Aucun email ne sera envoyé.
-                  Pour nous contacter, veuillez utiliser les coordonnées indiquées à droite.
-                </p>
-              </div>
-            </div>
-            
             <form onSubmit={handleSubmit}>
               <div className="mb-4">
                 <label htmlFor="nom" className="block mb-2 text-gold/80">Nom complet</label>
