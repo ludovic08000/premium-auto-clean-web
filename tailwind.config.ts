@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -24,6 +25,16 @@ export default {
 				ring: 'hsl(var(--ring))',
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
+				gold: {
+					DEFAULT: '#D4AF37',
+					light: '#F5D67B',
+					dark: '#BD9A35'
+				},
+				dark: {
+					DEFAULT: '#111111',
+					light: '#222222',
+					lighter: '#333333'
+				},
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
 					foreground: 'hsl(var(--primary-foreground))'
@@ -63,6 +74,10 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				}
 			},
+			fontFamily: {
+				sans: ['Poppins', 'sans-serif'],
+				serif: ['Playfair Display', 'serif'],
+			},
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
@@ -84,11 +99,34 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'fade-in': {
+					'0%': { 
+						opacity: '0', 
+						transform: 'translateY(20px)' 
+					},
+					'100%': { 
+						opacity: '1',
+						transform: 'translateY(0)'
+					}
+				},
+				'shine': {
+					'0%': { 
+						backgroundPosition: '200% 0' 
+					},
+					'100%': { 
+						backgroundPosition: '-200% 0' 
+					},
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'fade-in': 'fade-in 0.8s ease-out forwards',
+				'shine': 'shine 3s linear infinite'
+			},
+			backgroundImage: {
+				'gradient-gold': 'linear-gradient(45deg, #D4AF37, #F5D67B, #D4AF37)',
 			}
 		}
 	},
