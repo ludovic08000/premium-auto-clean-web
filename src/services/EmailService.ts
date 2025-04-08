@@ -41,22 +41,24 @@ export const sendEmail = async (data: EmailData): Promise<boolean> => {
     
     console.log("Réponse d'EmailJS (admin):", adminResponse);
     
-    // Préparation des paramètres spécifiques pour le client (email de confirmation)
-    // Important: Le client email doit être passé en tant que 'reply_to' pour le template EmailJS
+    // Pour l'email client, utilisez directement la méthode sendForm qui permet de spécifier le destinataire
+    // Préparons un template différent pour le client avec tous les paramètres nécessaires
     const clientTemplateParams = {
       to_name: data.nom,
-      reply_to: data.email, // Utiliser reply_to pour l'email du destinataire
+      to_email: data.email, // Email du client comme destinataire direct
       service: data.service,
       vehicule: data.vehicule,
       date_souhaitee: data.date,
       message: "Merci pour votre demande de rendez-vous. Nous vous contacterons dans les plus brefs délais pour confirmer votre rendez-vous.",
-      subject: "✅ Confirmation RDV - Premium Auto Clean"
+      subject: "✅ Confirmation RDV - Premium Auto Clean",
+      from_name: "Premium Auto Clean",
+      from_email: "contact@premiumautoclean.com"
     };
     
     // Envoi de l'email de confirmation au client
     const clientResponse = await emailjs.send(
       "premium_smtp", // Service ID
-      "template_gw4kn1m", // Template ID - utiliser le template existant
+      "template_client", // Template ID pour le client - assurez-vous que ce template existe dans votre compte EmailJS
       clientTemplateParams
     );
     
