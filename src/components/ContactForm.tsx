@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -50,8 +50,16 @@ const heures = [
 ];
 
 const ContactForm = () => {
+  console.log("ContactForm component is rendering");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+
+  useEffect(() => {
+    console.log("ContactForm component is mounted");
+    return () => {
+      console.log("ContactForm component is unmounting");
+    };
+  }, []);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -66,6 +74,7 @@ const ContactForm = () => {
   });
 
   const onSubmit = async (values: FormValues) => {
+    console.log("Form submitted with values:", values);
     setIsSubmitting(true);
     try {
       const formattedDate = format(values.date, "dd/MM/yyyy", { locale: fr });
@@ -164,7 +173,7 @@ const ContactForm = () => {
   };
 
   return (
-    <div className="container py-16">
+    <div id="contact" className="container py-16">
       <h2 className="text-3xl font-bold text-center mb-8">
         Demandez un rendez-vous
       </h2>
