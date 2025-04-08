@@ -34,7 +34,7 @@ const ContactForm = () => {
       telephone: "",
       vehicule: "",
       service: "",
-      date: new Date(), // Add a default date value
+      date: new Date(), // Date par défaut nécessaire
       heure: "",
       message: "",
     },
