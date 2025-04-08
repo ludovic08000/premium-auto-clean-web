@@ -17,6 +17,9 @@ const AdminLink: React.FC = () => {
     if (newClicks >= 5) {
       navigate('/admin');
       setClicks(0);
+      console.log("Navigation vers /admin");
+    } else {
+      console.log(`Clic ${newClicks}/5 sur AdminLink`);
     }
     
     // Réinitialiser après 3 secondes sans clic
@@ -29,6 +32,7 @@ const AdminLink: React.FC = () => {
     <span 
       onClick={handleClick} 
       className="cursor-default select-none"
+      title={clicks > 0 ? `${clicks}/5` : undefined}
     >
       &copy;
     </span>

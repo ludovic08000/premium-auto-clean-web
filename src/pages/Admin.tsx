@@ -1,10 +1,9 @@
 
 import React, { useState, useEffect } from "react";
-import { Navigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
 import AdminDashboard from "@/components/admin/AdminDashboard";
 
 const ADMIN_PASSWORD = "premiumadmin2024"; // Idéalement, ce mot de passe devrait être stocké de manière sécurisée
