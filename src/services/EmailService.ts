@@ -1,5 +1,6 @@
 
 import { toast } from "@/hooks/use-toast";
+import emailjs from "emailjs-com";
 
 interface EmailData {
   nom: string;
@@ -11,24 +12,41 @@ interface EmailData {
   message: string;
 }
 
+// Initialize EmailJS
+emailjs.init("bzjjpS39IdapP6Fpp"); // Public key
+
 export const sendEmail = async (data: EmailData): Promise<boolean> => {
   try {
-    console.log("Envoi des données au script PHP:", data);
+    console.log("Préparation des données pour EmailJS:", data);
     
-    // Chemin vers votre script PHP sur le serveur
-    const phpScriptUrl = "/send-email.php"; // Assurez-vous que ce chemin est correct
+    // Préparation des données pour l'envoi par EmailJS
+    const templateParams = {
+      from_name: data.nom,
+      from_email: data.email,
+      telephone: data.telephone,
+      vehicule: data.vehicule,
+      service: data.service,
+      date_souhaitee: data.date,
+      message: data.message,
+    };
     
-    const response = await fetch(phpScriptUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(data)
-    });
+    // Envoi de l'email avec EmailJS
+    const response = await emailjs.send(
+      "premium_smtp", // Service ID
+      "template_gw4kn1m", // Template ID
+      templateParams
+    );
     
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error("Erreur lors de l'envoi de l'email:", errorData);
+    console.log("Réponse d'EmailJS:", response);
+    
+    if (response.status === 200) {
+      toast({
+        title: "Message envoyé",
+        description: "Votre demande a été envoyée avec succès. Nous vous contacterons bientôt.",
+        duration: 5000,
+      });
+      return true;
+    } else {
       toast({
         title: "Erreur d'envoi",
         description: "Le message n'a pas pu être envoyé. Veuillez réessayer ou nous contacter par téléphone.",
@@ -37,17 +55,6 @@ export const sendEmail = async (data: EmailData): Promise<boolean> => {
       });
       return false;
     }
-    
-    const result = await response.json();
-    console.log("Réponse du script PHP:", result);
-    
-    toast({
-      title: "Message envoyé",
-      description: "Votre demande a été envoyée avec succès. Nous vous contacterons bientôt.",
-      duration: 5000,
-    });
-    
-    return true;
   } catch (error) {
     console.error("Erreur lors de l'envoi de l'email:", error);
     toast({
