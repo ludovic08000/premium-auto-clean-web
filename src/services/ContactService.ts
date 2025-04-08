@@ -4,17 +4,7 @@ import { fr } from "date-fns/locale";
 import { v4 as uuidv4 } from "uuid";
 import { useToast } from "@/hooks/use-toast";
 import emailjs from "emailjs-com";
-
-export interface ContactFormValues {
-  nom: string;
-  email: string;
-  telephone: string;
-  vehicule: string;
-  service: string;
-  date: Date;
-  heure: string;
-  message?: string;
-}
+import { ContactFormValues } from "@/schemas/contactFormSchema";
 
 export const submitContactForm = async (
   values: ContactFormValues,
