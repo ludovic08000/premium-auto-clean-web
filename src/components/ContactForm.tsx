@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Phone, Mail, Home, Calendar, Clock } from "lucide-react";
+import { Phone, Mail, Home, Calendar as CalendarIcon, Clock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { sendEmail } from "@/services/EmailService";
 import { format } from "date-fns";
@@ -230,7 +230,7 @@ const ContactForm = () => {
                           !date && "text-gold/50"
                         )}
                       >
-                        <Calendar className="mr-2 h-4 w-4 text-gold" />
+                        <CalendarIcon className="mr-2 h-4 w-4 text-gold" />
                         {date ? format(date, "dd MMMM yyyy", { locale: fr }) : <span>Choisir une date</span>}
                       </Button>
                     </PopoverTrigger>
@@ -336,7 +336,7 @@ const ContactForm = () => {
                 
                 <div className="flex items-start gap-4">
                   <div className="p-3 rounded-full bg-dark border border-gold/30">
-                    <Calendar className="h-5 w-5 text-gold" />
+                    <CalendarIcon className="h-5 w-5 text-gold" />
                   </div>
                   <div>
                     <h4 className="font-bold mb-1">Horaires d'ouverture</h4>
