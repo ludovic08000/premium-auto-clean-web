@@ -19,8 +19,8 @@ export const sendEmail = async (data: EmailData): Promise<boolean> => {
   try {
     console.log("Préparation des données pour EmailJS:", data);
     
-    // Préparation des données pour l'envoi par EmailJS
-    const templateParams = {
+    // Préparation des données pour l'envoi par EmailJS (notification admin)
+    const adminTemplateParams = {
       from_name: data.nom,
       from_email: data.email,
       telephone: data.telephone,
@@ -28,18 +28,39 @@ export const sendEmail = async (data: EmailData): Promise<boolean> => {
       service: data.service,
       date_souhaitee: data.date,
       message: data.message,
+      to_email: "contact@premiumautoclean.com",
+      subject: "📅 Nouveau RDV client - " + data.nom,
     };
     
-    // Envoi de l'email avec EmailJS
-    const response = await emailjs.send(
+    // Envoi de l'email avec EmailJS (notification admin)
+    const adminResponse = await emailjs.send(
       "premium_smtp", // Service ID
       "template_gw4kn1m", // Template ID
-      templateParams
+      adminTemplateParams
     );
     
-    console.log("Réponse d'EmailJS:", response);
+    console.log("Réponse d'EmailJS (admin):", adminResponse);
     
-    if (response.status === 200) {
+    // Préparation des données pour l'email de confirmation au client
+    const clientTemplateParams = {
+      to_name: data.nom,
+      to_email: data.email,
+      service: data.service,
+      vehicule: data.vehicule,
+      date_souhaitee: data.date,
+      subject: "✅ Confirmation RDV - Premium Auto Clean"
+    };
+    
+    // Envoi de l'email de confirmation au client
+    const clientResponse = await emailjs.send(
+      "premium_smtp", // Service ID
+      "template_client", // Template ID pour email client (à créer dans EmailJS)
+      clientTemplateParams
+    );
+    
+    console.log("Réponse d'EmailJS (client):", clientResponse);
+    
+    if (adminResponse.status === 200) {
       toast({
         title: "Message envoyé",
         description: "Votre demande a été envoyée avec succès. Nous vous contacterons bientôt.",
