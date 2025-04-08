@@ -1,11 +1,25 @@
 
 import { useState } from "react";
-import { Phone, Mail, Home, Calendar } from "lucide-react";
+import { Phone, Mail, Home, Calendar, Clock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { sendEmail } from "@/services/EmailService";
+import { format } from "date-fns";
+import { fr } from "date-fns/locale";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { cn } from "@/lib/utils";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const ContactForm = () => {
   const { toast } = useToast();
+  const [date, setDate] = useState<Date | undefined>(undefined);
   const [formData, setFormData] = useState({
     nom: "",
     email: "",
@@ -13,6 +27,7 @@ const ContactForm = () => {
     vehicule: "",
     service: "",
     date: "",
+    heure: "",
     message: "",
   });
   
@@ -24,6 +39,32 @@ const ContactForm = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleDateSelect = (selectedDate: Date | undefined) => {
+    setDate(selectedDate);
+    if (selectedDate) {
+      setFormData((prev) => ({ 
+        ...prev, 
+        date: format(selectedDate, 'yyyy-MM-dd')
+      }));
+    }
+  };
+
+  const handleHeureChange = (value: string) => {
+    setFormData((prev) => ({ ...prev, heure: value }));
+  };
+
+  // Génération des créneaux horaires disponibles
+  const generateHeures = () => {
+    const heures = [];
+    for (let h = 9; h <= 18; h++) {
+      if (h !== 12 && h !== 13) { // Exclure la pause déjeuner
+        heures.push(`${h}:00`);
+        heures.push(`${h}:30`);
+      }
+    }
+    return heures;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -31,7 +72,10 @@ const ContactForm = () => {
     
     try {
       // Envoi du formulaire via le service email
-      const success = await sendEmail(formData);
+      const success = await sendEmail({
+        ...formData,
+        date: date ? `${format(date, 'dd/MM/yyyy', { locale: fr })} à ${formData.heure}` : ""
+      });
       
       if (success) {
         setSubmitMessage({
@@ -53,8 +97,10 @@ const ContactForm = () => {
           vehicule: "",
           service: "",
           date: "",
+          heure: "",
           message: "",
         });
+        setDate(undefined);
       } else {
         setSubmitMessage({
           type: "error",
@@ -172,16 +218,50 @@ const ContactForm = () => {
                 </div>
               </div>
               
-              <div className="mb-4">
-                <label htmlFor="date" className="block mb-2 text-gold/80">Date souhaitée</label>
-                <input
-                  type="date"
-                  id="date"
-                  name="date"
-                  value={formData.date}
-                  onChange={handleChange}
-                  className="w-full bg-dark-light border border-gold/30 rounded-md px-4 py-2 text-gold focus:border-gold focus:outline-none"
-                />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label className="block mb-2 text-gold/80">Date souhaitée</label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className={cn(
+                          "w-full bg-dark-light border border-gold/30 text-left p-2 font-normal",
+                          !date && "text-gold/50"
+                        )}
+                      >
+                        <Calendar className="mr-2 h-4 w-4 text-gold" />
+                        {date ? format(date, "dd MMMM yyyy", { locale: fr }) : <span>Choisir une date</span>}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0 bg-dark border border-gold/30" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={date}
+                        onSelect={handleDateSelect}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+                <div>
+                  <label className="block mb-2 text-gold/80">Heure souhaitée</label>
+                  <Select
+                    value={formData.heure}
+                    onValueChange={handleHeureChange}
+                  >
+                    <SelectTrigger className="w-full bg-dark-light border border-gold/30 rounded-md px-4 py-2 text-gold focus:border-gold focus:outline-none">
+                      <SelectValue placeholder="Sélectionner une heure" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-dark border border-gold/30">
+                      {generateHeures().map((heure) => (
+                        <SelectItem key={heure} value={heure} className="text-gold hover:bg-gold/10">
+                          {heure}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
               
               <div className="mb-6">
@@ -198,8 +278,8 @@ const ContactForm = () => {
               
               <button
                 type="submit"
-                disabled={isSubmitting}
-                className="w-full btn-gold flex justify-center items-center"
+                disabled={isSubmitting || !date || !formData.heure}
+                className="w-full btn-gold flex justify-center items-center disabled:opacity-50"
               >
                 {isSubmitting ? (
                   <span className="inline-block w-5 h-5 border-2 border-dark border-t-transparent rounded-full animate-spin mr-2"></span>
