@@ -54,13 +54,13 @@ export const sendEmail = async (data: EmailData): Promise<boolean> => {
     // Envoi de l'email de confirmation au client
     const clientResponse = await emailjs.send(
       "premium_smtp", // Service ID
-      "template_client", // Template ID pour email client (à créer dans EmailJS)
+      "template_client", // Template ID pour email client
       clientTemplateParams
     );
     
     console.log("Réponse d'EmailJS (client):", clientResponse);
     
-    if (adminResponse.status === 200) {
+    if (adminResponse.status === 200 && clientResponse.status === 200) {
       toast({
         title: "Message envoyé",
         description: "Votre demande a été envoyée avec succès. Nous vous contacterons bientôt.",
