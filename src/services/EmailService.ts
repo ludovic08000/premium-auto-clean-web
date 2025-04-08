@@ -41,22 +41,26 @@ export const sendEmail = async (data: EmailData): Promise<boolean> => {
     
     console.log("Réponse d'EmailJS (admin):", adminResponse);
     
-    // Configuration pour l'email auto-reply au client
+    // Configuration pour l'email auto-reply au client - s'assurer que tous les champs nécessaires sont remplis
     const clientTemplateParams = {
-      to_name: data.nom,
-      to_email: data.email,
-      service: data.service,
-      vehicule: data.vehicule,
-      date_souhaitee: data.date,
-      subject: "✅ Confirmation RDV - Premium Auto Clean",
+      to_name: data.nom || "Client",  // Assurer qu'il y a toujours un nom
+      to_email: data.email,  // Email du client comme destinataire
+      reply_to: "contact@premiumautoclean.com",  // Pour les réponses
       from_name: "Premium Auto Clean",
-      from_email: "contact@premiumautoclean.com"
+      from_email: "contact@premiumautoclean.com",
+      service: data.service || "Service demandé",
+      vehicule: data.vehicule || "Véhicule",
+      date_souhaitee: data.date || "À confirmer",
+      subject: "✅ Confirmation RDV - Premium Auto Clean",
+      email: data.email  // Ajout d'un champ email supplémentaire au cas où le template l'utiliserait
     };
+    
+    console.log("Envoi de confirmation au client:", clientTemplateParams);
     
     // Envoi de l'email de confirmation au client avec le template auto-reply
     const clientResponse = await emailjs.send(
       "premium_smtp", // Service ID
-      "template_x6ttulj", // Template ID d'auto-réponse fourni par l'utilisateur
+      "template_x6ttulj", // Template ID d'auto-réponse
       clientTemplateParams
     );
     
