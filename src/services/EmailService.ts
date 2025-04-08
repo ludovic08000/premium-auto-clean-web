@@ -41,15 +41,13 @@ export const sendEmail = async (data: EmailData): Promise<boolean> => {
     
     console.log("Réponse d'EmailJS (admin):", adminResponse);
     
-    // Préparation des données pour l'email de confirmation au client
+    // Préparation des paramètres spécifiques pour le client (email de confirmation)
+    // Important: Le client email doit être passé en tant que 'reply_to' pour le template EmailJS
     const clientTemplateParams = {
-      from_name: "Premium Auto Clean",
-      from_email: "contact@premiumautoclean.com",
       to_name: data.nom,
-      to_email: data.email, // Le destinataire est l'email du client
-      telephone: data.telephone,
-      vehicule: data.vehicule,
+      reply_to: data.email, // Utiliser reply_to pour l'email du destinataire
       service: data.service,
+      vehicule: data.vehicule,
       date_souhaitee: data.date,
       message: "Merci pour votre demande de rendez-vous. Nous vous contacterons dans les plus brefs délais pour confirmer votre rendez-vous.",
       subject: "✅ Confirmation RDV - Premium Auto Clean"
