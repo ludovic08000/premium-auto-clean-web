@@ -9,6 +9,7 @@ import Footer from "@/components/Footer";
 import { Toaster } from "@/components/ui/toaster";
 
 const Index = () => {
+  console.log("Index component is rendering");
   return (
     <div className="min-h-screen bg-dark text-gold">
       <Navbar />
