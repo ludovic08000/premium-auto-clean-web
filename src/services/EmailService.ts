@@ -21,13 +21,13 @@ export const sendEmail = async (data: EmailData): Promise<boolean> => {
     
     // Préparation des données pour l'envoi par EmailJS (notification admin)
     const adminTemplateParams = {
-      from_name: data.nom,
-      from_email: data.email,
-      telephone: data.telephone,
-      vehicule: data.vehicule,
-      service: data.service,
-      date_souhaitee: data.date,
-      message: data.message,
+      nom: data.nom, // Utilise le format {{nom}} dans le template
+      email: data.email, // Utilise le format {{email}} dans le template
+      telephone: data.telephone, // Utilise le format {{telephone}} dans le template
+      vehicule: data.vehicule, // Utilise le format {{vehicule}} dans le template
+      service: data.service, // Utilise le format {{service}} dans le template
+      date: data.date, // Utilise le format {{date}} dans le template
+      message: data.message, // Utilise le format {{message}} dans le template
       to_email: "contact@premiumautoclean.com",
       subject: "📅 Nouveau RDV client - " + data.nom,
     };
@@ -43,16 +43,20 @@ export const sendEmail = async (data: EmailData): Promise<boolean> => {
     
     // Configuration pour l'email auto-reply au client - s'assurer que tous les champs nécessaires sont remplis
     const clientTemplateParams = {
-      to_name: data.nom || "Client",  // Assurer qu'il y a toujours un nom
-      to_email: data.email,  // Email du client comme destinataire
-      reply_to: "contact@premiumautoclean.com",  // Pour les réponses
+      to_name: data.nom || "Client",
+      to_email: data.email,
+      reply_to: "contact@premiumautoclean.com",
       from_name: "Premium Auto Clean",
       from_email: "contact@premiumautoclean.com",
       service: data.service || "Service demandé",
       vehicule: data.vehicule || "Véhicule",
       date_souhaitee: data.date || "À confirmer",
       subject: "✅ Confirmation RDV - Premium Auto Clean",
-      email: data.email  // Ajout d'un champ email supplémentaire au cas où le template l'utiliserait
+      email: data.email,
+      nom: data.nom, // Ajout pour la compatibilité avec les variables {{nom}} dans le template client
+      telephone: data.telephone, // Ajout pour la compatibilité avec {{telephone}}
+      date: data.date, // Ajout pour la compatibilité avec {{date}}
+      message: data.message // Ajout pour la compatibilité avec {{message}}
     };
     
     console.log("Envoi de confirmation au client:", clientTemplateParams);
