@@ -1,9 +1,20 @@
 
+# Active la réécriture d'URL
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
-  RewriteRule ^index\.html$ - [L]
+  
+  # Ne pas rediriger si le fichier existe
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule . /index.html [L]
+  
+  # Rediriger toutes les autres requêtes vers index.html
+  RewriteRule ^(.*)$ index.html [QSA,L]
+</IfModule>
+
+# Configurer les en-têtes CORS si nécessaire
+<IfModule mod_headers.c>
+  <FilesMatch "\.(html|js|css)$">
+    Header set Access-Control-Allow-Origin "*"
+  </FilesMatch>
 </IfModule>
