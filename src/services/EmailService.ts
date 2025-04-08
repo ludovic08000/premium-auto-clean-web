@@ -9,7 +9,7 @@ interface EmailData {
   vehicule: string;
   service: string;
   date: string;
-  heure?: string;
+  heure: string;
   message: string;
 }
 
@@ -27,7 +27,8 @@ export const sendEmail = async (data: EmailData): Promise<boolean> => {
       telephone: data.telephone, // Utilise le format {{telephone}} dans le template
       vehicule: data.vehicule, // Utilise le format {{vehicule}} dans le template
       service: data.service, // Utilise le format {{service}} dans le template
-      date: data.date, // Utilise le format {{date}} dans le template incluant l'heure
+      date: data.date, // Utilise le format {{date}} dans le template
+      heure: data.heure, // Utilise le format {{heure}} dans le template
       message: data.message, // Utilise le format {{message}} dans le template
       to_email: "contact@premiumautoclean.com",
       subject: "📅 Nouveau RDV client - " + data.nom,
@@ -51,12 +52,13 @@ export const sendEmail = async (data: EmailData): Promise<boolean> => {
       from_email: "contact@premiumautoclean.com",
       service: data.service || "Service demandé",
       vehicule: data.vehicule || "Véhicule",
-      date_souhaitee: data.date || "À confirmer", // Cette variable inclut maintenant la date et l'heure
+      date: data.date || "À confirmer", // Format date
+      heure: data.heure || "À confirmer", // Heure spécifique du rendez-vous
+      date_souhaitee: `${data.date || "À confirmer"} à ${data.heure || "À confirmer"}`, // Combinaison date et heure
       subject: "✅ Confirmation RDV - Premium Auto Clean",
       email: data.email,
       nom: data.nom, // Ajout pour la compatibilité avec les variables {{nom}} dans le template client
       telephone: data.telephone, // Ajout pour la compatibilité avec {{telephone}}
-      date: data.date, // Ajout pour la compatibilité avec {{date}}
       message: data.message // Ajout pour la compatibilité avec {{message}}
     };
     
