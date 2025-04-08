@@ -1,40 +1,70 @@
 
-import { CarFront } from "lucide-react";
+import { Facebook, Instagram, Mail, Phone } from "lucide-react";
+import { Link } from "react-router-dom";
+import AdminLink from "./AdminLink";
 
 const Footer = () => {
-  const currentYear = new Date().getFullYear();
-  
   return (
-    <footer className="bg-black pt-16 pb-8">
+    <footer className="bg-dark text-gold pt-12 pb-6 border-t border-gold/10">
       <div className="container mx-auto px-4">
-        <div className="flex flex-col md:flex-row justify-between items-center mb-12">
-          <div className="flex items-center gap-2 mb-6 md:mb-0">
-            <CarFront className="h-8 w-8 text-gold" />
-            <h2 className="text-2xl font-serif font-bold gold-gradient-text">Premium Auto Clean</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div>
+            <h3 className="text-xl font-bold mb-4">Premium Auto Clean</h3>
+            <p className="mb-2">Nettoyage automobile professionnel</p>
+            <p>SIRET: 123 456 789 00012</p>
           </div>
-          
-          <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2">
-            <a href="#services" className="text-gold/70 hover:text-gold transition-colors">Services</a>
-            <a href="#tarifs" className="text-gold/70 hover:text-gold transition-colors">Tarifs</a>
-            <a href="#abonnements" className="text-gold/70 hover:text-gold transition-colors">Abonnements</a>
-            <a href="#contact" className="text-gold/70 hover:text-gold transition-colors">Contact</a>
-          </nav>
+
+          <div>
+            <h3 className="text-xl font-bold mb-4">Contact</h3>
+            <div className="flex items-center mb-2">
+              <Phone size={18} className="mr-2" />
+              <a href="tel:0606060606" className="hover:text-gold/80">06 06 06 06 06</a>
+            </div>
+            <div className="flex items-center mb-2">
+              <Mail size={18} className="mr-2" />
+              <a href="mailto:contact@premiumautoclean.com" className="hover:text-gold/80">
+                contact@premiumautoclean.com
+              </a>
+            </div>
+            <div className="flex mt-4">
+              <a href="https://facebook.com" className="mr-4 hover:text-gold/80" aria-label="Facebook">
+                <Facebook size={24} />
+              </a>
+              <a href="https://instagram.com" className="hover:text-gold/80" aria-label="Instagram">
+                <Instagram size={24} />
+              </a>
+            </div>
+          </div>
+
+          <div>
+            <h3 className="text-xl font-bold mb-4">Informations</h3>
+            <ul>
+              <li className="mb-2">
+                <Link to="/" className="hover:text-gold/80">
+                  Accueil
+                </Link>
+              </li>
+              <li className="mb-2">
+                <a href="#services" className="hover:text-gold/80">
+                  Services
+                </a>
+              </li>
+              <li className="mb-2">
+                <a href="#tarifs" className="hover:text-gold/80">
+                  Tarifs
+                </a>
+              </li>
+              <li>
+                <a href="#contact" className="hover:text-gold/80">
+                  Contact
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
-        
-        <div className="border-t border-gold/20 pt-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="text-gold/60 text-sm text-center md:text-left">
-              <p>© {currentYear} Premium Auto Clean. Tous droits réservés.</p>
-              <p>SIRET: 98515908600018</p>
-            </div>
-            <div className="text-gold/60 text-sm text-center md:text-right">
-              <p>19 chemin du haut du thuex, 08000 Charleville-Mézières</p>
-              <p>
-                <a href="tel:0649754342" className="hover:text-gold transition-colors">06 49 75 43 42</a> | 
-                <a href="mailto:contact@premiumautoclean.com" className="hover:text-gold transition-colors"> contact@premiumautoclean.com</a>
-              </p>
-            </div>
-          </div>
+
+        <div className="border-t border-gold/10 mt-8 pt-6 text-center text-sm">
+          <AdminLink /> 2024 Premium Auto Clean - Tous droits réservés
         </div>
       </div>
     </footer>
