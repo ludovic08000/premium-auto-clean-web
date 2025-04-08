@@ -10,16 +10,18 @@ import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 import NavbarAdmin from "./components/NavbarAdmin";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+    },
+  },
+});
 
 const App = () => {
   useEffect(() => {
     console.log("App component is mounting");
-    
-    // Vérifiez si le DOM est correctement chargé
     console.log("Root element:", document.getElementById("root"));
-    
-    // Vérifier les erreurs potentielles de route
     console.log("Current pathname:", window.location.pathname);
     
     return () => {
@@ -41,7 +43,6 @@ const App = () => {
                 <Admin />
               </>
             } />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
           <Toaster />

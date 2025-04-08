@@ -10,14 +10,15 @@ const AdminLink: React.FC = () => {
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     const newClicks = clicks + 1;
     setClicks(newClicks);
     
     // Après 5 clics, rediriger vers la page admin
     if (newClicks >= 5) {
-      navigate('/admin');
-      setClicks(0);
       console.log("Navigation vers /admin");
+      setClicks(0);
+      navigate('/admin');
     } else {
       console.log(`Clic ${newClicks}/5 sur AdminLink`);
     }

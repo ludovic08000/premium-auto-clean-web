@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
 
 const NavbarAdmin = () => {
+  console.log("Rendering NavbarAdmin component");
   return (
     <div className="bg-dark border-b border-gold/20 p-2">
       <div className="container flex justify-between items-center">

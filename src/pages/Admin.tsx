@@ -15,28 +15,37 @@ const Admin = () => {
   const { toast } = useToast();
 
   useEffect(() => {
+    console.log("Admin component mounting");
     // Vérifier si l'utilisateur est déjà authentifié via localStorage
     const authStatus = localStorage.getItem("adminAuth");
     if (authStatus === "true") {
       setIsAuthenticated(true);
+      console.log("User already authenticated");
     }
+
+    return () => {
+      console.log("Admin component unmounting");
+    };
   }, []);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    console.log("Login attempt");
 
     // Simuler un léger délai pour l'authentification
     setTimeout(() => {
       if (password === ADMIN_PASSWORD) {
         setIsAuthenticated(true);
         localStorage.setItem("adminAuth", "true");
+        console.log("Login successful");
         toast({
           title: "Connexion réussie",
           description: "Bienvenue dans l'interface d'administration",
           variant: "default",
         });
       } else {
+        console.log("Login failed");
         toast({
           title: "Erreur d'authentification",
           description: "Mot de passe incorrect",
@@ -50,12 +59,15 @@ const Admin = () => {
   const handleLogout = () => {
     setIsAuthenticated(false);
     localStorage.removeItem("adminAuth");
+    console.log("Logout successful");
     toast({
       title: "Déconnexion",
       description: "Vous avez été déconnecté avec succès",
       variant: "default",
     });
   };
+
+  console.log("Admin is rendering, isAuthenticated:", isAuthenticated);
 
   if (isAuthenticated) {
     return (
