@@ -51,10 +51,10 @@ export const sendEmail = async (data: EmailData): Promise<boolean> => {
       subject: "✅ Confirmation RDV - Premium Auto Clean"
     };
     
-    // Envoi de l'email de confirmation au client
+    // Envoi de l'email de confirmation au client - utiliser le même template que pour l'admin
     const clientResponse = await emailjs.send(
       "premium_smtp", // Service ID
-      "template_client", // Template ID pour email client
+      "template_gw4kn1m", // Template ID - utiliser le template existant
       clientTemplateParams
     );
     
