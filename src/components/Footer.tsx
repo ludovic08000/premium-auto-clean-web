@@ -1,7 +1,6 @@
 
 import { Facebook, Instagram, Mail, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
-import AdminLink from "./AdminLink";
 
 const Footer = () => {
   return (
@@ -64,7 +63,7 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-gold/10 mt-8 pt-6 text-center text-sm">
-          <AdminLink /> 2024 Premium Auto Clean - Tous droits réservés
+          &copy; 2024 Premium Auto Clean - Tous droits réservés
         </div>
       </div>
     </footer>
