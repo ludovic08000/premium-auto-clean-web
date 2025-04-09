@@ -16,14 +16,14 @@ const MessageField = ({ form }: MessageFieldProps) => {
       name="message"
       render={({ field }) => (
         <FormItem>
-          <FormLabel className="text-gold flex items-center gap-2">
+          <FormLabel className="label-gold">
             <MessageSquare className="h-4 w-4" />
             <span>Message (facultatif)</span>
           </FormLabel>
           <FormControl>
             <Textarea
               placeholder="Votre message"
-              className="bg-dark-light border-gold/30 text-gold resize-none hover:border-gold/60 transition-all"
+              className="input-gold"
               {...field}
             />
           </FormControl>
