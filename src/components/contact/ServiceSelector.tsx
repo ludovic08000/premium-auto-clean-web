@@ -15,7 +15,8 @@ const ServiceSelector = ({ form }: ServiceSelectorProps) => {
     "Lavage extérieur",
     "Lavage complet",
     "Rénovation esthétique",
-    "Traitement céramique"
+    "Traitement céramique",
+    "Abonnement"
   ];
   
   return (
