@@ -4,12 +4,23 @@ import emailjs from "emailjs-com";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { ContactFormValues } from "@/schemas/contactFormSchema";
+import { validateCSRFToken } from "./CSRFService";
 
 // Initialize EmailJS avec la clé publique
 emailjs.init("bzjjpS39IdapP6Fpp");
 
-export const sendEmail = async (values: ContactFormValues): Promise<boolean> => {
+export const sendEmail = async (values: any): Promise<boolean> => {
   console.log("Form submitted with values:", values);
+  
+  // Vérifie le token CSRF
+  const csrfToken = values.csrfToken;
+  delete values.csrfToken; // Supprime le token des données à envoyer
+  
+  if (!csrfToken || !validateCSRFToken(csrfToken)) {
+    console.error("CSRF token invalid or missing");
+    toast.error("Erreur de sécurité: veuillez rafraîchir la page et réessayer.");
+    return false;
+  }
   
   try {
     const formattedDate = format(values.date, "dd/MM/yyyy", { locale: fr });
