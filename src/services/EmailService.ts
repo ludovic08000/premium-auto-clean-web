@@ -1,38 +1,37 @@
 
 import { toast } from "sonner";
 import emailjs from "emailjs-com";
-
-interface EmailData {
-  nom: string;
-  email: string;
-  telephone: string;
-  vehicule: string;
-  service: string;
-  date: string;
-  heure: string;
-  message: string;
-}
+import { format } from "date-fns";
+import { fr } from "date-fns/locale";
+import { ContactFormValues } from "@/schemas/contactFormSchema";
 
 // Initialize EmailJS avec la clé publique
 emailjs.init("bzjjpS39IdapP6Fpp");
 
-export const sendEmail = async (data: EmailData): Promise<boolean> => {
+export const sendEmail = async (values: ContactFormValues): Promise<boolean> => {
+  console.log("Form submitted with values:", values);
+  
   try {
-    console.log("Préparation des données pour EmailJS:", data);
+    const formattedDate = format(values.date, "dd/MM/yyyy", { locale: fr });
+    const formattedDateTime = `${formattedDate} à ${values.heure}`;
     
     // Préparation des données pour l'envoi par EmailJS (notification admin)
     const adminTemplateParams = {
-      nom: data.nom,
-      email: data.email,
-      telephone: data.telephone,
-      vehicule: data.vehicule,
-      service: data.service,
-      date: data.date,
-      heure: data.heure,
-      message: data.message,
+      to_name: "Administration Premium Auto Clean",
+      from_name: values.nom,
+      reply_to: values.email,
+      subject: `Nouvelle demande de ${values.service}`,
+      nom: values.nom,
+      email: values.email,
+      telephone: values.telephone,
+      vehicule: values.vehicule,
+      service: values.service,
+      date: formattedDateTime,
+      message: values.message || "",
       to_email: "contact@premiumautoclean.com",
-      subject: "📅 Nouveau RDV client - " + data.nom,
     };
+    
+    console.log("Préparation des données pour EmailJS:", adminTemplateParams);
     
     // Envoi de l'email avec EmailJS (notification admin)
     const adminResponse = await emailjs.send(
@@ -45,21 +44,20 @@ export const sendEmail = async (data: EmailData): Promise<boolean> => {
     
     // Configuration pour l'email auto-reply au client
     const clientTemplateParams = {
-      to_name: data.nom || "Client",
-      to_email: data.email,
+      to_name: values.nom || "Client",
+      to_email: values.email,
       reply_to: "contact@premiumautoclean.com",
       from_name: "Premium Auto Clean",
       from_email: "contact@premiumautoclean.com",
-      service: data.service || "Service demandé",
-      vehicule: data.vehicule || "Véhicule",
-      date: data.date || "À confirmer",
-      heure: data.heure || "À confirmer",
-      date_souhaitee: `${data.date || "À confirmer"} à ${data.heure || "À confirmer"}`,
+      service: values.service || "Service demandé",
+      vehicule: values.vehicule || "Véhicule",
+      date: formattedDateTime,
+      date_souhaitee: formattedDateTime,
       subject: "✅ Confirmation RDV - Premium Auto Clean",
-      email: data.email,
-      nom: data.nom,
-      telephone: data.telephone,
-      message: data.message
+      email: values.email,
+      nom: values.nom,
+      telephone: values.telephone,
+      message: values.message || ""
     };
     
     console.log("Envoi de confirmation au client:", clientTemplateParams);
@@ -81,8 +79,30 @@ export const sendEmail = async (data: EmailData): Promise<boolean> => {
       return false;
     }
   } catch (error) {
-    console.error("Erreur lors de l'envoi de l'email:", error);
-    toast.error("Le message n'a pas pu être envoyé. Veuillez réessayer ou nous contacter par téléphone.");
+    console.error("Erreur lors de l'envoi de l'email:", error, typeof error);
+    // Affichage d'informations plus détaillées sur l'erreur
+    if (error instanceof Error) {
+      toast.error(`Erreur: ${error.message}`);
+    } else {
+      toast.error("Le message n'a pas pu être envoyé. Veuillez réessayer ou nous contacter par téléphone.");
+    }
     return false;
   }
 };
+
+export const heures = [
+  "9:00",
+  "9:30",
+  "10:00",
+  "10:30",
+  "11:00",
+  "11:30",
+  "14:00",
+  "14:30",
+  "15:00",
+  "15:30",
+  "16:00",
+  "16:30",
+  "17:00",
+  "17:30",
+];

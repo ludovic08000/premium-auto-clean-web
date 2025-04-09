@@ -2,11 +2,10 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { contactFormSchema, ContactFormValues } from "@/schemas/contactFormSchema";
-import { submitContactForm } from "@/services/ContactService";
+import { sendEmail } from "@/services/EmailService";
 import PersonalInfoFields from "@/components/contact/PersonalInfoFields";
 import VehicleSelector from "@/components/contact/VehicleSelector";
 import ServiceSelector from "@/components/contact/ServiceSelector";
@@ -17,7 +16,6 @@ import MessageField from "@/components/contact/MessageField";
 const ContactForm = () => {
   console.log("ContactForm component is rendering");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { toast } = useToast();
 
   useEffect(() => {
     console.log("ContactForm component is mounted");
@@ -41,10 +39,13 @@ const ContactForm = () => {
   });
 
   const onSubmit = async (values: ContactFormValues) => {
+    console.log("Submitting form with values:", values);
     setIsSubmitting(true);
     try {
-      await submitContactForm(values, toast);
-      form.reset();
+      const success = await sendEmail(values);
+      if (success) {
+        form.reset();
+      }
     } finally {
       setIsSubmitting(false);
     }

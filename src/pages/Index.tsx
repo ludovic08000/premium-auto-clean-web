@@ -6,7 +6,6 @@ import Tarifs from "@/components/Tarifs";
 import Abonnements from "@/components/Abonnements";
 import ContactForm from "@/components/ContactForm";
 import Footer from "@/components/Footer";
-import { Toaster } from "@/components/ui/toaster";
 
 const Index = () => {
   console.log("Index component is rendering");
@@ -19,7 +18,6 @@ const Index = () => {
       <Abonnements />
       <ContactForm />
       <Footer />
-      <Toaster />
     </div>
   );
 };
