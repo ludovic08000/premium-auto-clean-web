@@ -3,7 +3,7 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/comp
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { UseFormReturn } from "react-hook-form";
 import { ContactFormValues } from "@/schemas/contactFormSchema";
-import { heures } from "@/services/EmailService";
+import { heures } from "@/services/ContactService";
 
 interface TimeSelectorProps {
   form: UseFormReturn<ContactFormValues>;
