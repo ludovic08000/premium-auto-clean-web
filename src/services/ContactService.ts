@@ -72,19 +72,6 @@ export const submitContactForm = async (
 
     console.log("Réponse d'EmailJS (client):", clientResponse);
 
-    // Stocker le rendez-vous dans localStorage pour l'admin
-    const appointment = {
-      id: uuidv4(),
-      ...values,
-      date: formattedDate,
-      createdAt: new Date().toISOString(),
-    };
-
-    // Récupérer les rendez-vous existants ou initialiser un tableau vide
-    const existingAppointments = JSON.parse(localStorage.getItem("appointments") || "[]");
-    const updatedAppointments = [...existingAppointments, appointment];
-    localStorage.setItem("appointments", JSON.stringify(updatedAppointments));
-
     // Afficher un message de succès
     toast({
       title: "Demande envoyée !",
