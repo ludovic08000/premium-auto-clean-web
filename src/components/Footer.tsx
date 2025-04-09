@@ -63,7 +63,7 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-gold/10 mt-8 pt-6 text-center text-sm">
-          &copy; 2024 Premium Auto Clean - Tous droits réservés
+          &copy; 2025 Premium Auto Clean - Tous droits réservés
         </div>
       </div>
     </footer>
