@@ -1,4 +1,3 @@
-
 import { Facebook, Instagram, Mail, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -10,7 +9,7 @@ const Footer = () => {
           <div>
             <h3 className="text-xl font-bold mb-4">Premium Auto Clean</h3>
             <p className="mb-2">Nettoyage automobile professionnel</p>
-            <p>SIRET: 123 456 789 00012</p>
+            <p>SIRET: 985 159 086 00018</p>
           </div>
 
           <div>
