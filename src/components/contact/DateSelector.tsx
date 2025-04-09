@@ -21,14 +21,17 @@ const DateSelector = ({ form }: DateSelectorProps) => {
       name="date"
       render={({ field }) => (
         <FormItem className="flex flex-col">
-          <FormLabel>Date souhaitée</FormLabel>
+          <FormLabel className="text-gold flex items-center gap-2">
+            <CalendarIcon className="h-4 w-4" />
+            <span>Date souhaitée</span>
+          </FormLabel>
           <Popover>
             <PopoverTrigger asChild>
               <FormControl>
                 <Button
                   variant={"outline"}
                   className={cn(
-                    "w-[240px] bg-dark border-gold/30 text-gold justify-start text-left font-normal",
+                    "w-full bg-dark-light border-gold/30 text-gold justify-start text-left font-normal hover:border-gold/60 transition-all",
                     !field.value && "text-muted-foreground"
                   )}
                 >
@@ -53,10 +56,11 @@ const DateSelector = ({ form }: DateSelectorProps) => {
                   date < new Date() || date > new Date(new Date().setDate(new Date().getDate() + 30))
                 }
                 initialFocus
+                className="bg-dark-light rounded-md"
               />
             </PopoverContent>
           </Popover>
-          <FormMessage />
+          <FormMessage className="text-red-400" />
         </FormItem>
       )}
     />
