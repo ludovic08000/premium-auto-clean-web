@@ -17,7 +17,7 @@ const Footer = () => {
             <h3 className="text-xl font-bold mb-4">Contact</h3>
             <div className="flex items-center mb-2">
               <Phone size={18} className="mr-2" />
-              <a href="tel:0606060606" className="hover:text-gold/80">06 06 06 06 06</a>
+              <a href="tel:0649754342" className="hover:text-gold/80">06 49 75 43 42</a>
             </div>
             <div className="flex items-center mb-2">
               <Mail size={18} className="mr-2" />
