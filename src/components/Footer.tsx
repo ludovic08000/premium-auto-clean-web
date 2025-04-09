@@ -1,3 +1,4 @@
+
 import { Facebook, Instagram, Mail, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -25,10 +26,10 @@ const Footer = () => {
               </a>
             </div>
             <div className="flex mt-4">
-              <a href="https://facebook.com" className="mr-4 hover:text-gold/80" aria-label="Facebook">
+              <a href="https://www.facebook.com/profile.php?id=61573982003043" className="mr-4 hover:text-gold/80" aria-label="Facebook">
                 <Facebook size={24} />
               </a>
-              <a href="https://instagram.com" className="hover:text-gold/80" aria-label="Instagram">
+              <a href="https://www.instagram.com/premium_auto_clean08/" className="hover:text-gold/80" aria-label="Instagram">
                 <Instagram size={24} />
               </a>
             </div>
