@@ -67,6 +67,114 @@ const Index = () => {
           {
             "@type": "City",
             "name": "Reims"
+          },
+          {
+            "@type": "City",
+            "name": "Sedan"
+          },
+          {
+            "@type": "City",
+            "name": "Rethel"
+          },
+          {
+            "@type": "City",
+            "name": "Vouziers"
+          },
+          {
+            "@type": "City",
+            "name": "Givet"
+          },
+          {
+            "@type": "City",
+            "name": "Fumay"
+          },
+          {
+            "@type": "City",
+            "name": "Nouzonville"
+          },
+          {
+            "@type": "City",
+            "name": "Bogny-sur-Meuse"
+          },
+          {
+            "@type": "City",
+            "name": "Carignan"
+          },
+          {
+            "@type": "City",
+            "name": "Mouzon"
+          },
+          {
+            "@type": "City",
+            "name": "Attigny"
+          },
+          {
+            "@type": "City",
+            "name": "Monthermé"
+          },
+          {
+            "@type": "City",
+            "name": "Vrigne-aux-Bois"
+          },
+          {
+            "@type": "City",
+            "name": "Donchery"
+          },
+          {
+            "@type": "City",
+            "name": "Bazeilles"
+          },
+          {
+            "@type": "City",
+            "name": "Rocroi"
+          },
+          {
+            "@type": "City",
+            "name": "Signy-l'Abbaye"
+          },
+          {
+            "@type": "City",
+            "name": "Château-Porcien"
+          },
+          {
+            "@type": "City",
+            "name": "Juniville"
+          },
+          {
+            "@type": "City",
+            "name": "Fismes"
+          },
+          {
+            "@type": "City",
+            "name": "Bazancourt"
+          },
+          {
+            "@type": "City",
+            "name": "Witry-lès-Reims"
+          },
+          {
+            "@type": "City",
+            "name": "Bétheny"
+          },
+          {
+            "@type": "City",
+            "name": "Cormontreuil"
+          },
+          {
+            "@type": "City",
+            "name": "Tinqueux"
+          },
+          {
+            "@type": "State",
+            "name": "Ardennes"
+          },
+          {
+            "@type": "State",
+            "name": "Marne"
+          },
+          {
+            "@type": "State",
+            "name": "Grand Est"
           }
         ],
         "priceRange": "€€",
