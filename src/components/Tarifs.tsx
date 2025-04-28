@@ -1,4 +1,3 @@
-
 const PriceCard = ({ 
   title, 
   price, 
@@ -22,8 +21,8 @@ const PriceCard = ({
 
 const ServiceItem = ({ name, price }: { name: string; price: string }) => (
   <div className="flex justify-between items-center py-2 border-b border-gold/20" itemScope itemType="https://schema.org/Offer">
-    <span className="text-gold/80" itemProp="name">{name}</span>
-    <span className="font-bold" itemProp="price">{price}</span>
+    <span className="text-gold/80 flex-1" itemProp="name">{name}</span>
+    <span className="font-bold text-right whitespace-nowrap" itemProp="price">{price}</span>
     <meta itemProp="priceCurrency" content="EUR" />
   </div>
 );
