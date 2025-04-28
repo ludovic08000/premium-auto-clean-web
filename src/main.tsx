@@ -4,7 +4,7 @@ import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 
-// Fonction d'initialisation simplifiée qui fonctionne partout
+// Fonction d'initialisation simplifiée qui évite les problèmes de MIME type
 function initializeApp() {
   try {
     console.log("Initialisation de l'application...");
@@ -35,5 +35,13 @@ function initializeApp() {
   }
 }
 
-// Démarrer immédiatement l'application
-initializeApp();
+// Démarrer l'application quand le DOM est chargé
+document.addEventListener('DOMContentLoaded', initializeApp);
+
+// Backup pour s'assurer que l'application démarre
+window.addEventListener('load', function() {
+  if (!document.documentElement.classList.contains('js-loaded')) {
+    console.log("Tentative de récupération après le chargement complet...");
+    initializeApp();
+  }
+});

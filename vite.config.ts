@@ -18,12 +18,14 @@ export default defineConfig(({ mode }) => ({
     // Configuration spécifique pour la compatibilité maximale
     rollupOptions: {
       output: {
-        // Utiliser des noms de fichiers compatibles
-        entryFileNames: 'assets/[name].js',
+        // Utiliser des noms de fichiers simples et compatibles
+        entryFileNames: 'assets/main.js',
         chunkFileNames: 'assets/[name].js',
         assetFileNames: 'assets/[name].[ext]',
-        // Format compatible avec IONOS et l'aperçu
-        format: mode === 'production' ? 'iife' : 'es',
+        // Toujours utiliser IIFE pour maximiser la compatibilité
+        format: 'iife',
+        // Désactiver les chunks pour simplifier
+        manualChunks: undefined
       }
     },
     // Assurer une compatibilité maximale du JavaScript
