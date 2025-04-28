@@ -21,7 +21,9 @@ export default defineConfig(({ mode }) => ({
         entryFileNames: 'assets/[name].js',
         chunkFileNames: 'assets/[name].js',
         assetFileNames: 'assets/[name].[ext]'
-      }
+      },
+      // Assurer que JSX est correctement traité
+      context: 'window'
     },
     // Assurer une compatibilité maximale du JavaScript
     target: 'es2015',
@@ -35,11 +37,13 @@ export default defineConfig(({ mode }) => ({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
+    extensions: ['.js', '.jsx', '.ts', '.tsx', '.json']
   },
   // Optimiser pour l'environnement de prévisualisation
   optimizeDeps: {
     esbuildOptions: {
-      target: 'es2015'
+      target: 'es2015',
+      jsx: 'automatic'
     }
   }
 }));
