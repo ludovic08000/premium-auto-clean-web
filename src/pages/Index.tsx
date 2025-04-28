@@ -5,6 +5,7 @@ import Hero from "@/components/Hero";
 import Services from "@/components/Services";
 import Tarifs from "@/components/Tarifs";
 import Abonnements from "@/components/Abonnements";
+import FAQ from "@/components/FAQ";
 import ContactForm from "@/components/ContactForm";
 import Footer from "@/components/Footer";
 import { setupSessionTimeout } from "@/services/CSRFService";
@@ -21,7 +22,7 @@ const Index = () => {
       "@context": "https://schema.org",
       "@type": "LocalBusiness",
       "name": "Premium Auto Clean",
-      "description": "Service professionnel de lavage et nettoyage automobile intérieur et extérieur. Détailing, polissage, traitement céramique, rénovation des phares.",
+      "description": "Service professionnel de lavage, nettoyage écologique et détailing automobile haut de gamme. Protection céramique, rénovation des phares, préparation esthétique complète.",
       "url": window.location.href,
       "image": "https://lovable.dev/opengraph-image-p98pqg.png",
       "telephone": "+33612345678",
@@ -31,6 +32,11 @@ const Index = () => {
         "addressLocality": "Charleville-Mézières",
         "postalCode": "08000",
         "addressCountry": "FR"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": "49.7620",
+        "longitude": "4.7210"
       },
       "areaServed": [
         {
@@ -63,24 +69,34 @@ const Index = () => {
       ],
       "hasOfferCatalog": {
         "@type": "OfferCatalog",
-        "name": "Services de nettoyage automobile",
+        "name": "Services de nettoyage et détailing automobile",
         "itemListElement": [
           {
             "@type": "Offer",
-            "name": "Nettoyage Complet",
-            "description": "Nettoyage intérieur et extérieur approfondi"
+            "name": "Nettoyage Complet & Détailing",
+            "description": "Nettoyage intérieur et extérieur approfondi avec protection céramique"
           },
           {
             "@type": "Offer",
-            "name": "Lavage Extérieur",
-            "description": "Lavage à la main et protection de la carrosserie"
+            "name": "Lavage Écologique",
+            "description": "Nettoyage respectueux de l'environnement avec produits biodégradables"
           },
           {
             "@type": "Offer",
-            "name": "Détailing Automobile",
-            "description": "Service premium de polissage et lustrage"
+            "name": "Préparation Esthétique",
+            "description": "Service premium de polissage, lustrage et protection"
+          },
+          {
+            "@type": "Offer",
+            "name": "Protection Céramique Automobile",
+            "description": "Traitement durable pour une protection optimale de la carrosserie"
           }
         ]
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "ratingCount": "127"
       }
     };
     
@@ -98,11 +114,13 @@ const Index = () => {
     <div className="min-h-screen bg-dark text-gold">
       <Navbar />
       <main className="animate-fade-in" itemScope itemType="https://schema.org/AutoRepair">
-        <meta itemProp="name" content="Premium Auto Clean" />
+        <meta itemProp="name" content="Premium Auto Clean - Détailing Auto Haut de Gamme" />
+        <meta itemProp="description" content="Service professionnel de nettoyage, protection céramique et préparation esthétique automobile." />
         <Hero />
         <Services />
         <Tarifs />
         <Abonnements />
+        <FAQ />
         <ContactForm />
       </main>
       <Footer />

@@ -3,13 +3,25 @@
 User-agent: *
 Allow: /
 Disallow: /private/
+Disallow: /admin/
+Disallow: /backend/
 
 # Règles spécifiques pour Googlebot
 User-agent: Googlebot
 Allow: /
+Crawl-delay: 5
 
 # Règles spécifiques pour Bing
 User-agent: Bingbot
+Allow: /
+Crawl-delay: 5
+
+# Règles pour Google Mobile
+User-agent: Googlebot-Mobile
+Allow: /
+
+# Règles pour Google Image
+User-agent: Googlebot-Image
 Allow: /
 
 # Règles spécifiques pour réseaux sociaux
@@ -24,3 +36,11 @@ Sitemap: https://premiumautoclean.com/sitemap.xml
 
 # Taux d'exploration recommandé
 Crawl-delay: 10
+
+# Optimisation des images
+Request-rate: 1/5
+Visit-time: 0800-2300
+
+# Host spécifique
+Host: premiumautoclean.com
+
