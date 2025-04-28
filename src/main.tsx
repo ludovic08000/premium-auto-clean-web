@@ -4,7 +4,7 @@ import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 
-// Fonction d'initialisation simplifiée qui évite les problèmes de MIME type
+// Fonction d'initialisation pour l'environnement de prévisualisation et de production
 function initializeApp() {
   try {
     console.log("Initialisation de l'application...");
@@ -35,13 +35,13 @@ function initializeApp() {
   }
 }
 
-// Démarrer l'application quand le DOM est chargé
-document.addEventListener('DOMContentLoaded', initializeApp);
+// Exécuter l'initialisation immédiatement pour l'environnement de prévisualisation
+initializeApp();
 
-// Backup pour s'assurer que l'application démarre
-window.addEventListener('load', function() {
+// Ajouter un écouteur d'événements pour s'assurer que l'application démarre également 
+// quand le DOM est complètement chargé (utile pour la production)
+document.addEventListener('DOMContentLoaded', () => {
   if (!document.documentElement.classList.contains('js-loaded')) {
-    console.log("Tentative de récupération après le chargement complet...");
     initializeApp();
   }
 });

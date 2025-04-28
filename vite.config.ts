@@ -18,20 +18,18 @@ export default defineConfig(({ mode }) => ({
     // Configuration spécifique pour la compatibilité maximale
     rollupOptions: {
       output: {
-        // Utiliser des noms de fichiers simples et compatibles
-        entryFileNames: 'assets/main.js',
+        // Configuration adaptée à l'environnement de prévisualisation et de production
+        entryFileNames: 'assets/[name].js',
         chunkFileNames: 'assets/[name].js',
-        assetFileNames: 'assets/[name].[ext]',
-        // Toujours utiliser IIFE pour maximiser la compatibilité
-        format: 'iife',
-        // Désactiver les chunks pour simplifier
-        manualChunks: undefined
+        assetFileNames: 'assets/[name].[ext]'
       }
     },
     // Assurer une compatibilité maximale du JavaScript
     target: 'es2015',
     // Configuration pour l'aperçu et IONOS
-    modulePreload: false
+    modulePreload: {
+      polyfill: true
+    }
   },
   plugins: [
     react(),
