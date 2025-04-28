@@ -66,4 +66,3 @@
 
 # Protection contre les attaques par clickjacking
 Header always append X-Frame-Options SAMEORIGIN
-
