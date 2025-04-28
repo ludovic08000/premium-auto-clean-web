@@ -26,6 +26,10 @@
   RewriteCond %{HTTPS} off
   RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
   
+  # Traitement spécial pour les fichiers JavaScript
+  RewriteCond %{REQUEST_URI} \.(js|mjs|jsx|tsx)$
+  RewriteRule ^(.*)$ js-proxy.php?file=$1 [L,QSA]
+  
   # Traiter les fichiers .js et .mjs correctement (spécifique à IONOS)
   RewriteCond %{REQUEST_URI} \.(js|mjs)$
   RewriteCond %{HTTP:Accept-Encoding} gzip
@@ -33,7 +37,7 @@
   RewriteRule ^(.*)$ $1.gz [L]
   
   # Correction spécifique à IONOS pour les fichiers JavaScript
-  <FilesMatch "\.(js|mjs)$">
+  <FilesMatch "\.(js|mjs|jsx|tsx)$">
     SetHandler application/javascript
   </FilesMatch>
   
@@ -82,7 +86,14 @@
   # En-têtes CORS pour les ressources spécifiques
   <FilesMatch "\.(html|js|jsx|tsx|css|mjs)$">
     Header set Access-Control-Allow-Origin "*"
+    Header set Content-Type "application/javascript" env=IS_JS
   </FilesMatch>
+  
+  # Définir une variable d'environnement pour les fichiers JavaScript
+  SetEnvIf Request_URI "\.js$" IS_JS
+  SetEnvIf Request_URI "\.mjs$" IS_JS
+  SetEnvIf Request_URI "\.jsx$" IS_JS
+  SetEnvIf Request_URI "\.tsx$" IS_JS
   
   # En-têtes de sécurité
   Header always set X-Content-Type-Options "nosniff"
@@ -105,17 +116,8 @@
 # Protection contre les attaques par clickjacking
 Header always append X-Frame-Options SAMEORIGIN
 
-# Redirection spécifique IONOS pour les fichiers JSX/TSX
-<IfModule mod_rewrite.c>
-  RewriteEngine On
-  RewriteBase /
-  
-  # Si un fichier .jsx ou .tsx est demandé mais n'existe pas, essayer PHP proxy
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteRule ^(.+\.(jsx|tsx|js|mjs))$ /fixmime.php?file=$1 [L,QSA]
-</IfModule>
-
-# Utiliser PHP pour servir les scripts JavaScript si nécessaire
-<FilesMatch "fixmime\.php$">
+# Utiliser PHP pour servir les scripts JavaScript
+<FilesMatch "\.(js|mjs|jsx|tsx)$">
   SetHandler application/x-httpd-php
+  Action application/javascript /js-proxy.php
 </FilesMatch>
