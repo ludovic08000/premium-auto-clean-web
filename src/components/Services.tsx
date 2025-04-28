@@ -53,6 +53,12 @@ const Services = () => {
   };
 
   useEffect(() => {
+    // Initialize all cards as visible by default
+    const lazyCards = document.querySelectorAll('[data-lazy-card]');
+    lazyCards.forEach(card => {
+      card.classList.add('animate-fade-in');
+    });
+
     const observerOptions = {
       threshold: 0.1,
       rootMargin: '0px 0px 100px 0px'
@@ -68,7 +74,11 @@ const Services = () => {
     }, observerOptions);
 
     Object.values(sectionRefs).forEach(ref => {
-      if (ref.current) observer.observe(ref.current);
+      if (ref.current) {
+        // Add animate-fade-in class immediately to fix black sections
+        ref.current.classList.add('animate-fade-in');
+        observer.observe(ref.current);
+      }
     });
 
     return () => {
@@ -89,7 +99,7 @@ const Services = () => {
           </p>
         </header>
         
-        <div className="mb-16 opacity-0" ref={sectionRefs.main}>
+        <div className="mb-16" ref={sectionRefs.main}>
           <h3 className="text-2xl font-serif font-bold text-gold mb-6 text-center">Services Principaux de Lavage et Nettoyage</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <ServiceCard
@@ -115,44 +125,44 @@ const Services = () => {
           </div>
         </div>
         
-        <div className="mb-16 opacity-0" ref={sectionRefs.additional}>
+        <div className="mb-16" ref={sectionRefs.additional}>
           <h3 className="text-2xl font-serif font-bold text-gold mb-6 text-center">Services Additionnels de Détailing</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <article className="card-premium opacity-0 transition-opacity duration-500" data-lazy-card>
+            <article className="card-premium animate-fade-in" data-lazy-card>
               <h4 className="font-bold mb-2">Nettoyage et Protection des Jantes</h4>
               <p className="text-gold/70">Élimination des résidus de freins, poussières et saletés incrustées. Application d'un traitement protecteur nano-céramique pour faciliter les nettoyages futurs et préserver l'éclat des jantes.</p>
             </article>
-            <article className="card-premium opacity-0 transition-opacity duration-500" data-lazy-card>
+            <article className="card-premium animate-fade-in" data-lazy-card>
               <h4 className="font-bold mb-2">Rénovation des Phares Ternis</h4>
               <p className="text-gold/70">Restauration complète de la transparence et de la luminosité des phares jaunis ou opacifiés par les UV pour améliorer la sécurité nocturne et l'esthétique générale du véhicule.</p>
             </article>
-            <article className="card-premium opacity-0 transition-opacity duration-500" data-lazy-card>
+            <article className="card-premium animate-fade-in" data-lazy-card>
               <h4 className="font-bold mb-2">Traitement et Hydratation du Cuir</h4>
               <p className="text-gold/70">Nettoyage en profondeur, hydratation et protection des selleries en cuir pour préserver leur souplesse et leur aspect neuf plus longtemps. Traitement anti-UV pour éviter le craquèlement.</p>
             </article>
-            <article className="card-premium opacity-0 transition-opacity duration-500" data-lazy-card>
+            <article className="card-premium animate-fade-in" data-lazy-card>
               <h4 className="font-bold mb-2">Traitement Hydrophobe des Vitres</h4>
               <p className="text-gold/70">Application d'un revêtement spécial nano-technologique sur les vitres pour améliorer la visibilité sous la pluie et faciliter l'écoulement de l'eau et des saletés même à basse vitesse.</p>
             </article>
-            <article className="card-premium opacity-0 transition-opacity duration-500" data-lazy-card>
+            <article className="card-premium animate-fade-in" data-lazy-card>
               <h4 className="font-bold mb-2">Désinfection à la Vapeur Sèche</h4>
               <p className="text-gold/70">Élimination complète des bactéries, virus et allergènes sans produits chimiques agressifs. Notre processus écologique est idéal pour les familles et les personnes sensibles aux produits chimiques traditionnels.</p>
             </article>
-            <article className="card-premium opacity-0 transition-opacity duration-500" data-lazy-card>
+            <article className="card-premium animate-fade-in" data-lazy-card>
               <h4 className="font-bold mb-2">Service de Lavage Auto à Domicile</h4>
               <p className="text-gold/70">Intervention sur site à votre domicile ou lieu de travail pour plus de confort. Notre équipe mobile est équipée de matériel professionnel et utilise des techniques économes en eau.</p>
             </article>
           </div>
         </div>
         
-        <div className="mb-16 opacity-0" ref={sectionRefs.special}>
+        <div className="mb-16" ref={sectionRefs.special}>
           <h3 className="text-2xl font-serif font-bold text-gold mb-6 text-center">Services Spéciaux de Nettoyage</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <article className="card-premium opacity-0 transition-opacity duration-500" data-lazy-card>
+            <article className="card-premium animate-fade-in" data-lazy-card>
               <h4 className="font-bold mb-2">Protection Céramique Professionnelle</h4>
               <p className="text-gold/70">Application d'un revêtement céramique haute performance offrant une protection supérieure contre les rayures, les UV et les contaminants. Garantit un effet hydrophobe exceptionnel et une brillance intense pendant plusieurs années.</p>
             </article>
-            <article className="card-premium opacity-0 transition-opacity duration-500" data-lazy-card>
+            <article className="card-premium animate-fade-in" data-lazy-card>
               <h4 className="font-bold mb-2">Préparation Esthétique Véhicule</h4>
               <p className="text-gold/70">Service complet de remise en état esthétique pour vente ou exposition. Idéal pour les véhicules de collection, de luxe ou pour préparer votre voiture avant une vente pour maximiser sa valeur.</p>
             </article>
@@ -221,31 +231,7 @@ const Services = () => {
         }
       `}} />
 
-      <script dangerouslySetInnerHTML={{ __html: `
-        document.addEventListener("DOMContentLoaded", function() {
-          const lazyCards = document.querySelectorAll('[data-lazy-card]');
-          
-          if ('IntersectionObserver' in window) {
-            const cardObserver = new IntersectionObserver((entries, observer) => {
-              entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                  entry.target.classList.add('animate-fade-in');
-                  observer.unobserve(entry.target);
-                }
-              });
-            }, {threshold: 0.1, rootMargin: '0px 0px 100px 0px'});
-            
-            lazyCards.forEach(card => {
-              cardObserver.observe(card);
-            });
-          } else {
-            // Fallback for browsers that don't support IntersectionObserver
-            lazyCards.forEach(card => {
-              card.classList.add('animate-fade-in');
-            });
-          }
-        });
-      `}} />
+      {/* Removed inline script as it's now handled in the useEffect */}
     </section>
   );
 };
