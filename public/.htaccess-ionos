@@ -1,13 +1,20 @@
 
-# Configuration spécifique pour IONOS
-AddType application/javascript .js .mjs .jsx .tsx
-AddType text/xml .xml
-AddHandler application/x-httpd-php .php
+# Configuration MIME complète pour IONOS
+<IfModule mod_mime.c>
+  # Définir correctement les types MIME pour JavaScript
+  AddType application/javascript .js
+  AddType application/javascript .mjs
+  AddType application/javascript .jsx
+  AddType application/javascript .tsx
+  
+  # Définir correctement le type MIME pour XML
+  AddType text/xml .xml
+</IfModule>
 
-# Force le type MIME pour JavaScript
+# Force les types MIME pour JavaScript
 <FilesMatch "\.(js|mjs|jsx|tsx)$">
   ForceType application/javascript
-  Header set Content-Type "application/javascript" 
+  Header set Content-Type "application/javascript"
 </FilesMatch>
 
 # Force le type MIME pour XML
@@ -16,12 +23,46 @@ AddHandler application/x-httpd-php .php
   Header set Content-Type "text/xml"
 </FilesMatch>
 
-# Redirection spéciale pour les XML et JS
-RewriteEngine On
-RewriteBase /
+# Redirection via PHP pour garantir les bons types MIME
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  
+  # Traiter les fichiers XML avec le script PHP spécifique
+  RewriteRule \.(xml)$ xml-proxy.php [L]
+  
+  # Traiter les fichiers JS avec le script PHP spécifique
+  RewriteRule \.(js|mjs|jsx|tsx)$ js-proxy.php [L]
+  
+  # Ne pas appliquer les règles aux fichiers et dossiers existants
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  
+  # Rediriger toutes les autres requêtes vers index.php (pas index.html)
+  # pour permettre le traitement PHP des MIME types
+  RewriteRule ^(.*)$ index.php [L]
+</IfModule>
 
-# Traiter les fichiers XML avec le script PHP spécifique
-RewriteRule \.xml$ /xml-proxy.php [L]
-
-# Traiter les fichiers JS avec le script PHP spécifique
-RewriteRule \.(js|mjs|jsx|tsx)$ /js-proxy.php [L]
+# Configuration des en-têtes pour tous les fichiers
+<IfModule mod_headers.c>
+  <FilesMatch ".*">
+    # Désactiver le cache pendant le développement/débogage
+    Header set Cache-Control "no-cache, must-revalidate"
+    Header set Pragma "no-cache"
+    
+    # Autoriser les requêtes cross-origin
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type"
+  </FilesMatch>
+  
+  # Configuration spécifique pour JS
+  <FilesMatch "\.(js|jsx|tsx|mjs)$">
+    Header set Content-Type "application/javascript"
+  </FilesMatch>
+  
+  # Configuration spécifique pour XML
+  <FilesMatch "\.(xml)$">
+    Header set Content-Type "text/xml"
+  </FilesMatch>
+</IfModule>

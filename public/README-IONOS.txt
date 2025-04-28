@@ -1,28 +1,55 @@
 
 ### INSTRUCTIONS DE DÉPLOIEMENT POUR IONOS ###
 
-Pour garantir que l'application fonctionne correctement sur IONOS (avec les bons types MIME), suivez ces étapes :
+Pour garantir que l'application fonctionne correctement sur IONOS (notamment les problèmes de MIME types), suivez ces étapes:
 
-1. Uploadez tous les fichiers du dossier "build" ou "dist" vers votre hébergement
+ÉTAPE 1: PRÉPARATION DES FICHIERS
+=================================
+1. Avant de téléverser les fichiers sur IONOS:
+   - Renommez ".htaccess-ionos" en ".htaccess"
+   - Renommez "index-ionos.php" en "index.php"
+   - Assurez-vous que les fichiers suivants sont prêts à être téléversés:
+     * .htaccess (l'ancien renommé)
+     * .user.ini
+     * index.php (l'ancien index-ionos.php)
+     * js-proxy.php
+     * xml-proxy.php
+     * test-mime.php
+     * tous les fichiers de votre build React
 
-2. Configurez le comportement des MIME types :
-   - Renommez `.htaccess-ionos` en `.htaccess` (ou fusionnez son contenu avec le .htaccess existant)
-   - Assurez-vous que le fichier `.user.ini` est présent à la racine
-   - Vérifiez que les scripts `xml-proxy.php` et `js-proxy.php` sont présents
+ÉTAPE 2: TÉLÉVERSEMENT
+=====================
+1. Téléversez TOUS les fichiers mentionnés ci-dessus vers votre hébergement IONOS
+2. Assurez-vous que les fichiers sont à la RACINE de votre site web
 
-3. Option PHP (recommandée pour les problèmes persistants) :
-   - Renommez `index-ionos.php` en `index.php`
-   - Placez ce fichier à la racine de votre site
-   - Cette méthode contourne les limitations de IONOS en utilisant PHP pour servir les fichiers statiques
+ÉTAPE 3: VÉRIFICATION
+====================
+1. Accédez à https://votre-domaine.com/test-mime.php pour vérifier les types MIME
+2. Vérifiez que le sitemap est accessible à https://votre-domaine.com/sitemap.xml
+3. Assurez-vous que l'application se charge correctement
 
-4. Testez le fonctionnement :
-   - Accédez à https://votre-domaine.com/test-mime.php pour vérifier les types MIME
-   - Vérifiez que le sitemap est accessible à https://votre-domaine.com/sitemap.xml
-   - Assurez-vous que l'application se charge correctement
+DÉPANNAGE
+=========
+Si vous rencontrez des problèmes:
 
-5. En cas de problème persistant :
-   - Utilisez la technique PHP : tous les fichiers sont servis via PHP avec des en-têtes explicites
-   - Contactez le support IONOS en mentionnant les problèmes de type MIME
-   - Vérifiez les journaux d'erreurs pour plus de détails
+1. PROBLÈME DE SITEMAP:
+   - Vérifiez que xml-proxy.php est présent et accessible
+   - Essayez d'accéder directement à https://votre-domaine.com/xml-proxy.php?file=/sitemap.xml
 
-Note: Ces solutions sont spécifiques à IONOS et peuvent ne pas être nécessaires sur d'autres hébergeurs.
+2. PROBLÈME DE CHARGEMENT JAVASCRIPT:
+   - Vérifiez que js-proxy.php est présent et accessible
+   - Essayez d'accéder directement à https://votre-domaine.com/js-proxy.php?file=/src/main.jsx
+
+3. ERREUR 500 OU PAGE BLANCHE:
+   - Vérifiez les journaux d'erreurs sur le panneau de contrôle IONOS
+   - Vérifiez les permissions des fichiers (644 pour les fichiers, 755 pour les répertoires)
+   - Utilisez le mode debug: https://votre-domaine.com/?debug=1
+
+EXPLICATIONS TECHNIQUES
+======================
+La solution mise en place contourne les limitations de IONOS:
+1. Tous les fichiers sont servis via PHP avec les en-têtes MIME appropriés
+2. Les requêtes sont interceptées par .htaccess et redirigées vers les scripts PHP appropriés
+3. Le script index.php sert de point d'entrée pour le SPA et gère également les fichiers statiques
+
+Si vous avez besoin d'aide supplémentaire, contactez votre développeur.
