@@ -1,0 +1,9 @@
+
+# Configuration spécifique pour IONOS
+AddType application/javascript .js .mjs
+AddHandler application/javascript .js .mjs
+
+<FilesMatch "\.(js|mjs)$">
+  ForceType application/javascript
+  Header set Content-Type "application/javascript" 
+</FilesMatch>

@@ -34,10 +34,26 @@
   RewriteRule ^(.*) index.html [L]
 </IfModule>
 
+# Configuration des types MIME pour JavaScript
+<IfModule mod_mime.c>
+  # Définir correctement les types MIME pour JavaScript
+  AddType application/javascript .js
+  AddType application/javascript .mjs
+  
+  # Assurer que les modules ES sont correctement servis
+  AddType application/javascript .js .mjs
+  AddHandler application/javascript .js .mjs
+  
+  # Forcer le type MIME pour JavaScript même avec d'autres extensions
+  <FilesMatch "\.(js|mjs)$">
+    ForceType application/javascript
+  </FilesMatch>
+</IfModule>
+
 # Configurer les en-têtes CORS et sécurité
 <IfModule mod_headers.c>
   # En-têtes CORS pour les ressources spécifiques
-  <FilesMatch "\.(html|js|css)$">
+  <FilesMatch "\.(html|js|css|mjs)$">
     Header set Access-Control-Allow-Origin "*"
   </FilesMatch>
   
@@ -47,8 +63,8 @@
   Header always set X-Frame-Options "SAMEORIGIN"
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
   
-  # Content Security Policy (CSP) mise à jour pour autoriser Google Fonts
-  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.gpteng.co https://*.emailjs.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; connect-src 'self' https://*.emailjs.com https://api.emailjs.com; font-src 'self' https://fonts.gstatic.com; frame-src 'none'; object-src 'none';"
+  # Content Security Policy (CSP) mise à jour pour autoriser Google Fonts et scripts
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.gpteng.co https://*.emailjs.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; connect-src 'self' https://*.emailjs.com https://api.emailjs.com https://www.google-analytics.com; font-src 'self' https://fonts.gstatic.com; frame-src 'none'; object-src 'none';"
   
   # Strict Transport Security (HSTS) - Activer HTTPS strict
   Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -66,3 +82,13 @@
 
 # Protection contre les attaques par clickjacking
 Header always append X-Frame-Options SAMEORIGIN
+
+# Configuration spécifique pour les hébergements problématiques (IONOS)
+<IfModule mod_php.ini>
+  php_flag display_errors off
+</IfModule>
+
+# Fichier de secours .user.ini pour les hébergements PHP (comme IONOS)
+# Assurez-vous d'avoir également un fichier .user.ini à la racine avec:
+# mime_type.application/javascript=.js
+# mime_type.application/javascript=.mjs
