@@ -15,6 +15,36 @@ const Index = () => {
   useEffect(() => {
     // Configuration d'un délai d'expiration de session de 30 minutes
     setupSessionTimeout(30);
+    
+    // Ajout des données structurées pour le SEO local
+    const jsonLd = {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Premium Auto Clean",
+      "description": "Service professionnel de nettoyage automobile et à domicile",
+      "url": window.location.href,
+      "areaServed": [
+        {
+          "@type": "City",
+          "name": "Charleville-Mézières"
+        },
+        {
+          "@type": "City",
+          "name": "Reims"
+        }
+      ],
+      "priceRange": "€€",
+      "servesCuisine": "Nettoyage automobile"
+    };
+    
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.text = JSON.stringify(jsonLd);
+    document.head.appendChild(script);
+    
+    return () => {
+      document.head.removeChild(script);
+    };
   }, []);
   
   return (

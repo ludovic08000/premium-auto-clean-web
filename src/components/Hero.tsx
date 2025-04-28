@@ -15,8 +15,11 @@ const Hero = () => {
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-serif font-bold mb-6 gold-gradient-text">
             Premium Auto Clean
           </h1>
-          <p className="text-xl sm:text-2xl font-light text-gold/80 mb-10">
+          <p className="text-xl sm:text-2xl font-light text-gold/80 mb-6">
             Service professionnel de nettoyage automobile et à domicile
+          </p>
+          <p className="text-lg font-light text-gold/70 mb-10">
+            À Charleville-Mézières et Reims
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a href="#services" className="btn-gold">
