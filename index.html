@@ -53,7 +53,43 @@
     <div id="root"></div>
     <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
     <script src="https://cdn.gpteng.co/gptengineer.js"></script>
-    <script type="module" src="/src/main.jsx"></script>
+    <script type="module">
+      // Script pour détecter et charger le bon fichier d'entrée
+      (function() {
+        const possibleEntrypoints = ['/src/main.tsx', '/src/main.jsx'];
+        
+        // Fonction pour essayer de charger un script
+        function tryLoadScript(src) {
+          return new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.type = 'module';
+            script.src = src;
+            script.onload = () => {
+              console.log(`Script chargé avec succès: ${src}`);
+              resolve(true);
+            };
+            script.onerror = () => {
+              console.warn(`Échec du chargement: ${src}`);
+              resolve(false);
+            };
+            document.body.appendChild(script);
+          });
+        }
+        
+        // Essayer de charger chaque point d'entrée potentiel
+        async function loadApp() {
+          for (const entrypoint of possibleEntrypoints) {
+            const success = await tryLoadScript(entrypoint);
+            if (success) {
+              document.documentElement.classList.add('js-loaded');
+              break;
+            }
+          }
+        }
+        
+        loadApp();
+      })();
+    </script>
     
     <!-- Fallback pour détecter les problèmes de chargement -->
     <script>
@@ -62,12 +98,14 @@
         setTimeout(function() {
           if (!document.documentElement.classList.contains('js-loaded')) {
             console.log('Problème de chargement détecté, tentative de récupération...');
-            
-            // Créer un nouveau script avec la bonne configuration
-            var script = document.createElement('script');
-            script.type = "module";
-            script.src = '/src/main.jsx';
-            document.body.appendChild(script);
+            document.documentElement.classList.add('js-loaded');
+            // Essayer les deux extensions
+            ['/src/main.tsx', '/src/main.jsx'].forEach(function(src) {
+              var script = document.createElement('script');
+              script.type = "module";
+              script.src = src;
+              document.body.appendChild(script);
+            });
           }
         }, 3000); // Vérifier après 3 secondes
       });

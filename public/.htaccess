@@ -26,9 +26,29 @@
   RewriteCond %{HTTPS} off
   RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
   
+  # Traiter les fichiers .js et .mjs correctement (spécifique à IONOS)
+  RewriteCond %{REQUEST_URI} \.(js|mjs)$
+  RewriteCond %{HTTP:Accept-Encoding} gzip
+  RewriteCond %{REQUEST_FILENAME}.gz -f
+  RewriteRule ^(.*)$ $1.gz [L]
+  
+  # Correction spécifique à IONOS pour les fichiers JavaScript
+  <FilesMatch "\.(js|mjs)$">
+    SetHandler application/javascript
+  </FilesMatch>
+  
   # Ne pas appliquer les règles aux fichiers et dossiers existants
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
+  
+  # Si le fichier n'existe pas directement, essayer avec d'autres extensions
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME}.tsx -f
+  RewriteRule ^(.*)$ $1.tsx [L]
+  
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME}.jsx -f
+  RewriteRule ^(.*)$ $1.jsx [L]
   
   # Rediriger toutes les autres requêtes vers index.html
   RewriteRule ^(.*) index.html [L]
@@ -39,21 +59,28 @@
   # Définir correctement les types MIME pour JavaScript
   AddType application/javascript .js
   AddType application/javascript .mjs
-  
-  # Assurer que les modules ES sont correctement servis
-  AddType application/javascript .js .mjs
-  AddHandler application/javascript .js .mjs
+  AddType application/javascript .jsx
+  AddType application/javascript .tsx
   
   # Forcer le type MIME pour JavaScript même avec d'autres extensions
-  <FilesMatch "\.(js|mjs)$">
+  <FilesMatch "\.(js|mjs|jsx|tsx)$">
     ForceType application/javascript
+    Header set Content-Type "application/javascript"
+  </FilesMatch>
+  
+  # Configuration pour fichiers compressés
+  AddEncoding gzip .gz
+  <FilesMatch "\.js\.gz$">
+    ForceType application/javascript
+    Header set Content-Encoding gzip
+    Header append Vary Accept-Encoding
   </FilesMatch>
 </IfModule>
 
 # Configurer les en-têtes CORS et sécurité
 <IfModule mod_headers.c>
   # En-têtes CORS pour les ressources spécifiques
-  <FilesMatch "\.(html|js|css|mjs)$">
+  <FilesMatch "\.(html|js|jsx|tsx|css|mjs)$">
     Header set Access-Control-Allow-Origin "*"
   </FilesMatch>
   
@@ -70,12 +97,7 @@
   Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
 
   # Définir le bon type MIME pour les fichiers JavaScript
-  <FilesMatch "\.js$">
-    Header set Content-Type "application/javascript"
-  </FilesMatch>
-  
-  # Définir le bon type MIME pour les modules JavaScript
-  <FilesMatch "\.mjs$">
+  <FilesMatch "\.(js|jsx|tsx|mjs)$">
     Header set Content-Type "application/javascript"
   </FilesMatch>
 </IfModule>
@@ -83,12 +105,17 @@
 # Protection contre les attaques par clickjacking
 Header always append X-Frame-Options SAMEORIGIN
 
-# Configuration spécifique pour les hébergements problématiques (IONOS)
-<IfModule mod_php.ini>
-  php_flag display_errors off
+# Redirection spécifique IONOS pour les fichiers JSX/TSX
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  
+  # Si un fichier .jsx ou .tsx est demandé mais n'existe pas, essayer PHP proxy
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule ^(.+\.(jsx|tsx|js|mjs))$ /fixmime.php?file=$1 [L,QSA]
 </IfModule>
 
-# Fichier de secours .user.ini pour les hébergements PHP (comme IONOS)
-# Assurez-vous d'avoir également un fichier .user.ini à la racine avec:
-# mime_type.application/javascript=.js
-# mime_type.application/javascript=.mjs
+# Utiliser PHP pour servir les scripts JavaScript si nécessaire
+<FilesMatch "fixmime\.php$">
+  SetHandler application/x-httpd-php
+</FilesMatch>

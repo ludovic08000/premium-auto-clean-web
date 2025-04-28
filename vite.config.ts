@@ -29,7 +29,11 @@ export default defineConfig(({ mode }) => ({
     target: 'es2015',
   },
   plugins: [
-    react(),
+    react({
+      // Configuration spécifique pour React SWC afin d'assurer la compatibilité maximale
+      jsxImportSource: 'react',
+      tsDecorators: true,
+    }),
     mode === 'development' &&
     componentTagger(),
   ].filter(Boolean),
@@ -43,7 +47,9 @@ export default defineConfig(({ mode }) => ({
   optimizeDeps: {
     esbuildOptions: {
       target: 'es2015',
-      jsx: 'automatic'
+      jsx: 'automatic',
+      jsxFactory: 'React.createElement',
+      jsxFragment: 'React.Fragment'
     }
   }
 }));
