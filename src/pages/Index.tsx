@@ -37,7 +37,7 @@ const Index = () => {
       });
     }
     
-    // Ajout des données structurées pour le SEO local
+    // Ajout des données structurées pour le SEO local avec les chemins d'images corrigés
     try {
       const jsonLd = {
         "@context": "https://schema.org",
@@ -45,7 +45,7 @@ const Index = () => {
         "name": "Premium Auto Clean",
         "description": "Service professionnel de lavage, nettoyage écologique et détailing automobile haut de gamme. Protection céramique, rénovation des phares, préparation esthétique complète.",
         "url": window.location.href,
-        "image": "https://lovable.dev/opengraph-image-p98pqg.png",
+        "image": "/assets/images/premium-auto-clean-og.png",
         "telephone": "+33612345678",
         "address": {
           "@type": "PostalAddress",
