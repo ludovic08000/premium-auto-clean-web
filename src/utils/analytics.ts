@@ -1,7 +1,6 @@
 
 /**
  * Utilitaires pour l'intégration de Google Analytics
- * À utiliser lorsque vous êtes prêt à ajouter l'analyse du trafic à votre site
  */
 
 // Identifiant de mesure Google Analytics (remplacer par votre propre ID)
@@ -30,6 +29,8 @@ export const initializeGA = (): void => {
   }
   gtag('js', new Date());
   gtag('config', GA_MEASUREMENT_ID);
+  
+  console.log('Google Analytics initialisé avec succès');
 };
 
 /**
@@ -63,6 +64,24 @@ export const sendPageView = (pagePath?: string, pageTitle?: string): void => {
     page_path: path,
     page_title: title,
     page_location: window.location.href
+  });
+};
+
+/**
+ * Suit les clics sur les liens externes
+ * @param element - Élément DOM à surveiller (par défaut, document.body)
+ */
+export const trackExternalLinks = (element: HTMLElement = document.body): void => {
+  element.addEventListener('click', (event) => {
+    const target = event.target as HTMLElement;
+    const link = target.closest('a');
+    
+    if (link && link.href && link.hostname !== window.location.hostname) {
+      sendGAEvent('external_link_click', {
+        url: link.href,
+        text: link.innerText || link.textContent,
+      });
+    }
   });
 };
 
