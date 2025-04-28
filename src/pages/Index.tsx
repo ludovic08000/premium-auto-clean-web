@@ -9,106 +9,132 @@ import FAQ from "@/components/FAQ";
 import ContactForm from "@/components/ContactForm";
 import Footer from "@/components/Footer";
 import { setupSessionTimeout } from "@/services/CSRFService";
+import { useToast } from "@/hooks/use-toast";
 
 const Index = () => {
   console.log("Index component is rendering");
+  const { toast } = useToast();
   
   useEffect(() => {
+    // S'assurer que les éléments DOM sont complètement chargés
+    if (document.readyState === 'complete') {
+      console.log("Document is fully loaded");
+    } else {
+      window.addEventListener('load', () => {
+        console.log("Window load event fired");
+      });
+    }
+    
     // Configuration d'un délai d'expiration de session de 30 minutes
-    setupSessionTimeout(30);
+    try {
+      setupSessionTimeout(30);
+    } catch (error) {
+      console.error("Erreur lors de la configuration du timeout de session:", error);
+      toast({
+        title: "Avertissement",
+        description: "Certaines fonctionnalités de sécurité peuvent être limitées.",
+        variant: "destructive",
+      });
+    }
     
     // Ajout des données structurées pour le SEO local
-    const jsonLd = {
-      "@context": "https://schema.org",
-      "@type": "LocalBusiness",
-      "name": "Premium Auto Clean",
-      "description": "Service professionnel de lavage, nettoyage écologique et détailing automobile haut de gamme. Protection céramique, rénovation des phares, préparation esthétique complète.",
-      "url": window.location.href,
-      "image": "https://lovable.dev/opengraph-image-p98pqg.png",
-      "telephone": "+33612345678",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "7 Rue des Laveurs",
-        "addressLocality": "Charleville-Mézières",
-        "postalCode": "08000",
-        "addressCountry": "FR"
-      },
-      "geo": {
-        "@type": "GeoCoordinates",
-        "latitude": "49.7620",
-        "longitude": "4.7210"
-      },
-      "areaServed": [
-        {
-          "@type": "City",
-          "name": "Charleville-Mézières"
+    try {
+      const jsonLd = {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "Premium Auto Clean",
+        "description": "Service professionnel de lavage, nettoyage écologique et détailing automobile haut de gamme. Protection céramique, rénovation des phares, préparation esthétique complète.",
+        "url": window.location.href,
+        "image": "https://lovable.dev/opengraph-image-p98pqg.png",
+        "telephone": "+33612345678",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "7 Rue des Laveurs",
+          "addressLocality": "Charleville-Mézières",
+          "postalCode": "08000",
+          "addressCountry": "FR"
         },
-        {
-          "@type": "City",
-          "name": "Reims"
-        }
-      ],
-      "priceRange": "€€",
-      "openingHoursSpecification": [
-        {
-          "@type": "OpeningHoursSpecification",
-          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-          "opens": "09:00",
-          "closes": "19:00"
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": "49.7620",
+          "longitude": "4.7210"
         },
-        {
-          "@type": "OpeningHoursSpecification",
-          "dayOfWeek": ["Saturday"],
-          "opens": "09:00",
-          "closes": "17:00"
-        }
-      ],
-      "sameAs": [
-        "https://www.facebook.com/premiumautoclean",
-        "https://www.instagram.com/premium_auto_clean"
-      ],
-      "hasOfferCatalog": {
-        "@type": "OfferCatalog",
-        "name": "Services de nettoyage et détailing automobile",
-        "itemListElement": [
+        "areaServed": [
           {
-            "@type": "Offer",
-            "name": "Nettoyage Complet & Détailing",
-            "description": "Nettoyage intérieur et extérieur approfondi avec protection céramique"
+            "@type": "City",
+            "name": "Charleville-Mézières"
           },
           {
-            "@type": "Offer",
-            "name": "Lavage Écologique",
-            "description": "Nettoyage respectueux de l'environnement avec produits biodégradables"
-          },
-          {
-            "@type": "Offer",
-            "name": "Préparation Esthétique",
-            "description": "Service premium de polissage, lustrage et protection"
-          },
-          {
-            "@type": "Offer",
-            "name": "Protection Céramique Automobile",
-            "description": "Traitement durable pour une protection optimale de la carrosserie"
+            "@type": "City",
+            "name": "Reims"
           }
-        ]
-      },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.8",
-        "ratingCount": "127"
-      }
-    };
-    
-    const script = document.createElement('script');
-    script.type = 'application/ld+json';
-    script.text = JSON.stringify(jsonLd);
-    document.head.appendChild(script);
-    
-    return () => {
-      document.head.removeChild(script);
-    };
-  }, []);
+        ],
+        "priceRange": "€€",
+        "openingHoursSpecification": [
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+            "opens": "09:00",
+            "closes": "19:00"
+          },
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Saturday"],
+            "opens": "09:00",
+            "closes": "17:00"
+          }
+        ],
+        "sameAs": [
+          "https://www.facebook.com/premiumautoclean",
+          "https://www.instagram.com/premium_auto_clean"
+        ],
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Services de nettoyage et détailing automobile",
+          "itemListElement": [
+            {
+              "@type": "Offer",
+              "name": "Nettoyage Complet & Détailing",
+              "description": "Nettoyage intérieur et extérieur approfondi avec protection céramique"
+            },
+            {
+              "@type": "Offer",
+              "name": "Lavage Écologique",
+              "description": "Nettoyage respectueux de l'environnement avec produits biodégradables"
+            },
+            {
+              "@type": "Offer",
+              "name": "Préparation Esthétique",
+              "description": "Service premium de polissage, lustrage et protection"
+            },
+            {
+              "@type": "Offer",
+              "name": "Protection Céramique Automobile",
+              "description": "Traitement durable pour une protection optimale de la carrosserie"
+            }
+          ]
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.8",
+          "ratingCount": "127"
+        }
+      };
+      
+      const script = document.createElement('script');
+      script.type = 'application/ld+json';
+      script.text = JSON.stringify(jsonLd);
+      document.head.appendChild(script);
+      
+      return () => {
+        if (document.head.contains(script)) {
+          document.head.removeChild(script);
+        }
+      };
+    } catch (error) {
+      console.error("Erreur lors de l'ajout des données structurées:", error);
+    }
+  }, [toast]);
   
   return (
     <div className="min-h-screen bg-dark text-gold">

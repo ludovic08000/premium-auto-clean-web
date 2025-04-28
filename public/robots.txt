@@ -34,13 +34,5 @@ Allow: /
 # Sitemap
 Sitemap: https://premiumautoclean.com/sitemap.xml
 
-# Taux d'exploration recommandé
-Crawl-delay: 10
-
-# Optimisation des images
-Request-rate: 1/5
-Visit-time: 0800-2300
-
 # Host spécifique
 Host: premiumautoclean.com
-
