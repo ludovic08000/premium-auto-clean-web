@@ -9,12 +9,12 @@ Disallow: /backend/
 # Règles spécifiques pour Googlebot
 User-agent: Googlebot
 Allow: /
-Crawl-delay: 5
+Crawl-delay: 2
 
 # Règles spécifiques pour Bing
 User-agent: Bingbot
 Allow: /
-Crawl-delay: 5
+Crawl-delay: 2
 
 # Règles pour Google Mobile
 User-agent: Googlebot-Mobile
@@ -36,3 +36,6 @@ Sitemap: https://premiumautoclean.com/sitemap.xml
 
 # Host spécifique
 Host: premiumautoclean.com
+
+# Sitemap optimisé pour requêtes locales
+Sitemap: https://premiumautoclean.com/sitemap-local.xml

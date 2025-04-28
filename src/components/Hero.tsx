@@ -16,19 +16,26 @@ const Hero = () => {
             Premium Auto Clean - Détailing et Nettoyage Automobile Haut de Gamme
           </h1>
           <h2 className="text-xl sm:text-2xl font-light text-gold/80 mb-4">
-            Service premium de détailing, polissage et protection céramique automobile
+            Service premium de détailing, polissage et protection céramique automobile dans les Ardennes et la Marne
           </h2>
           <p className="text-lg font-light text-gold/70 mb-6">
-            À Charleville-Mézières et Reims - Intervention à domicile possible
+            À Charleville-Mézières et Reims - Intervention à domicile possible dans tout le Grand Est
           </p>
           <div className="max-w-3xl mx-auto mb-8">
             <p className="text-gold/80">
-              Redonnez vie à votre véhicule avec nos services de <strong>lavage auto écologique</strong> et <strong>détailing haut de gamme</strong>. 
-              Notre expertise en <em>préparation esthétique automobile</em> comprend un nettoyage intérieur approfondi, 
-              traitement céramique protecteur et rénovation des phares. Une solution complète pour sublimer votre voiture.
+              Redonnez vie à votre véhicule avec nos services de <strong>lavage auto écologique</strong> et <strong>détailing automobile haut de gamme</strong>. 
+              Notre expertise en <em>préparation esthétique automobile</em> comprend un <strong>nettoyage intérieur professionnel</strong>, 
+              <strong>traitement nano-céramique</strong> protecteur longue durée et <strong>rénovation complète des phares ternis</strong>. 
+              Une solution complète pour sublimer votre voiture à <strong>Charleville-Mézières</strong>, <strong>Reims</strong> et dans toute la région <strong>Champagne-Ardenne</strong>.
             </p>
           </div>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="mt-6 text-sm text-gold/60">
+            <p>
+              Spécialistes en <span className="font-medium">protection carrosserie céramique</span>, <span className="font-medium">nettoyage écologique automobile</span>, 
+              <span className="font-medium">rénovation intérieure de véhicule</span> et <span className="font-medium">détailing professionnel à domicile</span>.
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
             <a href="#services" className="btn-gold" aria-label="Découvrir nos services de nettoyage et détailing">
               Découvrir nos services
             </a>
