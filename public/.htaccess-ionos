@@ -1,14 +1,27 @@
 
 # Configuration spécifique pour IONOS
-AddType application/javascript .js .mjs
+AddType application/javascript .js .mjs .jsx .tsx
 AddType text/xml .xml
+AddHandler application/x-httpd-php .php
 
-<FilesMatch "\.(js|mjs)$">
+# Force le type MIME pour JavaScript
+<FilesMatch "\.(js|mjs|jsx|tsx)$">
   ForceType application/javascript
   Header set Content-Type "application/javascript" 
 </FilesMatch>
 
+# Force le type MIME pour XML
 <FilesMatch "\.(xml)$">
   ForceType text/xml
   Header set Content-Type "text/xml"
 </FilesMatch>
+
+# Redirection spéciale pour les XML et JS
+RewriteEngine On
+RewriteBase /
+
+# Traiter les fichiers XML avec le script PHP spécifique
+RewriteRule \.xml$ /xml-proxy.php [L]
+
+# Traiter les fichiers JS avec le script PHP spécifique
+RewriteRule \.(js|mjs|jsx|tsx)$ /js-proxy.php [L]
