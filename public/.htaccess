@@ -15,6 +15,7 @@
   ExpiresByType text/css "access plus 1 month"
   ExpiresByType application/javascript "access plus 1 month"
   ExpiresByType application/pdf "access plus 1 month"
+  ExpiresByType text/xml "access plus 1 day"
 </IfModule>
 
 # Active la réécriture d'URL
@@ -25,6 +26,12 @@
   # Rediriger de HTTP vers HTTPS (si le serveur supporte HTTPS)
   RewriteCond %{HTTPS} off
   RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+  
+  # Traitement spécial pour les fichiers XML (sitemap)
+  <FilesMatch "\.(xml)$">
+    ForceType text/xml
+    Header set Content-Type "text/xml"
+  </FilesMatch>
   
   # Traitement spécial pour les fichiers JavaScript
   RewriteCond %{REQUEST_URI} \.(js|mjs|jsx|tsx)$
@@ -58,7 +65,7 @@
   RewriteRule ^(.*) index.html [L]
 </IfModule>
 
-# Configuration des types MIME pour JavaScript
+# Configuration des types MIME pour JavaScript et XML
 <IfModule mod_mime.c>
   # Définir correctement les types MIME pour JavaScript
   AddType application/javascript .js
@@ -66,10 +73,19 @@
   AddType application/javascript .jsx
   AddType application/javascript .tsx
   
+  # Définir correctement le type MIME pour XML
+  AddType text/xml .xml
+  
   # Forcer le type MIME pour JavaScript même avec d'autres extensions
   <FilesMatch "\.(js|mjs|jsx|tsx)$">
     ForceType application/javascript
     Header set Content-Type "application/javascript"
+  </FilesMatch>
+  
+  # Forcer le type MIME pour XML
+  <FilesMatch "\.(xml)$">
+    ForceType text/xml
+    Header set Content-Type "text/xml"
   </FilesMatch>
   
   # Configuration pour fichiers compressés
@@ -87,6 +103,12 @@
   <FilesMatch "\.(html|js|jsx|tsx|css|mjs)$">
     Header set Access-Control-Allow-Origin "*"
     Header set Content-Type "application/javascript" env=IS_JS
+  </FilesMatch>
+  
+  # En-têtes spécifiques pour XML
+  <FilesMatch "\.(xml)$">
+    Header set Access-Control-Allow-Origin "*"
+    Header set Content-Type "text/xml"
   </FilesMatch>
   
   # Définir une variable d'environnement pour les fichiers JavaScript
@@ -120,4 +142,9 @@ Header always append X-Frame-Options SAMEORIGIN
 <FilesMatch "\.(js|mjs|jsx|tsx)$">
   SetHandler application/x-httpd-php
   Action application/javascript /js-proxy.php
+</FilesMatch>
+
+# Traitement spécial pour les fichiers XML
+<FilesMatch "\.(xml)$">
+  SetHandler text/xml
 </FilesMatch>

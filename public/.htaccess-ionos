@@ -1,9 +1,14 @@
 
 # Configuration spécifique pour IONOS
 AddType application/javascript .js .mjs
-AddHandler application/javascript .js .mjs
+AddType text/xml .xml
 
 <FilesMatch "\.(js|mjs)$">
   ForceType application/javascript
   Header set Content-Type "application/javascript" 
+</FilesMatch>
+
+<FilesMatch "\.(xml)$">
+  ForceType text/xml
+  Header set Content-Type "text/xml"
 </FilesMatch>
