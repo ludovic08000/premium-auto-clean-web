@@ -15,10 +15,9 @@ export default defineConfig(({ mode }) => ({
     outDir: 'dist',
     emptyOutDir: true,
     sourcemap: mode === 'development',
-    // Configuration spécifique pour la compatibilité maximale
+    // Configuration pour la compatibilité avec l'environnement de prévisualisation
     rollupOptions: {
       output: {
-        // Configuration adaptée à l'environnement de prévisualisation et de production
         entryFileNames: 'assets/[name].js',
         chunkFileNames: 'assets/[name].js',
         assetFileNames: 'assets/[name].[ext]'
@@ -26,10 +25,6 @@ export default defineConfig(({ mode }) => ({
     },
     // Assurer une compatibilité maximale du JavaScript
     target: 'es2015',
-    // Configuration pour l'aperçu et IONOS
-    modulePreload: {
-      polyfill: true
-    }
   },
   plugins: [
     react(),
@@ -41,7 +36,7 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  // Optimiser pour les serveurs problématiques
+  // Optimiser pour l'environnement de prévisualisation
   optimizeDeps: {
     esbuildOptions: {
       target: 'es2015'
