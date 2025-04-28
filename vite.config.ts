@@ -15,22 +15,20 @@ export default defineConfig(({ mode }) => ({
     outDir: 'dist',
     emptyOutDir: true,
     sourcemap: mode === 'development',
-    // Configuration spécifique pour IONOS
+    // Configuration spécifique pour la compatibilité maximale
     rollupOptions: {
       output: {
         // Utiliser des noms de fichiers compatibles
         entryFileNames: 'assets/[name].js',
         chunkFileNames: 'assets/[name].js',
         assetFileNames: 'assets/[name].[ext]',
-        // Compatibilité maximale
-        format: 'iife',
-        // Renommer le fichier principal pour correspondre à index.html
-        manualChunks: undefined
+        // Format compatible avec IONOS et l'aperçu
+        format: mode === 'production' ? 'iife' : 'es',
       }
     },
     // Assurer une compatibilité maximale du JavaScript
     target: 'es2015',
-    // Générer un fichier principal.js
+    // Configuration pour l'aperçu et IONOS
     modulePreload: false
   },
   plugins: [

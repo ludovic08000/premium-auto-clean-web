@@ -4,7 +4,7 @@ import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 
-// Fonction d'initialisation pour améliorer la compatibilité serveur
+// Fonction d'initialisation simplifiée qui fonctionne partout
 function initializeApp() {
   try {
     console.log("Initialisation de l'application...");
@@ -35,18 +35,5 @@ function initializeApp() {
   }
 }
 
-// Démarrer l'application quand le DOM est chargé
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initializeApp);
-} else {
-  // Le DOM est déjà chargé
-  initializeApp();
-}
-
-// Backup pour s'assurer que l'application démarre toujours
-window.addEventListener('load', function() {
-  if (!document.documentElement.classList.contains('js-loaded')) {
-    console.log("Tentative de récupération après le chargement complet...");
-    initializeApp();
-  }
-});
+// Démarrer immédiatement l'application
+initializeApp();
