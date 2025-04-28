@@ -15,6 +15,23 @@ export default defineConfig(({ mode }) => ({
     outDir: 'dist',
     emptyOutDir: true,
     sourcemap: mode === 'development',
+    // Configuration spécifique pour IONOS
+    rollupOptions: {
+      output: {
+        // Utiliser des noms de fichiers compatibles
+        entryFileNames: 'assets/[name].js',
+        chunkFileNames: 'assets/[name].js',
+        assetFileNames: 'assets/[name].[ext]',
+        // Compatibilité maximale
+        format: 'iife',
+        // Renommer le fichier principal pour correspondre à index.html
+        manualChunks: undefined
+      }
+    },
+    // Assurer une compatibilité maximale du JavaScript
+    target: 'es2015',
+    // Générer un fichier principal.js
+    modulePreload: false
   },
   plugins: [
     react(),
@@ -26,4 +43,10 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  // Optimiser pour les serveurs problématiques
+  optimizeDeps: {
+    esbuildOptions: {
+      target: 'es2015'
+    }
+  }
 }));

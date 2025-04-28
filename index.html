@@ -53,7 +53,24 @@
     
     <div id="root"></div>
     <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
-    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
-    <script type="module" src="/src/main.tsx"></script>
+    <script src="https://cdn.gpteng.co/gptengineer.js" defer></script>
+    <script src="/src/main.js" defer></script>
+    
+    <!-- Fallback pour détecter les problèmes de chargement -->
+    <script>
+      window.addEventListener('DOMContentLoaded', function() {
+        // Vérifier si l'application a été chargée correctement
+        setTimeout(function() {
+          if (!document.documentElement.classList.contains('js-loaded')) {
+            console.log('Problème de chargement détecté, tentative de récupération...');
+            
+            // Créer un nouveau script avec la bonne configuration
+            var script = document.createElement('script');
+            script.src = '/src/main.js';
+            document.body.appendChild(script);
+          }
+        }, 3000); // Vérifier après 3 secondes
+      });
+    </script>
   </body>
 </html>
