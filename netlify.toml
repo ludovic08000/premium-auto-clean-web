@@ -42,9 +42,10 @@
     Content-Security-Policy = "upgrade-insecure-requests"
     Referrer-Policy = "strict-origin-when-cross-origin"
 
-# Configuration SSL spécifique
+# Configuration SSL personnalisée (pour certificat Ionos)
 [context.production.environment]
   HTTPS = "true"
   NODE_ENV = "production"
   SSL = "true"
-
+  SSL_KEY = "ionos_key"            # Ceci est juste un identifiant, pas la vraie valeur
+  SSL_CERT = "ionos_cert"          # Ceci est juste un identifiant, pas la vraie valeur

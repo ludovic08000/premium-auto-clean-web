@@ -31,6 +31,7 @@
   RewriteBase /
   
   # Rediriger de HTTP vers HTTPS (si le serveur supporte HTTPS)
+  # Utilise la configuration SSL d'Ionos
   RewriteCond %{HTTPS} off
   RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
   
@@ -57,11 +58,11 @@
   Header always set X-Frame-Options "SAMEORIGIN"
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
   
-  # Content Security Policy (CSP)
+  # Content Security Policy (CSP) - Compatible avec le certificat Ionos
   Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.gpteng.co https://*.emailjs.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://*.emailjs.com https://api.emailjs.com; font-src 'self'; frame-src 'none'; object-src 'none'; upgrade-insecure-requests;"
   
-  # Strict Transport Security (HSTS) - Activer HTTPS strict
-  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+  # Strict Transport Security (HSTS) - Compatible avec Ionos
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
 </IfModule>
 
 # Protection contre les attaques par clickjacking
@@ -78,7 +79,7 @@ Header always append X-Frame-Options SAMEORIGIN
   ForceType application/javascript
 </Files>
 
-# Déclaration de certificat SSL pour éviter les problèmes internes
+# Configuration pour utiliser le certificat SSL d'Ionos
 <IfModule mod_ssl.c>
   SSLOptions +StrictRequire
   SSLProtocol all -SSLv2 -SSLv3 -TLSv1 -TLSv1.1
