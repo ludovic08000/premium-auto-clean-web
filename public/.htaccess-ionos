@@ -11,13 +11,12 @@
   AddType text/xml .xml
 </IfModule>
 
-# Force les types MIME pour JavaScript
+# Force les types MIME pour JavaScript et XML
 <FilesMatch "\.(js|mjs|jsx|tsx)$">
   ForceType application/javascript
   Header set Content-Type "application/javascript"
 </FilesMatch>
 
-# Force le type MIME pour XML
 <FilesMatch "\.(xml)$">
   ForceType text/xml
   Header set Content-Type "text/xml"
@@ -31,32 +30,27 @@
   # Traiter les fichiers XML avec le script PHP spécifique
   RewriteRule \.(xml)$ xml-proxy.php [L]
   
-  # Traiter les fichiers JS avec le script PHP spécifique
+  # Traiter les fichiers JavaScript avec le script PHP spécifique
   RewriteRule \.(js|mjs|jsx|tsx)$ js-proxy.php [L]
   
-  # Ne pas appliquer les règles aux fichiers et dossiers existants
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
+  # Ne pas appliquer les règles aux fichiers et dossiers existants sauf JS et XML
+  RewriteCond %{REQUEST_FILENAME} !-f [OR]
+  RewriteCond %{REQUEST_URI} \.(js|mjs|jsx|tsx|xml)$
   
-  # Rediriger toutes les autres requêtes vers index.php (pas index.html)
-  # pour permettre le traitement PHP des MIME types
+  # Rediriger les autres requêtes vers index.php pour traitement PHP des MIME types
   RewriteRule ^(.*)$ index.php [L]
 </IfModule>
 
 # Configuration des en-têtes pour tous les fichiers
 <IfModule mod_headers.c>
+  # Autoriser les requêtes cross-origin
   <FilesMatch ".*">
-    # Désactiver le cache pendant le développement/débogage
-    Header set Cache-Control "no-cache, must-revalidate"
-    Header set Pragma "no-cache"
-    
-    # Autoriser les requêtes cross-origin
     Header set Access-Control-Allow-Origin "*"
     Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
     Header set Access-Control-Allow-Headers "Content-Type"
   </FilesMatch>
   
-  # Configuration spécifique pour JS
+  # Configuration spécifique pour JavaScript
   <FilesMatch "\.(js|jsx|tsx|mjs)$">
     Header set Content-Type "application/javascript"
   </FilesMatch>

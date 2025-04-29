@@ -7,6 +7,8 @@
 $mimeTypes = [
     'js' => 'application/javascript',
     'mjs' => 'application/javascript',
+    'jsx' => 'application/javascript',
+    'tsx' => 'application/javascript',
     'xml' => 'text/xml',
     'html' => 'text/html',
     'css' => 'text/css',
@@ -41,8 +43,8 @@ if ($fileExtension === 'xml') {
     exit;
 }
 
-// Traitement spécial pour JS
-if (in_array($fileExtension, ['js', 'mjs'])) {
+// Traitement spécial pour JS et TypeScript
+if (in_array($fileExtension, ['js', 'mjs', 'jsx', 'tsx'])) {
     include __DIR__ . '/js-proxy.php';
     exit;
 }

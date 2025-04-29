@@ -1,7 +1,7 @@
 
 <?php
 // Script optimisé pour gérer les fichiers JavaScript
-// Version 2.3 - Optimisation et suppression des fonctionnalités non essentielles
+// Version 2.4 - Correction des types MIME
 
 // Prévenir toute sortie avant les en-têtes
 ob_start();
@@ -27,24 +27,21 @@ $requestPath = str_replace(['../', '..\\', ':', '?', '&'], '', $requestPath);
 $requestPath = parse_url($requestPath, PHP_URL_PATH);
 $requestPath = preg_replace('/[?&].*$/', '', $requestPath); // Supprimer les paramètres d'URL
 
-// Mode de débogage désactivé par défaut
-$debug = false;
-
 // Rechercher le fichier dans différents emplacements
 $searchLocations = [
+    // Dossier src
+    __DIR__ . '/src' . $requestPath,
     // Dossier dist/assets (build Vite standard)
     __DIR__ . '/dist/assets' . str_replace(['/assets/', '/dist/assets/', '/src/'], '/', $requestPath),
     __DIR__ . '/dist/assets' . $requestPath,
     // Dossier dist
     __DIR__ . '/dist' . $requestPath,
     // Racine du projet
-    __DIR__ . $requestPath,
-    // Dossier src
-    __DIR__ . '/src' . $requestPath
+    __DIR__ . $requestPath
 ];
 
 // Extensions à essayer
-$extensions = ['', '.js', '.mjs'];
+$extensions = ['', '.js', '.mjs', '.tsx', '.jsx'];
 
 // Chercher le fichier
 $filePath = null;

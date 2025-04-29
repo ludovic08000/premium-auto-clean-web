@@ -14,6 +14,7 @@
   ExpiresByType image/svg+xml "access plus 1 month"
   ExpiresByType text/css "access plus 1 month"
   ExpiresByType application/javascript "access plus 1 month"
+  ExpiresByType text/xml "access plus 1 month"
   ExpiresByType application/pdf "access plus 1 month"
 </IfModule>
 
@@ -26,6 +27,12 @@
   RewriteCond %{HTTPS} off
   RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
   
+  # Traiter les fichiers XML avec une règle spécifique
+  RewriteRule \.xml$ - [T=text/xml,L]
+  
+  # Traiter les fichiers JavaScript avec une règle spécifique
+  RewriteRule \.(js|mjs|jsx|tsx)$ - [T=application/javascript,L]
+  
   # Ne pas appliquer les règles aux fichiers et dossiers existants
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
@@ -36,26 +43,30 @@
 
 # Configuration des types MIME pour JavaScript
 <IfModule mod_mime.c>
-  # Définir correctement les types MIME pour JavaScript
+  # Définir correctement les types MIME
   AddType application/javascript .js
   AddType application/javascript .mjs
   AddType application/javascript .jsx
   AddType application/javascript .tsx
+  AddType text/xml .xml
   
-  # Configuration spécifique pour les modules ES6
-  AddType application/javascript .js
-  AddHandler application/javascript .js
+  # Forcer le type MIME pour JavaScript
+  <FilesMatch "\.(js|mjs|jsx|tsx)$">
+    ForceType application/javascript
+    Header set Content-Type "application/javascript"
+  </FilesMatch>
   
-  # Activer le traitement des modules JavaScript
-  <FilesMatch "\.(js|mjs)$">
-    Header set Content-Type application/javascript
+  # Forcer le type MIME pour XML
+  <FilesMatch "\.(xml)$">
+    ForceType text/xml
+    Header set Content-Type "text/xml"
   </FilesMatch>
 </IfModule>
 
 # Configurer les en-têtes CORS et sécurité
 <IfModule mod_headers.c>
   # En-têtes CORS pour les ressources spécifiques
-  <FilesMatch "\.(html|js|css|mjs)$">
+  <FilesMatch "\.(html|js|mjs|jsx|tsx|css|xml)$">
     Header set Access-Control-Allow-Origin "*"
     Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
     Header set Access-Control-Allow-Headers "Content-Type"
@@ -67,3 +78,6 @@
   Header always set X-Frame-Options "SAMEORIGIN"
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
 </IfModule>
+
+# Protection contre les attaques par clickjacking
+Header always append X-Frame-Options SAMEORIGIN
