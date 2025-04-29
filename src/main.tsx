@@ -4,6 +4,18 @@ import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 
+// Déclaration de l'interface pour appConfig
+interface AppConfig {
+  mainScriptLoaded: boolean;
+}
+
+// Déclaration pour étendre l'interface Window
+declare global {
+  interface Window {
+    appConfig?: AppConfig;
+  }
+}
+
 // Fonction d'initialisation pour l'environnement de prévisualisation et de production
 function initializeApp() {
   try {
