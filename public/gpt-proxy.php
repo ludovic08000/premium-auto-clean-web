@@ -1,83 +1,63 @@
 
 <?php
-// Script for loading gptengineer.js with proper MIME type and CORS headers
-// Prevent any output before headers
+// Script pour charger gptengineer.js avec le bon type MIME et les en-têtes CORS
+// Prévenir toute sortie avant les en-têtes
 ob_start();
 
-// Set proper JavaScript MIME type
+// Définir le type MIME JavaScript
 header("Content-Type: application/javascript");
 
-// Set CORS headers
+// Définir les en-têtes CORS
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
-// Handle preflight requests
+// Gérer les requêtes préliminaires OPTIONS
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit(0);
 }
 
-// URL of the script to proxy
+// URL du script à proxifier
 $scriptUrl = 'https://cdn.gpteng.co/gptengineer.js';
 
+// Version minimaliste de secours si le téléchargement échoue
+$fallbackScript = "console.log('gptengineer.js : Version de secours chargée');";
+
 try {
-    // Initialize cURL
-    $ch = curl_init();
+    // Configuration de l'appel cURL
+    $ch = curl_init($scriptUrl);
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_TIMEOUT => 5,
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_USERAGENT => 'Mozilla/5.0 (compatible; PremiumAutoClean/1.0)'
+    ]);
 
-    // Configure cURL
-    curl_setopt($ch, CURLOPT_URL, $scriptUrl);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-    curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (compatible; PremiumAutoCleanProxy/1.0)');
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // Not ideal for production
-    curl_setopt($ch, CURLOPT_TIMEOUT, 10); // 10 second timeout
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-        'Accept: */*',
-        'Origin: https://premiumautoclean.com'
-    ));
-
-    // Execute the request
+    // Exécuter la requête
     $content = curl_exec($ch);
-
-    // Check for cURL errors
-    if (curl_errno($ch)) {
-        // Return a JavaScript comment instead of HTML error
-        echo "console.error('Proxy error: " . addslashes(curl_error($ch)) . "');";
-        curl_close($ch);
-        exit;
-    }
-
-    // Check HTTP status code
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    if ($httpCode !== 200) {
-        echo "console.error('HTTP error: " . $httpCode . "');";
-        curl_close($ch);
-        exit;
+    
+    // Vérifier les erreurs cURL et le code HTTP
+    if (curl_errno($ch) || $httpCode !== 200 || empty($content)) {
+        throw new Exception("Échec du téléchargement (HTTP: $httpCode)");
     }
-
-    // Verify content is JavaScript (not HTML)
-    if (strpos($content, '<!DOCTYPE html>') === 0 || strpos($content, '<html') === 0) {
-        echo "console.error('Content returned is HTML, not JavaScript');";
-        
-        // Use a local fallback if available
-        if (file_exists(__DIR__ . '/gptengineer.js')) {
-            echo file_get_contents(__DIR__ . '/gptengineer.js');
-        } else {
-            // Minimal fallback
-            echo "console.log('gptengineer.js could not be loaded - functionality limited');";
-        }
-    } else {
-        // Return the JavaScript content
-        echo $content;
+    
+    // Vérifier le type de contenu
+    $contentType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
+    if (strpos($contentType, 'javascript') === false && strpos($content, '<!DOCTYPE') === 0) {
+        throw new Exception("Contenu non-JavaScript reçu");
     }
-
-    // Close cURL
-    curl_close($ch);
+    
+    // Le script est valide, on l'envoie
+    echo $content;
+    
 } catch (Exception $e) {
-    // Return a JavaScript comment instead of a PHP error
-    echo "console.error('Proxy exception: " . addslashes($e->getMessage()) . "');";
+    // En cas d'erreur, utiliser le script de secours
+    echo "console.error('Proxy error: " . addslashes($e->getMessage()) . "');\n";
+    echo $fallbackScript;
 }
 
-// Flush and end output buffering
+curl_close($ch);
 ob_end_flush();
 ?>

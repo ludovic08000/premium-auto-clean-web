@@ -44,19 +44,21 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" />
     <meta name="theme-color" content="#111111" />
     
-    <!-- Lovable script tag for enabling new features - loaded via proxy -->
-    <!-- Do not use direct CDN URL to avoid CORS issues -->
-    <script type="text/javascript">
-      // Preload the gptengineer.js via our proxy to avoid CORS errors
-      window.addEventListener('DOMContentLoaded', function() {
+    <!-- Chargement direct du script Lovable via CDN (méthode primaire) -->
+    <script type="module" src="https://cdn.gpteng.co/gptengineer.js" onerror="loadViaProxy()"></script>
+    
+    <!-- Méthode de secours via proxy en cas d'échec -->
+    <script>
+      function loadViaProxy() {
+        console.log('Tentative de chargement via proxy...');
         const script = document.createElement('script');
         script.type = 'module';
         script.src = '/gpt-proxy.php';
         script.onerror = function() {
-          console.warn('Failed to load gptengineer.js via proxy');
+          console.warn('Échec du chargement via proxy');
         };
         document.head.appendChild(script);
-      });
+      }
     </script>
   </head>
 

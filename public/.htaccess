@@ -28,7 +28,7 @@
   RewriteCond %{HTTP_HOST} !^localhost
   RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
   
-  # Traitement spécial pour les scripts gptengineer et lovable.js
+  # Traitement spécial pour le script gptengineer
   RewriteRule ^gpt-proxy\.php$ - [L]
   
   # Traitement spécial pour les fichiers JavaScript
