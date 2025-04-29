@@ -1,3 +1,4 @@
+
 const PriceCard = ({ 
   title, 
   price, 
@@ -84,19 +85,49 @@ const Tarifs = () => {
           <div className="max-w-3xl mx-auto bg-dark p-6 rounded-lg border border-gold/30" itemScope itemType="https://schema.org/ItemList">
             <meta itemProp="name" content="Services de détailing automobile à la carte" />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10">
-              <div>
-                <ServiceItem name="Nettoyage intérieur complet" price="À partir de 30€" />
-                <ServiceItem name="Nettoyage extérieur premium" price="À partir de 44€" />
-                <ServiceItem name="Nettoyage et protection des jantes" price="À partir de 25€" />
-                <ServiceItem name="Rénovation des phares ternis" price="À partir de 50€" />
-                <ServiceItem name="Traitement et hydratation du cuir" price="À partir de 25€" />
+              <div className="space-y-2">
+                <div className="flex justify-between items-center py-2 border-b border-gold/20">
+                  <span className="text-gold/80">Nettoyage intérieur complet</span>
+                  <span className="font-bold ml-4 whitespace-nowrap">À partir de 30€</span>
+                </div>
+                <div className="flex justify-between items-center py-2 border-b border-gold/20">
+                  <span className="text-gold/80">Nettoyage extérieur premium</span>
+                  <span className="font-bold ml-4 whitespace-nowrap">À partir de 44€</span>
+                </div>
+                <div className="flex justify-between items-center py-2 border-b border-gold/20">
+                  <span className="text-gold/80">Nettoyage et protection des jantes</span>
+                  <span className="font-bold ml-4 whitespace-nowrap">À partir de 25€</span>
+                </div>
+                <div className="flex justify-between items-center py-2 border-b border-gold/20">
+                  <span className="text-gold/80">Rénovation des phares ternis</span>
+                  <span className="font-bold ml-4 whitespace-nowrap">À partir de 50€</span>
+                </div>
+                <div className="flex justify-between items-center py-2 border-b border-gold/20">
+                  <span className="text-gold/80">Traitement et hydratation du cuir</span>
+                  <span className="font-bold ml-4 whitespace-nowrap">À partir de 25€</span>
+                </div>
               </div>
-              <div>
-                <ServiceItem name="Traitement hydrophobe des vitres" price="À partir de 20€" />
-                <ServiceItem name="Nettoyage des taches tenaces" price="À partir de 20€" />
-                <ServiceItem name="Désinfection à la vapeur sèche" price="À partir de 25€" />
-                <ServiceItem name="Service de nettoyage à domicile" price="À partir de 15€" />
-                <ServiceItem name="Polissage et correction de défauts" price="À partir de 90€" />
+              <div className="space-y-2">
+                <div className="flex justify-between items-center py-2 border-b border-gold/20">
+                  <span className="text-gold/80">Traitement hydrophobe des vitres</span>
+                  <span className="font-bold ml-4 whitespace-nowrap">À partir de 20€</span>
+                </div>
+                <div className="flex justify-between items-center py-2 border-b border-gold/20">
+                  <span className="text-gold/80">Nettoyage des taches tenaces</span>
+                  <span className="font-bold ml-4 whitespace-nowrap">À partir de 20€</span>
+                </div>
+                <div className="flex justify-between items-center py-2 border-b border-gold/20">
+                  <span className="text-gold/80">Désinfection à la vapeur sèche</span>
+                  <span className="font-bold ml-4 whitespace-nowrap">À partir de 25€</span>
+                </div>
+                <div className="flex justify-between items-center py-2 border-b border-gold/20">
+                  <span className="text-gold/80">Service de nettoyage à domicile</span>
+                  <span className="font-bold ml-4 whitespace-nowrap">À partir de 15€</span>
+                </div>
+                <div className="flex justify-between items-center py-2 border-b border-gold/20">
+                  <span className="text-gold/80">Polissage et correction de défauts</span>
+                  <span className="font-bold ml-4 whitespace-nowrap">À partir de 90€</span>
+                </div>
               </div>
             </div>
           </div>
