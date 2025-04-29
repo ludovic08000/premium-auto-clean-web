@@ -1,7 +1,15 @@
 
 <?php
-// Script amélioré pour gérer correctement les fichiers JavaScript sur IONOS
-header("Content-Type: application/javascript");
+// Script amélioré pour gérer correctement les fichiers JavaScript
+// Version 2.0 - Correction des problèmes MIME et sécurisation
+
+// Prévenir toute sortie avant les en-têtes
+ob_start();
+
+// Définir strictement le type MIME JavaScript
+header("Content-Type: application/javascript; charset=UTF-8");
+
+// Définir les en-têtes CORS
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
@@ -14,86 +22,94 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 // Récupérer le chemin du fichier demandé
 $requestPath = isset($_GET['file']) ? $_GET['file'] : $_SERVER['REQUEST_URI'];
 
-// Nettoyer le chemin
-$requestPath = str_replace('../', '', $requestPath);
-$requestPath = str_replace('..\\', '', $requestPath);
+// Nettoyer et sécuriser le chemin
+$requestPath = str_replace(['../', '..\\', ':', '?', '&'], '', $requestPath);
 $requestPath = parse_url($requestPath, PHP_URL_PATH);
 
-// Essayer plusieurs extensions si le fichier direct n'existe pas
-$extensions = ['', '.js', '.mjs', '.jsx', '.tsx'];
-$filePath = null;
+// Mode de débogage (à commenter en production)
+$debug = isset($_GET['debug']) && $_GET['debug'] == '1';
 
-// Pour le débogage (à commenter en production)
-$debug = isset($_GET['debug']) ? true : false;
 if ($debug) {
-    echo "// Requested path: " . $requestPath . "\n";
-    echo "// Looking for files with extensions: " . implode(', ', $extensions) . "\n";
+    echo "// Debug mode enabled\n";
+    echo "// Requested path: $requestPath\n";
 }
 
-// Chercher d'abord dans le dossier dist
-$distPath = __DIR__ . '/dist/assets' . str_replace(['/src/', '/dist/'], '/', $requestPath);
-foreach ($extensions as $ext) {
-    $testPath = $distPath . $ext;
-    if (file_exists($testPath) && is_readable($testPath)) {
-        $filePath = $testPath;
-        if ($debug) echo "// Found file in dist folder: " . $testPath . "\n";
-        break;
-    } elseif ($debug) {
-        echo "// Not found in dist: " . $testPath . "\n";
-    }
-}
+// Rechercher le fichier dans différents emplacements
+$searchLocations = [
+    // Dossier dist/assets (build Vite standard)
+    __DIR__ . '/dist/assets' . str_replace(['/assets/', '/dist/assets/', '/src/'], '/', $requestPath),
+    __DIR__ . '/dist/assets' . $requestPath,
+    // Dossier dist
+    __DIR__ . '/dist' . $requestPath,
+    // Racine du projet
+    __DIR__ . $requestPath,
+    // Dossier src
+    __DIR__ . '/src' . $requestPath
+];
 
-// Si non trouvé dans dist, chercher à la racine
-if (!$filePath) {
+// Extensions à essayer
+$extensions = ['', '.js', '.mjs', '.jsx', '.tsx'];
+
+// Chercher le fichier
+$filePath = null;
+foreach ($searchLocations as $location) {
     foreach ($extensions as $ext) {
-        $testPath = __DIR__ . $requestPath . $ext;
-        if (file_exists($testPath) && is_readable($testPath)) {
+        $testPath = $location . $ext;
+        if (file_exists($testPath) && is_file($testPath) && is_readable($testPath)) {
             $filePath = $testPath;
-            if ($debug) echo "// Found file at root: " . $testPath . "\n";
-            break;
+            if ($debug) echo "// Found file: $testPath\n";
+            break 2;
         } elseif ($debug) {
-            echo "// Not found at root: " . $testPath . "\n";
+            echo "// File not found: $testPath\n";
         }
     }
 }
 
-// Chercher dans le dossier src en dernier recours
-if (!$filePath) {
-    $srcPath = __DIR__ . $requestPath;
-    foreach ($extensions as $ext) {
-        $testPath = $srcPath . $ext;
-        if (file_exists($testPath) && is_readable($testPath)) {
-            $filePath = $testPath;
-            if ($debug) echo "// Found file in src: " . $testPath . "\n";
-            break;
-        } elseif ($debug) {
-            echo "// Not found in src: " . $testPath . "\n";
-        }
+// Si le fichier est trouvé
+if ($filePath) {
+    // Optimisation du cache
+    $etag = md5_file($filePath);
+    $lastModified = gmdate('D, d M Y H:i:s', filemtime($filePath)) . ' GMT';
+    
+    header('ETag: "' . $etag . '"');
+    header('Last-Modified: ' . $lastModified);
+    header('Cache-Control: max-age=3600'); // Cache 1 heure
+    
+    // Vérification du cache côté client
+    if (isset($_SERVER['HTTP_IF_NONE_MATCH']) && trim($_SERVER['HTTP_IF_NONE_MATCH'], '"') == $etag) {
+        header('HTTP/1.1 304 Not Modified');
+        exit;
     }
-}
-
-// Vérifier que le fichier existe et est lisible
-if ($filePath && is_readable($filePath)) {
-    // Définir les en-têtes pour le cache
-    header('Cache-Control: max-age=3600'); // Cache pour 1 heure
     
     // Lire le contenu du fichier
     $content = file_get_contents($filePath);
     
-    // Vérifier si le contenu ressemble à du JavaScript
+    // Vérifier si le contenu n'est pas du HTML (éviter les erreurs "Unexpected token '<'")
     if (strpos($content, '<!DOCTYPE html>') === 0 || strpos($content, '<html') === 0) {
-        echo "// ATTENTION: Le fichier $filePath semble contenir du HTML au lieu de JavaScript\n";
-        echo "// Cela peut causer des erreurs de parsing côté client\n";
+        if ($debug) {
+            echo "// WARNING: File appears to be HTML, not JavaScript\n";
+            echo "// Serving fallback JavaScript instead\n";
+        }
+        
+        // Générer un script de secours minimaliste
+        echo "console.error('Error loading JavaScript file. Received HTML instead of JavaScript.');";
+        echo "console.warn('File path requested: " . addslashes($requestPath) . "');";
+    } else {
+        // C'est du JavaScript valide, on l'envoie
+        echo $content;
+    }
+} else {
+    // Fichier non trouvé
+    if ($debug) {
+        echo "// File not found after checking all locations\n";
+        echo "// Searched in: " . implode(', ', array_map(function($loc) { return str_replace(__DIR__, '[ROOT]', $loc); }, $searchLocations)) . "\n";
     }
     
-    // Envoyer le contenu du fichier
-    echo $content;
-} else {
-    // Renvoyer une erreur 404 si le fichier n'existe pas
     header('HTTP/1.1 404 Not Found');
-    echo "// Le fichier JavaScript demandé n'existe pas ou n'est pas accessible: " . $requestPath;
-    if ($debug) {
-        echo "\n// Debug info: recherche effectuée dans " . __DIR__ . ", " . __DIR__ . '/dist/assets/' . " et " . __DIR__ . '/src/';
-    }
+    echo "console.error('JavaScript file not found: " . addslashes($requestPath) . "');";
 }
+
+// Envoyer la sortie et terminer
+ob_end_flush();
+exit;
 ?>

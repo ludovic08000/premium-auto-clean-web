@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
   <head>
@@ -43,66 +44,68 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" />
     <meta name="theme-color" content="#111111" />
     
-    <!-- Chargement direct du script Lovable depuis le CDN -->
-    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
-    
-    <!-- Chargement de secours via proxy pour contourner les problèmes CORS/MIME -->
+    <!-- Système amélioré de chargement Lovable -->
     <script>
-      // Configuration globale pour le chargement des scripts Lovable
-      window.lovableConfig = {
-        scriptLoaded: false,
-        loadAttempts: 0,
-        maxAttempts: 3
+      // Configuration pour la gestion des scripts
+      window.scriptConfig = {
+        lovableLoaded: false,
+        attempts: 0,
+        maxAttempts: 3,
+        proxyPath: '/gpt-proxy.php',
+        directPath: 'https://cdn.gpteng.co/gptengineer.js'
       };
       
-      // Fonction pour vérifier si le script principal a été chargé
-      function checkLovableLoaded() {
-        // Vérifier si le script a déjà été chargé avec succès par le CDN
-        if (typeof window.lovable !== 'undefined' || document.querySelector('script[src="https://cdn.gpteng.co/gptengineer.js"]').dataset.loaded === 'true') {
-          console.log('Script Lovable chargé avec succès via CDN');
-          window.lovableConfig.scriptLoaded = true;
-          return true;
-        }
-        return false;
-      }
-      
-      // Fonction pour charger via le proxy local si le chargement direct échoue
-      function loadViaProxy() {
-        if (window.lovableConfig.scriptLoaded) return;
-        
-        console.log('Tentative de chargement via proxy...');
-        const proxyScript = document.createElement('script');
-        proxyScript.type = 'module';
-        proxyScript.src = '/gpt-proxy.php';
-        proxyScript.onload = function() {
-          console.log('Script Lovable chargé avec succès via proxy');
-          window.lovableConfig.scriptLoaded = true;
-        };
-        proxyScript.onerror = function() {
-          console.error('Échec du chargement via proxy');
-        };
-        document.head.appendChild(proxyScript);
-      }
-      
-      // Surveiller le chargement du script principal
-      document.querySelector('script[src="https://cdn.gpteng.co/gptengineer.js"]').onload = function() {
-        this.dataset.loaded = 'true';
-        window.lovableConfig.scriptLoaded = true;
-      };
-      
-      document.querySelector('script[src="https://cdn.gpteng.co/gptengineer.js"]').onerror = function() {
-        console.warn('Échec du chargement direct du script Lovable, tentative via proxy...');
-        loadViaProxy();
-      };
-      
-      // Vérification finale après chargement complet de la page
-      window.addEventListener('load', function() {
-        setTimeout(function() {
-          if (!window.lovableConfig.scriptLoaded) {
-            console.warn('Le script Lovable n\'a pas été chargé correctement, nouvelle tentative via proxy');
-            loadViaProxy();
+      // Fonction pour charger le script Lovable - Version améliorée avec promesse
+      function loadLovableScript(src, useProxy = false) {
+        return new Promise((resolve, reject) => {
+          // Si déjà chargé, ne pas recharger
+          if (window.scriptConfig.lovableLoaded) {
+            resolve(true);
+            return;
           }
-        }, 1000);
+          
+          const script = document.createElement('script');
+          script.type = 'module';
+          script.src = src;
+          
+          // Gestionnaires d'événements
+          script.onload = function() {
+            console.log(`Lovable chargé avec succès via ${useProxy ? 'proxy' : 'CDN'}`);
+            window.scriptConfig.lovableLoaded = true;
+            resolve(true);
+          };
+          
+          script.onerror = function(e) {
+            console.warn(`Échec du chargement via ${useProxy ? 'proxy' : 'CDN'}`, e);
+            reject(new Error(`Échec du chargement de ${src}`));
+          };
+          
+          document.head.appendChild(script);
+        });
+      }
+      
+      // Système de chargement avec tentatives multiples
+      async function initLovable() {
+        // Première tentative via CDN
+        try {
+          await loadLovableScript(window.scriptConfig.directPath);
+          return; // Si réussi, on sort
+        } catch (e) {
+          console.warn('Échec de chargement via CDN, tentative via proxy...');
+        }
+        
+        // Deuxième tentative via proxy
+        try {
+          await loadLovableScript(window.scriptConfig.proxyPath, true);
+          return; // Si réussi, on sort
+        } catch (e) {
+          console.error('Échec total du chargement du script Lovable');
+        }
+      }
+      
+      // Lancer le processus de chargement
+      initLovable().catch(e => {
+        console.error('Erreur d\'initialisation:', e);
       });
     </script>
   </head>
@@ -115,109 +118,80 @@
     
     <div id="root"></div>
     
-    <!-- Chargement de script avec gestion des erreurs -->
+    <!-- Chargement des scripts de l'application avec gestion améliorée des erreurs -->
     <script>
-      // Fonction pour charger un script de façon robuste
-      function loadScript(url, type = 'text/javascript') {
+      // Configuration de chargement
+      window.appConfig = {
+        mainScriptLoaded: false,
+        entryPoints: [
+          '/dist/assets/main.js',
+          '/js-proxy.php?file=/dist/assets/main.js',
+          '/js-proxy.php?file=/src/main.tsx'
+        ],
+        currentAttempt: 0
+      };
+      
+      // Fonction pour charger un script avec promesse et gestion d'erreurs
+      function loadScript(url) {
         return new Promise((resolve, reject) => {
-          try {
-            const script = document.createElement('script');
-            script.type = type;
-            script.src = url;
-            script.async = true;
-            
-            // Gestionnaire de succès
-            script.onload = () => {
-              console.log(`Script chargé avec succès: ${url}`);
-              resolve(true);
-            };
-            
-            // Gestionnaire d'erreur avec tentative directe via XHR
-            script.onerror = () => {
-              console.warn(`Échec du chargement direct: ${url}, tentative via XHR...`);
-              
-              // Tenter de charger via XHR
-              const xhr = new XMLHttpRequest();
-              xhr.open('GET', url, true);
-              xhr.onload = () => {
-                if (xhr.status === 200) {
-                  console.log(`Script récupéré via XHR: ${url}`);
-                  // Vérifier si le contenu commence par <!DOCTYPE html> ou <html
-                  if (xhr.responseText.trim().startsWith('<!DOCTYPE html>') || 
-                      xhr.responseText.trim().startsWith('<html')) {
-                    console.error(`Le contenu récupéré pour ${url} est du HTML, pas du JavaScript`);
-                    reject(new Error('Invalid JavaScript content'));
-                    return;
-                  }
-                  
-                  const inlineScript = document.createElement('script');
-                  inlineScript.type = type;
-                  inlineScript.textContent = xhr.responseText;
-                  document.body.appendChild(inlineScript);
-                  resolve(true);
-                } else {
-                  console.error(`Échec XHR: ${url} (${xhr.status})`);
-                  reject();
-                }
-              };
-              xhr.onerror = () => {
-                console.error(`Échec XHR total: ${url}`);
-                reject();
-              };
-              xhr.send();
-            };
-            
-            document.body.appendChild(script);
-          } catch (e) {
-            console.error(`Erreur lors du chargement: ${url}`, e);
-            reject(e);
-          }
+          const script = document.createElement('script');
+          script.type = url.endsWith('.tsx') ? 'module' : 'text/javascript';
+          script.src = url;
+          
+          script.onload = () => {
+            console.log(`Script chargé avec succès: ${url}`);
+            resolve(true);
+          };
+          
+          script.onerror = () => {
+            console.warn(`Échec du chargement: ${url}`);
+            reject(new Error(`Échec du chargement de ${url}`));
+          };
+          
+          document.body.appendChild(script);
         });
       }
       
-      // Initialisation de l'application
-      async function initApp() {
-        try {
-          // Marquer le début du chargement
-          document.documentElement.classList.add('loading');
-          
-          // Essayer de charger les points d'entrée principaux
-          const entrypoints = [
-            '/dist/assets/main.js',
-            '/js-proxy.php?file=/dist/assets/main.js',
-            '/js-proxy.php?file=/src/main.tsx',
-            '/js-proxy.php?file=/src/main.jsx'
-          ];
-          
-          let success = false;
-          for (const entry of entrypoints) {
-            try {
-              success = await loadScript(entry);
-              if (success) {
-                console.log(`Application chargée via: ${entry}`);
-                document.documentElement.classList.add('js-loaded');
-                document.documentElement.classList.remove('loading');
-                break;
-              }
-            } catch (e) {
-              console.warn(`Échec du point d'entrée: ${entry}`, e);
-            }
+      // Fonction pour charger l'application avec plusieurs tentatives
+      async function loadApp() {
+        document.documentElement.classList.add('loading');
+        
+        // Essayer chaque point d'entrée séquentiellement
+        for (const entrypoint of window.appConfig.entryPoints) {
+          try {
+            window.appConfig.currentAttempt++;
+            console.log(`Tentative ${window.appConfig.currentAttempt}/${window.appConfig.entryPoints.length}: ${entrypoint}`);
+            
+            await loadScript(entrypoint);
+            
+            // Si on arrive ici, le chargement a réussi
+            console.log(`Application chargée via: ${entrypoint}`);
+            document.documentElement.classList.add('js-loaded');
+            document.documentElement.classList.remove('loading');
+            window.appConfig.mainScriptLoaded = true;
+            return true;
+          } catch (e) {
+            console.warn(`Échec de l'entrée ${entrypoint}:`, e);
           }
-          
-          if (!success) {
-            console.error("Tous les points d'entrée ont échoué");
-            document.getElementById('root').innerHTML = '<div style="padding: 20px; text-align: center;"><h2>Erreur de chargement</h2><p>L\'application n\'a pas pu être chargée. Veuillez rafraîchir la page ou contacter le support.</p></div>';
-          }
-        } catch (e) {
-          console.error("Erreur critique d'initialisation:", e);
         }
+        
+        // Si toutes les tentatives échouent
+        console.error("Échec de chargement de l'application après toutes les tentatives");
+        document.getElementById('root').innerHTML = `
+          <div style="padding: 30px; text-align: center; font-family: sans-serif;">
+            <h2>Problème de chargement</h2>
+            <p>L'application n'a pas pu être chargée. Veuillez rafraîchir la page ou contacter le support technique.</p>
+            <button onclick="window.location.reload()" style="padding: 10px 20px; background: #333; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 15px;">Rafraîchir la page</button>
+          </div>
+        `;
+        return false;
       }
       
-      // Lancer l'initialisation quand le DOM est prêt
+      // Lancer le chargement quand le DOM est prêt
       if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initApp);
+        document.addEventListener('DOMContentLoaded', loadApp);
       } else {
-        initApp();
+        loadApp();
       }
     </script>
   </body>
