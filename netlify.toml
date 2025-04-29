@@ -59,3 +59,7 @@
 [context.production.environment]
   NODE_ENV = "production"
   HTTPS = "true"
+
+# S'assurer que les dépendances de développement sont installées pour le build
+[build.environment]
+  NPM_FLAGS = "--legacy-peer-deps"
