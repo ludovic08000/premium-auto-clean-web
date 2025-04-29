@@ -44,21 +44,75 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" />
     <meta name="theme-color" content="#111111" />
     
-    <!-- Chargement direct du script Lovable via CDN (méthode primaire) -->
-    <script type="module" src="https://cdn.gpteng.co/gptengineer.js" onerror="loadViaProxy()"></script>
-    
-    <!-- Méthode de secours via proxy en cas d'échec -->
+    <!-- Chargement des scripts Lovable avec gestion améliorée des erreurs -->
     <script>
-      function loadViaProxy() {
-        console.log('Tentative de chargement via proxy...');
+      // Configuration globale pour le chargement des scripts Lovable
+      window.lovableConfig = {
+        scriptLoaded: false,
+        loadAttempts: 0,
+        maxAttempts: 3
+      };
+      
+      // Fonction améliorée pour charger le script Lovable
+      function loadLovableScript() {
+        if (window.lovableConfig.scriptLoaded || window.lovableConfig.loadAttempts >= window.lovableConfig.maxAttempts) {
+          return;
+        }
+        
+        window.lovableConfig.loadAttempts++;
+        console.log(`Tentative de chargement ${window.lovableConfig.loadAttempts}/${window.lovableConfig.maxAttempts}`);
+        
+        // Méthode 1: Chargement direct depuis CDN
         const script = document.createElement('script');
         script.type = 'module';
-        script.src = '/gpt-proxy.php';
+        script.src = 'https://cdn.gpteng.co/gptengineer.js';
+        script.onload = function() {
+          console.log('Script Lovable chargé avec succès via CDN');
+          window.lovableConfig.scriptLoaded = true;
+        };
         script.onerror = function() {
-          console.warn('Échec du chargement via proxy');
+          console.warn('Échec du chargement via CDN, tentative via proxy...');
+          // Méthode 2: Chargement via proxy local
+          loadViaProxy();
         };
         document.head.appendChild(script);
       }
+      
+      // Fonction pour charger via le proxy local
+      function loadViaProxy() {
+        const proxyScript = document.createElement('script');
+        proxyScript.type = 'module';
+        proxyScript.src = '/gpt-proxy.php';
+        proxyScript.onload = function() {
+          console.log('Script Lovable chargé avec succès via proxy');
+          window.lovableConfig.scriptLoaded = true;
+        };
+        proxyScript.onerror = function() {
+          console.error('Échec du chargement via proxy');
+          // Dernière tentative après un délai
+          setTimeout(retryLoading, 2000);
+        };
+        document.head.appendChild(proxyScript);
+      }
+      
+      // Fonction de dernière chance avec délai
+      function retryLoading() {
+        if (!window.lovableConfig.scriptLoaded && window.lovableConfig.loadAttempts < window.lovableConfig.maxAttempts) {
+          console.log('Nouvelle tentative après délai...');
+          loadLovableScript();
+        }
+      }
+      
+      // Démarrer le chargement du script
+      loadLovableScript();
+      
+      // Vérification finale après chargement complet de la page
+      window.addEventListener('load', function() {
+        if (!window.lovableConfig.scriptLoaded) {
+          console.warn('Le script Lovable n\'a pas été chargé après le chargement complet de la page');
+          retryLoading();
+        }
+      });
     </script>
   </head>
 

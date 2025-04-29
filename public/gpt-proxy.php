@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 $scriptUrl = 'https://cdn.gpteng.co/gptengineer.js';
 
 // Version minimaliste de secours si le téléchargement échoue
-$fallbackScript = "console.log('gptengineer.js : Version de secours chargée');";
+$fallbackScript = "console.log('gptengineer.js : Version de secours chargée - Fonctionnalités limitées');";
 
 try {
     // Configuration de l'appel cURL
@@ -30,8 +30,8 @@ try {
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_FOLLOWLOCATION => true,
         CURLOPT_TIMEOUT => 5,
-        CURLOPT_SSL_VERIFYPEER => false,
-        CURLOPT_USERAGENT => 'Mozilla/5.0 (compatible; PremiumAutoClean/1.0)'
+        CURLOPT_SSL_VERIFYPEER => true, // Activer la vérification SSL pour plus de sécurité
+        CURLOPT_USERAGENT => 'Mozilla/5.0 (compatible; PremiumAutoClean/1.0; +https://premiumautoclean.com)'
     ]);
 
     // Exécuter la requête
@@ -40,24 +40,29 @@ try {
     
     // Vérifier les erreurs cURL et le code HTTP
     if (curl_errno($ch) || $httpCode !== 200 || empty($content)) {
-        throw new Exception("Échec du téléchargement (HTTP: $httpCode)");
+        throw new Exception("Échec du téléchargement (HTTP: $httpCode, Erreur: " . curl_error($ch) . ")");
     }
     
     // Vérifier le type de contenu
     $contentType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
     if (strpos($contentType, 'javascript') === false && strpos($content, '<!DOCTYPE') === 0) {
-        throw new Exception("Contenu non-JavaScript reçu");
+        throw new Exception("Contenu non-JavaScript reçu: $contentType");
     }
     
     // Le script est valide, on l'envoie
     echo $content;
     
 } catch (Exception $e) {
-    // En cas d'erreur, utiliser le script de secours
+    // En cas d'erreur, utiliser le script de secours et journaliser l'erreur
+    error_log("Erreur gptengineer.js proxy: " . $e->getMessage());
     echo "console.error('Proxy error: " . addslashes($e->getMessage()) . "');\n";
     echo $fallbackScript;
+} finally {
+    // Toujours fermer la ressource cURL
+    if (isset($ch) && is_resource($ch)) {
+        curl_close($ch);
+    }
 }
 
-curl_close($ch);
 ob_end_flush();
 ?>
