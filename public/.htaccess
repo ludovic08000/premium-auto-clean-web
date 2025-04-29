@@ -36,6 +36,34 @@
 
 # Configuration des types MIME pour JavaScript
 <IfModule mod_mime.c>
+  # Définir correctement les types MIME pour JavaScript
   AddType application/javascript .js
   AddType application/javascript .mjs
+  AddType application/javascript .jsx
+  AddType application/javascript .tsx
+  
+  # Configuration spécifique pour les modules ES6
+  AddType application/javascript .js
+  AddHandler application/javascript .js
+  
+  # Activer le traitement des modules JavaScript
+  <FilesMatch "\.(js|mjs)$">
+    Header set Content-Type application/javascript
+  </FilesMatch>
+</IfModule>
+
+# Configurer les en-têtes CORS et sécurité
+<IfModule mod_headers.c>
+  # En-têtes CORS pour les ressources spécifiques
+  <FilesMatch "\.(html|js|css|mjs)$">
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type"
+  </FilesMatch>
+  
+  # En-têtes de sécurité
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-XSS-Protection "1; mode=block"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
 </IfModule>
