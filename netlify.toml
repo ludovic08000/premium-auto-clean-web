@@ -42,3 +42,9 @@
     Content-Security-Policy = "upgrade-insecure-requests"
     Referrer-Policy = "strict-origin-when-cross-origin"
 
+# Configuration SSL spécifique
+[context.production.environment]
+  HTTPS = "true"
+  NODE_ENV = "production"
+  SSL = "true"
+

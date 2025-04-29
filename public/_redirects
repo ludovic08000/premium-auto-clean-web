@@ -2,8 +2,9 @@
 # Fallback for favicon
 /favicon.ico  /favicon.ico  200
 
-# HTTPS enforcing
+# HTTPS enforcing with stricter rules
 http://*  https://:splat  301!
 
 # SPA fallback
 /*  /index.html  200
+
