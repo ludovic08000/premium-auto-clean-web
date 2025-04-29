@@ -2,11 +2,14 @@
 <?php
 // Script amélioré pour gérer correctement les fichiers JavaScript sur IONOS
 header("Content-Type: application/javascript");
-
-// Définir les en-têtes CORS pour permettre l'accès depuis n'importe quel domaine
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
+
+// Gérer les requêtes préliminaires OPTIONS pour CORS
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    exit(0);
+}
 
 // Récupérer le chemin du fichier demandé
 $requestPath = isset($_GET['file']) ? $_GET['file'] : $_SERVER['REQUEST_URI'];
@@ -27,28 +30,44 @@ if ($debug) {
     echo "// Looking for files with extensions: " . implode(', ', $extensions) . "\n";
 }
 
+// Chercher d'abord dans le dossier dist
+$distPath = __DIR__ . '/dist/assets' . str_replace(['/src/', '/dist/'], '/', $requestPath);
 foreach ($extensions as $ext) {
-    $testPath = __DIR__ . $requestPath . $ext;
+    $testPath = $distPath . $ext;
     if (file_exists($testPath) && is_readable($testPath)) {
         $filePath = $testPath;
-        if ($debug) echo "// Found file: " . $testPath . "\n";
+        if ($debug) echo "// Found file in dist folder: " . $testPath . "\n";
         break;
     } elseif ($debug) {
-        echo "// Not found: " . $testPath . "\n";
+        echo "// Not found in dist: " . $testPath . "\n";
     }
 }
 
-// Chemin alternatif pour les fichiers dans le dossier dist
-if (!$filePath && strpos($requestPath, '/src/') === 0) {
-    $altPath = __DIR__ . '/dist' . str_replace('/src/', '/assets/', $requestPath);
+// Si non trouvé dans dist, chercher à la racine
+if (!$filePath) {
     foreach ($extensions as $ext) {
-        $testPath = $altPath . $ext;
+        $testPath = __DIR__ . $requestPath . $ext;
         if (file_exists($testPath) && is_readable($testPath)) {
             $filePath = $testPath;
-            if ($debug) echo "// Found in dist folder: " . $testPath . "\n";
+            if ($debug) echo "// Found file at root: " . $testPath . "\n";
             break;
         } elseif ($debug) {
-            echo "// Not found in dist: " . $testPath . "\n";
+            echo "// Not found at root: " . $testPath . "\n";
+        }
+    }
+}
+
+// Chercher dans le dossier src en dernier recours
+if (!$filePath) {
+    $srcPath = __DIR__ . $requestPath;
+    foreach ($extensions as $ext) {
+        $testPath = $srcPath . $ext;
+        if (file_exists($testPath) && is_readable($testPath)) {
+            $filePath = $testPath;
+            if ($debug) echo "// Found file in src: " . $testPath . "\n";
+            break;
+        } elseif ($debug) {
+            echo "// Not found in src: " . $testPath . "\n";
         }
     }
 }
@@ -56,16 +75,25 @@ if (!$filePath && strpos($requestPath, '/src/') === 0) {
 // Vérifier que le fichier existe et est lisible
 if ($filePath && is_readable($filePath)) {
     // Définir les en-têtes pour le cache
-    header('Cache-Control: max-age=86400'); // Cache pour 1 jour
+    header('Cache-Control: max-age=3600'); // Cache pour 1 heure
     
-    // Lire et envoyer le contenu du fichier
-    readfile($filePath);
+    // Lire le contenu du fichier
+    $content = file_get_contents($filePath);
+    
+    // Vérifier si le contenu ressemble à du JavaScript
+    if (strpos($content, '<!DOCTYPE html>') === 0 || strpos($content, '<html') === 0) {
+        echo "// ATTENTION: Le fichier $filePath semble contenir du HTML au lieu de JavaScript\n";
+        echo "// Cela peut causer des erreurs de parsing côté client\n";
+    }
+    
+    // Envoyer le contenu du fichier
+    echo $content;
 } else {
     // Renvoyer une erreur 404 si le fichier n'existe pas
     header('HTTP/1.1 404 Not Found');
     echo "// Le fichier JavaScript demandé n'existe pas ou n'est pas accessible: " . $requestPath;
     if ($debug) {
-        echo "\n// Debug info: recherche effectuée dans " . __DIR__ . " et " . __DIR__ . '/dist/assets/';
+        echo "\n// Debug info: recherche effectuée dans " . __DIR__ . ", " . __DIR__ . '/dist/assets/' . " et " . __DIR__ . '/src/';
     }
 }
 ?>

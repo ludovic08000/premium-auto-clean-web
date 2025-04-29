@@ -19,51 +19,53 @@ Pour résoudre les problèmes de CORS et MIME types sur votre hébergement IONOS
    - .user.ini
    - js-proxy.php
    - xml-proxy.php
-   - gpt-proxy.php (NOUVEAU: proxy spécifique pour gptengineer.js)
+   - gpt-proxy.php (proxy spécifique pour gptengineer.js)
    - index.html (avec les modifications pour la gestion des erreurs CORS)
 
-ÉTAPE 3: RÉSOUDRE LES PROBLÈMES DE CORS
-======================================
-1. Dans index.html, remplacez :
-   <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
-   par
-   <script src="/gpt-proxy.php" type="module"></script>
+ÉTAPE 3: RÉSOUDRE LES PROBLÈMES DE CORS ET MIME
+=============================================
+1. Dans index.html, assurez-vous d'utiliser le proxy local :
+   <script src="/gpt-proxy.php"></script>
+   
+2. Si vous avez des erreurs "Uncaught SyntaxError: Failed to execute 'appendChild' on 'Node': Unexpected token '<'", cela signifie que vos fichiers JavaScript sont servis avec un mauvais type MIME :
+   
+   a. Vérifiez que .user.ini est bien configuré
+   b. Assurez-vous que les fichiers js-proxy.php et gpt-proxy.php sont accessibles
+   c. Utilisez les chemins avec proxy explicites comme :
+      /js-proxy.php?file=/dist/assets/main.js
+      au lieu de :
+      /dist/assets/main.js
 
-2. Si vous avez encore des problèmes avec gptengineer.js, utilisez le proxy local :
-   - Accédez à https://cdn.gpteng.co/gptengineer.js
-   - Copiez tout le contenu
-   - Créez un fichier local "gptengineer.js" à la racine
-   - Collez le contenu dans ce fichier
-   - Modifiez index.html pour utiliser ce fichier local :
-     <script src="/gptengineer.js" type="module"></script>
+3. Pour déboguer, ajoutez le paramètre debug=1 aux requêtes de proxy :
+   /js-proxy.php?file=/dist/assets/main.js&debug=1
 
 ÉTAPE 4: VÉRIFICATION DU DÉPLOIEMENT
 ==================================
-1. Accédez à votre site avec ?debug=1 pour voir les informations de débogage
-   https://votresite.com/?debug=1
+1. Ouvrez la console de votre navigateur et vérifiez qu'il n'y a pas d'erreurs CORS ou MIME
    
-2. Vérifiez les fichiers JavaScript avec le proxy JS :
-   https://votresite.com/js-proxy.php?file=/src/main.jsx&debug=1
+2. Vérifiez que les fichiers sont bien servis avec le bon type MIME :
+   - Les fichiers JS doivent avoir "Content-Type: application/javascript"
+   - Les fichiers XML doivent avoir "Content-Type: text/xml"
    
-3. Vérifiez que le sitemap est accessible :
-   https://votresite.com/sitemap.xml
+3. Si des erreurs persistent, essayez de :
+   - Vider le cache du navigateur
+   - Utiliser la navigation privée
+   - Tester avec un autre navigateur
 
-DÉPANNAGE AVANCÉ
-==============
-Si vous rencontrez toujours des problèmes :
+SOLUTIONS AUX PROBLÈMES COURANTS
+==============================
 
-1. Vérifiez les logs d'erreur sur votre panneau IONOS
-2. Assurez-vous que PHP a les permissions nécessaires
-3. Essayez de désactiver temporairement le cache du navigateur
-4. Utilisez les outils de développement du navigateur pour voir les erreurs précises
-5. Essayez d'accéder directement aux fichiers via les scripts proxy
-
-EXPLICATION TECHNIQUE
-===================
-Cette solution contourne les limitations d'IONOS en :
-1. Utilisant PHP comme proxy pour servir les fichiers avec les bons types MIME
-2. Résolvant les problèmes CORS avec des en-têtes appropriés
-3. Fournissant des alternatives pour charger les scripts externes
-4. Gérant les requêtes préflight OPTIONS pour CORS
+1. Erreur "Unexpected token '<'" :
+   - Cette erreur se produit quand un fichier HTML est chargé comme JavaScript
+   - Solution : Utilisez les scripts proxy (js-proxy.php) pour charger vos fichiers JS
+   
+2. Erreur "CORS policy: No 'Access-Control-Allow-Origin' header" :
+   - Cette erreur se produit quand les en-têtes CORS ne sont pas correctement configurés
+   - Solution : Utilisez les scripts proxy qui ajoutent les en-têtes CORS nécessaires
+   
+3. Erreur "Failed to load module script" :
+   - Cette erreur se produit quand un module ES6 est chargé avec un mauvais MIME type
+   - Solution : Assurez-vous que le type="module" est utilisé seulement pour les vrais modules
 
 Pour toute question, n'hésitez pas à contacter votre développeur.
+

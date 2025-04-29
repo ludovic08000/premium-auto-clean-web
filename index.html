@@ -43,26 +43,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" />
     <meta name="theme-color" content="#111111" />
-    
-    <!-- Fix for CORS issues -->
-    <script>
-      // Fix for CORS issues with external scripts
-      window.addEventListener('error', function(e) {
-        if (e.target.tagName === 'SCRIPT' && e.target.src && e.target.src.includes('cdn.gpteng.co')) {
-          console.log('Tentative de récupération du script externe...');
-          var xhr = new XMLHttpRequest();
-          xhr.open('GET', e.target.src, true);
-          xhr.onload = function() {
-            if (xhr.status === 200) {
-              var script = document.createElement('script');
-              script.text = xhr.responseText;
-              document.head.appendChild(script);
-            }
-          };
-          xhr.send();
-        }
-      }, true);
-    </script>
   </head>
 
   <body>
@@ -100,6 +80,14 @@
               xhr.onload = () => {
                 if (xhr.status === 200) {
                   console.log(`Script récupéré via XHR: ${url}`);
+                  // Vérifier si le contenu commence par <!DOCTYPE html> ou <html
+                  if (xhr.responseText.trim().startsWith('<!DOCTYPE html>') || 
+                      xhr.responseText.trim().startsWith('<html')) {
+                    console.error(`Le contenu récupéré pour ${url} est du HTML, pas du JavaScript`);
+                    reject(new Error('Invalid JavaScript content'));
+                    return;
+                  }
+                  
                   const inlineScript = document.createElement('script');
                   inlineScript.type = type;
                   inlineScript.textContent = xhr.responseText;
@@ -131,16 +119,16 @@
           // Marquer le début du chargement
           document.documentElement.classList.add('loading');
           
-          // Charger le script gptengineer.js
-          await loadScript('https://cdn.gpteng.co/gptengineer.js', 'module')
+          // Charger le script gptengineer.js via le proxy local
+          await loadScript('/gpt-proxy.php')
             .catch(() => console.log('Application chargée sans gptengineer.js'));
           
           // Essayer de charger les points d'entrée principaux
           const entrypoints = [
             '/dist/assets/main.js',
-            '/assets/main.js',
-            '/src/main.tsx',
-            '/src/main.jsx'
+            '/js-proxy.php?file=/dist/assets/main.js',
+            '/js-proxy.php?file=/src/main.tsx',
+            '/js-proxy.php?file=/src/main.jsx'
           ];
           
           let success = false;
@@ -154,7 +142,7 @@
                 break;
               }
             } catch (e) {
-              console.warn(`Échec du point d'entrée: ${entry}`);
+              console.warn(`Échec du point d'entrée: ${entry}`, e);
             }
           }
           
@@ -167,8 +155,12 @@
         }
       }
       
-      // Lancer l'initialisation
-      window.addEventListener('DOMContentLoaded', initApp);
+      // Lancer l'initialisation quand le DOM est prêt
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initApp);
+      } else {
+        initApp();
+      }
     </script>
   </body>
 </html>
