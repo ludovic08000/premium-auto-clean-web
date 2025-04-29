@@ -65,10 +65,14 @@
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
   
   # Content Security Policy (CSP) - Compatible avec le certificat Ionos
-  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.gpteng.co https://*.emailjs.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://*.emailjs.com https://api.emailjs.com; font-src 'self'; object-src 'none'; upgrade-insecure-requests;"
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.gpteng.co https://*.emailjs.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://*.emailjs.com https://api.emailjs.com; font-src 'self'; object-src 'none'; upgrade-insecure-requests; block-all-mixed-content;"
   
   # Strict Transport Security (HSTS) - Compatible avec Ionos
   Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+  
+  # Optimisations de connexion
+  Header always set Connection "keep-alive"
+  Header always set Keep-Alive "timeout=60"
 </IfModule>
 
 # Forcer le type MIME pour les fichiers JavaScript
@@ -88,4 +92,7 @@
   SSLProtocol all -SSLv2 -SSLv3 -TLSv1 -TLSv1.1
   SSLCipherSuite HIGH:!aNULL:!MD5:!3DES
   SSLHonorCipherOrder on
+  SSLSessionCache shmcb:/var/cache/mod_ssl/scache(512000)
+  SSLSessionCacheTimeout 300
 </IfModule>
+

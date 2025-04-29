@@ -4,18 +4,13 @@
   publish = "dist"
   command = "npm run build"
 
-# Redirection pour SPA (Single Page Application) - réglage prioritaire
+# Redirection pour la page d'accueil (priorité maximale)
 [[redirects]]
   from = "/"
   to = "/index.html"
   status = 200
   force = true
-
-# Redirection pour SPA (tout le reste)
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+  priority = 100
 
 # Redirection spéciale pour app depuis Ionos
 [[redirects]]
@@ -23,6 +18,14 @@
   to = "/:splat"
   status = 301
   force = true
+  priority = 90
+
+# Redirection pour SPA (tout le reste)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  priority = 10
 
 # Configuration des en-têtes pour les types MIME corrects
 [[headers]]
@@ -46,15 +49,16 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000"
 
-# Configuration de sécurité pour SSL
+# Configuration de sécurité pour SSL avec optimisations de connexion
 [[headers]]
   for = "/*"
   [headers.values]
     Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
     X-Content-Type-Options = "nosniff"
     X-XSS-Protection = "1; mode=block"
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.gpteng.co https://*.emailjs.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://*.emailjs.com https://api.emailjs.com; font-src 'self'; object-src 'none'; upgrade-insecure-requests;"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.gpteng.co https://*.emailjs.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://*.emailjs.com https://api.emailjs.com; font-src 'self'; object-src 'none'; upgrade-insecure-requests; block-all-mixed-content;"
     Referrer-Policy = "strict-origin-when-cross-origin"
+    Connection = "keep-alive"
 
 # Configuration SSL personnalisée (pour certificat Ionos)
 [context.production.environment]
@@ -63,3 +67,5 @@
   SSL = "true"
   SSL_KEY = "ionos_key"
   SSL_CERT = "ionos_cert"
+  KEEP_ALIVE_TIMEOUT = "60"
+
