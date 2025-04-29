@@ -1,41 +1,14 @@
-
-# Règles pour tous les robots d'exploration
-User-agent: *
-Allow: /
-Disallow: /private/
-Disallow: /admin/
-Disallow: /backend/
-
-# Règles spécifiques pour Googlebot
 User-agent: Googlebot
 Allow: /
-Crawl-delay: 2
 
-# Règles spécifiques pour Bing
 User-agent: Bingbot
 Allow: /
-Crawl-delay: 2
 
-# Règles pour Google Mobile
-User-agent: Googlebot-Mobile
-Allow: /
-
-# Règles pour Google Image
-User-agent: Googlebot-Image
-Allow: /
-
-# Règles spécifiques pour réseaux sociaux
 User-agent: Twitterbot
 Allow: /
 
 User-agent: facebookexternalhit
 Allow: /
 
-# Sitemap
-Sitemap: https://premiumautoclean.com/sitemap.xml
-
-# Host spécifique
-Host: premiumautoclean.com
-
-# Sitemap optimisé pour requêtes locales
-Sitemap: https://premiumautoclean.com/sitemap-local.xml
+User-agent: *
+Allow: /

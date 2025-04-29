@@ -14,7 +14,6 @@
   ExpiresByType image/svg+xml "access plus 1 month"
   ExpiresByType text/css "access plus 1 month"
   ExpiresByType application/javascript "access plus 1 month"
-  ExpiresByType text/xml "access plus 1 month"
   ExpiresByType application/pdf "access plus 1 month"
 </IfModule>
 
@@ -27,12 +26,6 @@
   RewriteCond %{HTTPS} off
   RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
   
-  # Traiter les fichiers XML avec une règle spécifique
-  RewriteRule \.xml$ - [T=text/xml,L]
-  
-  # Traiter les fichiers JavaScript avec une règle spécifique
-  RewriteRule \.(js|mjs|jsx|tsx)$ - [T=application/javascript,L]
-  
   # Ne pas appliquer les règles aux fichiers et dossiers existants
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
@@ -41,35 +34,11 @@
   RewriteRule ^(.*) index.html [L]
 </IfModule>
 
-# Configuration des types MIME pour JavaScript
-<IfModule mod_mime.c>
-  # Définir correctement les types MIME
-  AddType application/javascript .js
-  AddType application/javascript .mjs
-  AddType application/javascript .jsx
-  AddType application/javascript .tsx
-  AddType text/xml .xml
-  
-  # Forcer le type MIME pour JavaScript
-  <FilesMatch "\.(js|mjs|jsx|tsx)$">
-    ForceType application/javascript
-    Header set Content-Type "application/javascript"
-  </FilesMatch>
-  
-  # Forcer le type MIME pour XML
-  <FilesMatch "\.(xml)$">
-    ForceType text/xml
-    Header set Content-Type "text/xml"
-  </FilesMatch>
-</IfModule>
-
 # Configurer les en-têtes CORS et sécurité
 <IfModule mod_headers.c>
   # En-têtes CORS pour les ressources spécifiques
-  <FilesMatch "\.(html|js|mjs|jsx|tsx|css|xml)$">
+  <FilesMatch "\.(html|js|css)$">
     Header set Access-Control-Allow-Origin "*"
-    Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
-    Header set Access-Control-Allow-Headers "Content-Type"
   </FilesMatch>
   
   # En-têtes de sécurité
@@ -77,6 +46,12 @@
   Header always set X-XSS-Protection "1; mode=block"
   Header always set X-Frame-Options "SAMEORIGIN"
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  
+  # Content Security Policy (CSP)
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' https://cdn.gpteng.co https://*.emailjs.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://*.emailjs.com https://api.emailjs.com; font-src 'self'; frame-src 'none'; object-src 'none';"
+  
+  # Strict Transport Security (HSTS) - Activer HTTPS strict
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
 </IfModule>
 
 # Protection contre les attaques par clickjacking
