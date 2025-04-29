@@ -35,8 +35,8 @@
   RewriteCond %{HTTPS} off
   RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
   
-  # Redirection spéciale pour les requêtes /frame-redirect
-  RewriteRule ^frame-redirect$ frame-redirect.html [L]
+  # Redirection spéciale pour les chemins /app/
+  RewriteRule ^app/(.*)$ /$1 [R=301,L]
   
   # Ne pas appliquer les règles aux fichiers et dossiers existants
   RewriteCond %{REQUEST_FILENAME} !-f
@@ -58,13 +58,11 @@
   # En-têtes de sécurité
   Header always set X-Content-Type-Options "nosniff"
   Header always set X-XSS-Protection "1; mode=block"
-  
-  # Permettre les frames de la même origine
   Header always set X-Frame-Options "SAMEORIGIN"
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
   
-  # Content Security Policy (CSP) - Compatible avec le certificat Ionos et frames
-  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.gpteng.co https://*.emailjs.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://*.emailjs.com https://api.emailjs.com; font-src 'self'; frame-ancestors 'self'; object-src 'none'; upgrade-insecure-requests;"
+  # Content Security Policy (CSP) - Compatible avec le certificat Ionos
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.gpteng.co https://*.emailjs.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://*.emailjs.com https://api.emailjs.com; font-src 'self'; object-src 'none'; upgrade-insecure-requests;"
   
   # Strict Transport Security (HSTS) - Compatible avec Ionos
   Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
