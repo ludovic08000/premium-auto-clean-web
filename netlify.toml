@@ -2,7 +2,7 @@
 # Configuration Netlify pour SPA React
 [build]
   publish = "dist"
-  command = "npm run build"
+  command = "npm ci && npm run build"
 
 # Redirection pour la page d'accueil (priorité maximale)
 [[redirects]]
@@ -68,4 +68,3 @@
   SSL_KEY = "ionos_key"
   SSL_CERT = "ionos_cert"
   KEEP_ALIVE_TIMEOUT = "60"
-
