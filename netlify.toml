@@ -10,6 +10,12 @@
   to = "/index.html"
   status = 200
 
+# Redirection spéciale pour app depuis Ionos
+[[redirects]]
+  from = "/app/*"
+  to = "/:splat"
+  status = 301
+
 # Configuration des en-têtes pour les types MIME corrects
 [[headers]]
   for = "/*.js"

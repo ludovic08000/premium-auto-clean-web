@@ -5,6 +5,9 @@
 # HTTPS enforcing with stricter rules
 http://*  https://:splat  301!
 
+# Support for Ionos redirects - ensure proper forwarding
+/app/*  /:splat  301!
+
 # SPA fallback
 /*  /index.html  200
 
