@@ -4,7 +4,14 @@
   publish = "dist"
   command = "npm run build"
 
-# Redirection pour SPA (Single Page Application)
+# Redirection pour SPA (Single Page Application) - réglage prioritaire
+[[redirects]]
+  from = "/"
+  to = "/index.html"
+  status = 200
+  force = true
+
+# Redirection pour SPA (tout le reste)
 [[redirects]]
   from = "/*"
   to = "/index.html"
@@ -15,6 +22,7 @@
   from = "/app/*"
   to = "/:splat"
   status = 301
+  force = true
 
 # Configuration des en-têtes pour les types MIME corrects
 [[headers]]
@@ -53,5 +61,5 @@
   HTTPS = "true"
   NODE_ENV = "production"
   SSL = "true"
-  SSL_KEY = "ionos_key"            # Ceci est juste un identifiant, pas la vraie valeur
-  SSL_CERT = "ionos_cert"          # Ceci est juste un identifiant, pas la vraie valeur
+  SSL_KEY = "ionos_key"
+  SSL_CERT = "ionos_cert"

@@ -38,6 +38,9 @@
   # Redirection spéciale pour les chemins /app/
   RewriteRule ^app/(.*)$ /$1 [R=301,L]
   
+  # Redirection explicite de la racine vers index.html
+  RewriteRule ^$ /index.html [L]
+  
   # Ne pas appliquer les règles aux fichiers et dossiers existants
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d

@@ -8,5 +8,8 @@ http://*  https://:splat  301!
 # Support for Ionos redirects - ensure proper forwarding
 /app/*  /:splat  301!
 
-# SPA fallback
+# Explicit homepage redirection
+/  /index.html  200
+
+# SPA fallback - make sure this is the last rule
 /*  /index.html  200
