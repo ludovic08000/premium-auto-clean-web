@@ -15,6 +15,7 @@ export default defineConfig(({ mode }) => ({
     outDir: 'dist',
     emptyOutDir: true,
     sourcemap: mode === 'development',
+    assetsInlineLimit: 0, // S'assure que les petits fichiers comme le favicon ne sont pas intégrés en base64
   },
   plugins: [
     react(),
