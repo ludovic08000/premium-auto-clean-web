@@ -28,13 +28,8 @@
   RewriteCond %{HTTP_HOST} !^localhost
   RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
   
-  # Autoriser explicitement les requêtes CORS pour cdn.gpteng.co
-  <IfModule mod_headers.c>
-    SetEnvIfNoCase Origin "https://cdn.gpteng.co" CORS_ALLOW_ORIGIN=$0
-    Header always set Access-Control-Allow-Origin %{CORS_ALLOW_ORIGIN}e env=CORS_ALLOW_ORIGIN
-    Header always set Access-Control-Allow-Methods "GET, POST, OPTIONS"
-    Header always set Access-Control-Allow-Headers "Origin, Content-Type, Accept"
-  </IfModule>
+  # Traitement spécial pour les scripts gptengineer et lovable.js
+  RewriteRule ^gpt-proxy\.php$ - [L]
   
   # Traitement spécial pour les fichiers JavaScript
   RewriteCond %{REQUEST_URI} \.(js|mjs|jsx|tsx)$
@@ -71,6 +66,12 @@
   # En-têtes pour JavaScript
   <FilesMatch "\.(js|jsx|tsx|mjs)$">
     Header set Content-Type "application/javascript"
+  </FilesMatch>
+  
+  # En-tête spécifique pour gpt-proxy.php
+  <FilesMatch "gpt-proxy\.php$">
+    Header set Content-Type "application/javascript"
+    Header set Access-Control-Allow-Origin "*"
   </FilesMatch>
   
   # En-têtes pour XML

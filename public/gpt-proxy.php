@@ -1,58 +1,83 @@
 
 <?php
-// Script pour gérer le chargement de gptengineer.js
+// Script for loading gptengineer.js with proper MIME type and CORS headers
+// Prevent any output before headers
+ob_start();
+
+// Set proper JavaScript MIME type
 header("Content-Type: application/javascript");
+
+// Set CORS headers
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
-// Gérer les requêtes préliminaires OPTIONS pour CORS
+// Handle preflight requests
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit(0);
 }
 
-// URL du script à proxifier
+// URL of the script to proxy
 $scriptUrl = 'https://cdn.gpteng.co/gptengineer.js';
 
-// Initialiser cURL
-$ch = curl_init();
+try {
+    // Initialize cURL
+    $ch = curl_init();
 
-// Configurer cURL
-curl_setopt($ch, CURLOPT_URL, $scriptUrl);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36');
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // À éviter en production si possible
-curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-    'Accept: */*',
-    'Origin: https://premiumautoclean.com'
-));
+    // Configure cURL
+    curl_setopt($ch, CURLOPT_URL, $scriptUrl);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (compatible; PremiumAutoCleanProxy/1.0)');
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // Not ideal for production
+    curl_setopt($ch, CURLOPT_TIMEOUT, 10); // 10 second timeout
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+        'Accept: */*',
+        'Origin: https://premiumautoclean.com'
+    ));
 
-// Exécuter la requête
-$content = curl_exec($ch);
+    // Execute the request
+    $content = curl_exec($ch);
 
-// Gérer les erreurs
-if (curl_errno($ch)) {
-    echo "// Erreur lors de la récupération du script: " . curl_error($ch);
-} else {
-    // Vérifier si le contenu ressemble à du JavaScript
+    // Check for cURL errors
+    if (curl_errno($ch)) {
+        // Return a JavaScript comment instead of HTML error
+        echo "console.error('Proxy error: " . addslashes(curl_error($ch)) . "');";
+        curl_close($ch);
+        exit;
+    }
+
+    // Check HTTP status code
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    if ($httpCode !== 200) {
+        echo "console.error('HTTP error: " . $httpCode . "');";
+        curl_close($ch);
+        exit;
+    }
+
+    // Verify content is JavaScript (not HTML)
     if (strpos($content, '<!DOCTYPE html>') === 0 || strpos($content, '<html') === 0) {
-        echo "// Le contenu récupéré semble être du HTML et non du JavaScript\n";
-        echo "// Fallback à une version locale ou à une solution alternative\n";
+        echo "console.error('Content returned is HTML, not JavaScript');";
         
-        // Option 1: Rediriger vers une version locale si disponible
+        // Use a local fallback if available
         if (file_exists(__DIR__ . '/gptengineer.js')) {
             echo file_get_contents(__DIR__ . '/gptengineer.js');
         } else {
-            // Option 2: Fournir un script minimal de fallback
-            echo "console.log('Script gptengineer.js non disponible. Fonctionnalités limitées.');\n";
+            // Minimal fallback
+            echo "console.log('gptengineer.js could not be loaded - functionality limited');";
         }
     } else {
-        // Retourner le contenu JavaScript
+        // Return the JavaScript content
         echo $content;
     }
+
+    // Close cURL
+    curl_close($ch);
+} catch (Exception $e) {
+    // Return a JavaScript comment instead of a PHP error
+    echo "console.error('Proxy exception: " . addslashes($e->getMessage()) . "');";
 }
 
-// Fermer cURL
-curl_close($ch);
+// Flush and end output buffering
+ob_end_flush();
 ?>

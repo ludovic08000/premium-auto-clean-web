@@ -44,8 +44,20 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" />
     <meta name="theme-color" content="#111111" />
     
-    <!-- Lovable script tag for enabling new features -->
-    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
+    <!-- Lovable script tag for enabling new features - loaded via proxy -->
+    <!-- Do not use direct CDN URL to avoid CORS issues -->
+    <script type="text/javascript">
+      // Preload the gptengineer.js via our proxy to avoid CORS errors
+      window.addEventListener('DOMContentLoaded', function() {
+        const script = document.createElement('script');
+        script.type = 'module';
+        script.src = '/gpt-proxy.php';
+        script.onerror = function() {
+          console.warn('Failed to load gptengineer.js via proxy');
+        };
+        document.head.appendChild(script);
+      });
+    </script>
   </head>
 
   <body>
@@ -121,10 +133,6 @@
         try {
           // Marquer le début du chargement
           document.documentElement.classList.add('loading');
-          
-          // Charger le script gptengineer.js via le proxy local
-          await loadScript('/gpt-proxy.php')
-            .catch(() => console.log('Application chargée sans gptengineer.js'));
           
           // Essayer de charger les points d'entrée principaux
           const entrypoints = [
