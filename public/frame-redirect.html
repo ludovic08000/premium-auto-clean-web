@@ -1,0 +1,46 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redirection - Premium Auto Clean</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+    }
+    iframe {
+      border: none;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  </style>
+</head>
+<body>
+  <iframe src="/" title="Premium Auto Clean" id="mainFrame"></iframe>
+  
+  <script>
+    // Fonction pour gérer les redirections
+    function handleRedirect() {
+      const path = window.location.pathname;
+      const iframe = document.getElementById('mainFrame');
+      
+      // Si nous sommes sur le chemin /app/, rediriger vers la racine dans l'iframe
+      if (path.startsWith('/app/')) {
+        const newPath = path.replace('/app/', '/');
+        iframe.src = newPath;
+      }
+    }
+    
+    // Exécuter au chargement
+    window.onload = handleRedirect;
+  </script>
+</body>
+</html>
