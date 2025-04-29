@@ -1,6 +1,6 @@
 
 <?php
-// Script de test des types MIME pour IONOS
+// Script de test des types MIME pour IONOS - version optimisée
 header('Content-Type: text/html; charset=utf-8');
 ?>
 <!DOCTYPE html>
@@ -36,8 +36,6 @@ header('Content-Type: text/html; charset=utf-8');
         $files = [
             '/sitemap.xml' => 'XML Sitemap',
             '/src/main.js' => 'JavaScript principal',
-            '/src/main.tsx' => 'TypeScript React',
-            '/src/main.jsx' => 'JSX React',
             '/index.html' => 'HTML principal'
         ];
         
@@ -59,7 +57,7 @@ header('Content-Type: text/html; charset=utf-8');
                 // Vérifier le type MIME
                 $expectedType = "";
                 if (strpos($file, '.xml') !== false) $expectedType = "text/xml";
-                if (strpos($file, '.js') !== false || strpos($file, '.jsx') !== false || strpos($file, '.tsx') !== false) $expectedType = "application/javascript";
+                if (strpos($file, '.js') !== false) $expectedType = "application/javascript";
                 if (strpos($file, '.html') !== false) $expectedType = "text/html";
                 
                 if ($contentType == $expectedType || ($expectedType == "application/javascript" && strpos($contentType, "javascript") !== false)) {
@@ -85,7 +83,6 @@ header('Content-Type: text/html; charset=utf-8');
     <ol>
         <li>Renommez le fichier <code>index-ionos.php</code> en <code>index.php</code> et placez-le à la racine</li>
         <li>Renommez le fichier <code>.htaccess-ionos</code> en <code>.htaccess</code> principal</li>
-        <li>Assurez-vous que le fichier <code>.user.ini</code> est présent à la racine</li>
         <li>Vérifiez que les fichiers <code>js-proxy.php</code> et <code>xml-proxy.php</code> sont présents à la racine</li>
     </ol>
     
@@ -93,10 +90,6 @@ header('Content-Type: text/html; charset=utf-8');
     <ul>
         <li><a href="/?debug=1">Tester le mode debug</a></li>
         <li><a href="/sitemap.xml">Tester le sitemap XML</a></li>
-        <li><a href="/src/main.jsx">Tester un fichier JavaScript JSX</a></li>
-        <li><a href="/src/main.tsx">Tester un fichier JavaScript TSX</a></li>
     </ul>
-    
-    <p><strong>Note:</strong> Pour IONOS, il est préférable d'utiliser PHP pour servir les fichiers statiques avec les bons types MIME plutôt que de se fier uniquement à .htaccess</p>
 </body>
 </html>

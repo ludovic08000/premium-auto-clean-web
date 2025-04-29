@@ -1,17 +1,12 @@
 
 <?php
-// Script amélioré pour IONOS - à renommer en index.php sur l'hébergement
-// Gère tous les problèmes de MIME types en servant les fichiers via PHP
-
-// Activer le débogage - à commenter en production
-$debug = isset($_GET['debug']) ? true : false;
+// Script optimisé pour IONOS - à renommer en index.php sur l'hébergement
+// Gère les problèmes de MIME types en servant les fichiers via PHP
 
 // Définir les types MIME par extension
 $mimeTypes = [
     'js' => 'application/javascript',
     'mjs' => 'application/javascript',
-    'jsx' => 'application/javascript',
-    'tsx' => 'application/javascript',
     'xml' => 'text/xml',
     'html' => 'text/html',
     'css' => 'text/css',
@@ -23,8 +18,7 @@ $mimeTypes = [
     'svg' => 'image/svg+xml',
     'woff' => 'font/woff',
     'woff2' => 'font/woff2',
-    'ttf' => 'font/ttf',
-    'eot' => 'application/vnd.ms-fontobject'
+    'ttf' => 'font/ttf'
 ];
 
 // Récupérer l'URI demandée et nettoyer
@@ -41,16 +35,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit(0);
 }
 
-// Debug mode
-if ($debug) {
-    header('Content-Type: text/plain');
-    echo "URI demandée: " . $requestUri . "\n";
-    echo "Chemin: " . $requestPath . "\n";
-    echo "Extension: " . $fileExtension . "\n";
-    echo "MIME attendu: " . (isset($mimeTypes[$fileExtension]) ? $mimeTypes[$fileExtension] : "non spécifié") . "\n";
-    exit;
-}
-
 // Traitement spécial pour XML
 if ($fileExtension === 'xml') {
     include __DIR__ . '/xml-proxy.php';
@@ -58,15 +42,8 @@ if ($fileExtension === 'xml') {
 }
 
 // Traitement spécial pour JS
-if (in_array($fileExtension, ['js', 'mjs', 'jsx', 'tsx'])) {
+if (in_array($fileExtension, ['js', 'mjs'])) {
     include __DIR__ . '/js-proxy.php';
-    exit;
-}
-
-// Traitement spécial pour cdn.gpteng.co
-if (strpos($requestUri, 'gptengineer.js') !== false) {
-    // Rediriger vers le proxy de script
-    header('Location: https://cdn.gpteng.co/gptengineer.js');
     exit;
 }
 
@@ -98,20 +75,6 @@ if (isset($mimeTypes[$fileExtension])) {
         readfile($distPath);
         exit;
     }
-}
-
-// Vérifier si c'est un fichier statique avec une autre extension
-$filePath = __DIR__ . $requestPath;
-if (file_exists($filePath) && is_file($filePath)) {
-    // Servir le fichier avec un type MIME générique
-    $finfo = finfo_open(FILEINFO_MIME_TYPE);
-    $mime = finfo_file($finfo, $filePath);
-    finfo_close($finfo);
-    
-    header('Content-Type: ' . $mime);
-    header('Access-Control-Allow-Origin: *');
-    readfile($filePath);
-    exit;
 }
 
 // Pour tout autre cas, servir l'application SPA
