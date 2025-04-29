@@ -1,7 +1,7 @@
 
 <?php
 // Script amélioré pour gérer correctement les fichiers JavaScript
-// Version 2.0 - Correction des problèmes MIME et sécurisation
+// Version 2.1 - Correction des problèmes MIME et sécurisation avancée
 
 // Prévenir toute sortie avant les en-têtes
 ob_start();
@@ -91,15 +91,26 @@ if ($filePath) {
             echo "// Serving fallback JavaScript instead\n";
         }
         
-        // Générer un script de secours minimaliste
+        // Générer un script de secours approprié
         echo "console.error('Error loading JavaScript file. Received HTML instead of JavaScript.');";
         echo "console.warn('File path requested: " . addslashes($requestPath) . "');";
+        
+        // Script de secours pour la fonctionnalité minimale
+        echo "if (typeof window.appLoaded === 'undefined') {";
+        echo "  window.appLoaded = false;";
+        echo "  document.addEventListener('DOMContentLoaded', function() {";
+        echo "    var rootEl = document.getElementById('root');";
+        echo "    if (rootEl) {";
+        echo "      rootEl.innerHTML = '<div style=\"padding: 20px; text-align: center;\"><h2>Erreur de chargement</h2><p>Une erreur est survenue lors du chargement du fichier JavaScript.</p><button onclick=\"location.reload()\" style=\"padding: 10px; background: #333; color: white; border: 0; border-radius: 4px;\">Rafraîchir</button></div>';";
+        echo "    }";
+        echo "  });";
+        echo "}";
     } else {
         // C'est du JavaScript valide, on l'envoie
         echo $content;
     }
 } else {
-    // Fichier non trouvé
+    // Fichier non trouvé - générer un JavaScript de secours
     if ($debug) {
         echo "// File not found after checking all locations\n";
         echo "// Searched in: " . implode(', ', array_map(function($loc) { return str_replace(__DIR__, '[ROOT]', $loc); }, $searchLocations)) . "\n";
@@ -107,6 +118,14 @@ if ($filePath) {
     
     header('HTTP/1.1 404 Not Found');
     echo "console.error('JavaScript file not found: " . addslashes($requestPath) . "');";
+    
+    // Script de secours pour afficher une erreur propre
+    echo "document.addEventListener('DOMContentLoaded', function() {";
+    echo "  var rootEl = document.getElementById('root');";
+    echo "  if (rootEl) {";
+    echo "    rootEl.innerHTML = '<div style=\"padding: 20px; text-align: center;\"><h2>Fichier non trouvé</h2><p>Le fichier JavaScript \"" . addslashes($requestPath) . "\" n\\'a pas été trouvé.</p><button onclick=\"location.reload()\" style=\"padding: 10px; background: #333; color: white; border: 0; border-radius: 4px;\">Rafraîchir</button></div>';";
+    echo "  }";
+    echo "});";
 }
 
 // Envoyer la sortie et terminer

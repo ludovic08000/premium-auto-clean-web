@@ -55,7 +55,7 @@
         directPath: 'https://cdn.gpteng.co/gptengineer.js'
       };
       
-      // Fonction pour charger le script Lovable - Version améliorée avec promesse
+      // Fonction pour charger le script Lovable - Version robuste avec gestion d'erreurs
       function loadLovableScript(src, useProxy = false) {
         return new Promise((resolve, reject) => {
           // Si déjà chargé, ne pas recharger
@@ -70,7 +70,7 @@
           
           // Gestionnaires d'événements
           script.onload = function() {
-            console.log(`Lovable chargé avec succès via ${useProxy ? 'proxy' : 'CDN'}`);
+            console.info(`Lovable chargé avec succès via ${useProxy ? 'proxy' : 'CDN'}`);
             window.scriptConfig.lovableLoaded = true;
             resolve(true);
           };
@@ -124,9 +124,14 @@
       window.appConfig = {
         mainScriptLoaded: false,
         entryPoints: [
-          '/dist/assets/main.js',
+          // Toujours essayer le proxy en premier pour éviter les erreurs MIME type
+          '/js-proxy.php?file=/dist/assets/index.js',
           '/js-proxy.php?file=/dist/assets/main.js',
-          '/js-proxy.php?file=/src/main.tsx'
+          '/js-proxy.php?file=/src/main.tsx',
+          '/js-proxy.php?file=/src/main.jsx',
+          // Ensuite essayer les chemins directs comme solutions de secours
+          '/dist/assets/index.js',
+          '/dist/assets/main.js'
         ],
         currentAttempt: 0
       };
@@ -135,11 +140,11 @@
       function loadScript(url) {
         return new Promise((resolve, reject) => {
           const script = document.createElement('script');
-          script.type = url.endsWith('.tsx') ? 'module' : 'text/javascript';
+          script.type = url.endsWith('.tsx') || url.endsWith('.jsx') ? 'module' : 'text/javascript';
           script.src = url;
           
           script.onload = () => {
-            console.log(`Script chargé avec succès: ${url}`);
+            console.info(`Script chargé avec succès: ${url}`);
             resolve(true);
           };
           
@@ -160,12 +165,12 @@
         for (const entrypoint of window.appConfig.entryPoints) {
           try {
             window.appConfig.currentAttempt++;
-            console.log(`Tentative ${window.appConfig.currentAttempt}/${window.appConfig.entryPoints.length}: ${entrypoint}`);
+            console.info(`Tentative ${window.appConfig.currentAttempt}/${window.appConfig.entryPoints.length}: ${entrypoint}`);
             
             await loadScript(entrypoint);
             
             // Si on arrive ici, le chargement a réussi
-            console.log(`Application chargée via: ${entrypoint}`);
+            console.info(`Application chargée via: ${entrypoint}`);
             document.documentElement.classList.add('js-loaded');
             document.documentElement.classList.remove('loading');
             window.appConfig.mainScriptLoaded = true;
