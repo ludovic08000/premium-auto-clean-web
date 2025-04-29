@@ -1,11 +1,10 @@
 
-import { useEffect, lazy, Suspense } from "react";
+import { lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NotFound from "./pages/NotFound";
-import { initializeGA, sendPageView } from "./utils/analytics";
 
 // Utilisation de lazy loading pour le composant Index
 const Index = lazy(() => import("./pages/Index"));
@@ -20,36 +19,6 @@ const queryClient = new QueryClient({
 });
 
 const App = () => {
-  useEffect(() => {
-    console.log("App component is mounting");
-    console.log("Root element:", document.getElementById("root"));
-    console.log("Current pathname:", window.location.pathname);
-    
-    // Initialiser Google Analytics
-    initializeGA();
-    
-    return () => {
-      console.log("App component is unmounting");
-    };
-  }, []);
-
-  // Suivre les changements de page
-  useEffect(() => {
-    // Enregistrer la page vue initiale
-    sendPageView();
-    
-    // Écouter les changements de l'historique pour les pages suivantes
-    const handleRouteChange = () => {
-      sendPageView();
-    };
-    
-    window.addEventListener('popstate', handleRouteChange);
-    
-    return () => {
-      window.removeEventListener('popstate', handleRouteChange);
-    };
-  }, []);
-
   console.log("App is rendering");
 
   return (
