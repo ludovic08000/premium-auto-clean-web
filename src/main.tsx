@@ -46,23 +46,38 @@ function initializeApp() {
     }
   } catch (error) {
     console.error("Erreur lors de l'initialisation de l'application:", error);
+    
+    // Tenter de signaler l'erreur visuellement
+    const rootElement = document.getElementById("root");
+    if (rootElement) {
+      rootElement.innerHTML = `
+        <div style="padding: 20px; text-align: center; font-family: sans-serif; color: #d4af37; background-color: #111;">
+          <h2>Erreur de chargement</h2>
+          <p>Une erreur s'est produite lors du chargement de l'application.</p>
+          <button onclick="window.location.reload()" style="padding: 10px 20px; background: #d4af37; color: #111; border: none; border-radius: 4px; cursor: pointer; margin-top: 15px;">Rafraîchir la page</button>
+        </div>
+      `;
+    }
     return false;
   }
 }
 
 // Exécuter l'initialisation immédiatement
-initializeApp();
-
-// Ajouter plusieurs écouteurs d'événements pour s'assurer que l'application démarre
-document.addEventListener('DOMContentLoaded', () => {
-  if (!document.documentElement.classList.contains('js-loaded')) {
+// Attendez que le DOM soit complètement chargé pour l'environnement de prévisualisation
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
     console.log("Initialisation via DOMContentLoaded");
     initializeApp();
-  }
-});
+  });
+} else {
+  // Si le DOM est déjà chargé (ce qui peut être le cas pour la prévisualisation)
+  console.log("Initialisation immédiate - DOM déjà chargé");
+  initializeApp();
+}
 
+// Ajouter plusieurs écouteurs d'événements pour s'assurer que l'application démarre
 window.addEventListener('load', () => {
-  if (!document.documentElement.classList.contains('js-loaded')) {
+  if (!window.appConfig?.mainScriptLoaded) {
     console.log("Initialisation via window.load");
     initializeApp();
   }
@@ -70,11 +85,11 @@ window.addEventListener('load', () => {
 
 // Système de secours supplémentaire - initialisation différée
 setTimeout(() => {
-  if (!document.documentElement.classList.contains('js-loaded')) {
+  if (!window.appConfig?.mainScriptLoaded) {
     console.log("Initialisation différée après délai");
     initializeApp();
   }
-}, 1500);
+}, 1000);
 
 // Gestionnaire d'erreurs global
 window.onerror = function(message, source, lineno, colno, error) {
