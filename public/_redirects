@@ -1,16 +1,12 @@
 
-# Fallback for favicon
-/favicon.ico  /favicon.ico  200
-
-# HTTPS enforcing with stricter rules
+# Forcer HTTPS - priorité maximale
 http://*  https://:splat  301!
 
-# Support for Ionos redirects - ensure proper forwarding
+# Support pour Ionos redirects
 /app/*  /:splat  301!
 
-# Explicit homepage redirection - highest priority
+# Explicit homepage redirection
 /  /index.html  200!
 
-# SPA fallback - make sure this is the last rule
+# SPA fallback - dernière règle
 /*  /index.html  200
-

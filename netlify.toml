@@ -20,6 +20,14 @@
   force = true
   priority = 90
 
+# Forcer HTTPS
+[[redirects]]
+  from = "http://*"
+  to = "https://:splat"
+  status = 301
+  force = true
+  priority = 95
+
 # Redirection pour SPA (tout le reste)
 [[redirects]]
   from = "/*"
@@ -53,18 +61,14 @@
 [[headers]]
   for = "/*"
   [headers.values]
-    Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
     X-Content-Type-Options = "nosniff"
     X-XSS-Protection = "1; mode=block"
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.gpteng.co https://*.emailjs.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://*.emailjs.com https://api.emailjs.com; font-src 'self'; object-src 'none'; upgrade-insecure-requests; block-all-mixed-content;"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.gpteng.co https://*.emailjs.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://*.emailjs.com https://api.emailjs.com; font-src 'self'; object-src 'none'; upgrade-insecure-requests;"
     Referrer-Policy = "strict-origin-when-cross-origin"
     Connection = "keep-alive"
 
-# Configuration SSL personnalisée (pour certificat Ionos)
+# Configuration SSL simplifiée
 [context.production.environment]
-  HTTPS = "true"
   NODE_ENV = "production"
-  SSL = "true"
-  SSL_KEY = "ionos_key"
-  SSL_CERT = "ionos_cert"
-  KEEP_ALIVE_TIMEOUT = "60"
+  HTTPS = "true"

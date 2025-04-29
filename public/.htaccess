@@ -30,69 +30,35 @@
   RewriteEngine On
   RewriteBase /
   
-  # Rediriger de HTTP vers HTTPS (si le serveur supporte HTTPS)
-  # Utilise la configuration SSL d'Ionos
+  # Rediriger de HTTP vers HTTPS (configuration simplifiée)
   RewriteCond %{HTTPS} off
-  RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
   
   # Redirection spéciale pour les chemins /app/
   RewriteRule ^app/(.*)$ /$1 [R=301,L]
-  
-  # Redirection explicite de la racine vers index.html
-  RewriteRule ^$ /index.html [L]
   
   # Ne pas appliquer les règles aux fichiers et dossiers existants
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   
   # Rediriger toutes les autres requêtes vers index.html
-  RewriteRule ^(.*) index.html [L]
+  RewriteRule ^ index.html [L]
 </IfModule>
 
-# Configurer les en-têtes CORS et sécurité
+# Configurer les en-têtes de sécurité (version simplifiée)
 <IfModule mod_headers.c>
-  # En-têtes CORS pour les ressources spécifiques
-  <FilesMatch "\.(html|js|css|mjs)$">
-    Header set Access-Control-Allow-Origin "*"
-    Header set Content-Type "application/javascript" env=js
-    Header set Content-Type "text/javascript" env=mjs
-  </FilesMatch>
-  
-  # En-têtes de sécurité
+  # En-têtes de sécurité essentiels
   Header always set X-Content-Type-Options "nosniff"
   Header always set X-XSS-Protection "1; mode=block"
-  Header always set X-Frame-Options "SAMEORIGIN"
-  Header always set Referrer-Policy "strict-origin-when-cross-origin"
-  
-  # Content Security Policy (CSP) - Compatible avec le certificat Ionos
-  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.gpteng.co https://*.emailjs.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://*.emailjs.com https://api.emailjs.com; font-src 'self'; object-src 'none'; upgrade-insecure-requests; block-all-mixed-content;"
-  
-  # Strict Transport Security (HSTS) - Compatible avec Ionos
   Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
   
-  # Optimisations de connexion
-  Header always set Connection "keep-alive"
-  Header always set Keep-Alive "timeout=60"
+  # Configuration pour utiliser le certificat SSL
+  Header set Content-Security-Policy "upgrade-insecure-requests;"
 </IfModule>
 
-# Forcer le type MIME pour les fichiers JavaScript
-<Files ~ "\.js$">
-  ForceType application/javascript
-</Files>
-<Files ~ "\.mjs$">
-  ForceType application/javascript
-</Files>
-<Files ~ "\.tsx$">
-  ForceType application/javascript
-</Files>
-
-# Configuration pour utiliser le certificat SSL d'Ionos
+# Force HTTPS with simplified configuration
 <IfModule mod_ssl.c>
   SSLOptions +StrictRequire
   SSLProtocol all -SSLv2 -SSLv3 -TLSv1 -TLSv1.1
-  SSLCipherSuite HIGH:!aNULL:!MD5:!3DES
   SSLHonorCipherOrder on
-  SSLSessionCache shmcb:/var/cache/mod_ssl/scache(512000)
-  SSLSessionCacheTimeout 300
 </IfModule>
-
