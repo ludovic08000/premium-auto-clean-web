@@ -68,6 +68,14 @@ window.addEventListener('load', () => {
   }
 });
 
+// Système de secours supplémentaire - initialisation différée
+setTimeout(() => {
+  if (!document.documentElement.classList.contains('js-loaded')) {
+    console.log("Initialisation différée après délai");
+    initializeApp();
+  }
+}, 1500);
+
 // Gestionnaire d'erreurs global
 window.onerror = function(message, source, lineno, colno, error) {
   console.error("Erreur globale détectée:", message, source, error);

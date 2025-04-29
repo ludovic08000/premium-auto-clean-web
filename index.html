@@ -128,13 +128,13 @@
         mainScriptLoaded: false,
         entryPoints: [
           // Script principal direct
-          '/src/main.tsx',
           '/src/main.jsx',
+          '/src/main.tsx',
           // Toujours utiliser le proxy PHP en second recours
-          '/js-proxy.php?file=/src/main.tsx',
           '/js-proxy.php?file=/src/main.jsx',
-          '/js-proxy.php?file=/main.tsx',
+          '/js-proxy.php?file=/src/main.tsx',
           '/js-proxy.php?file=/main.jsx',
+          '/js-proxy.php?file=/main.tsx',
           // Chemins distribués en dernier recours
           '/dist/assets/index.js',
           '/dist/assets/main.js'
@@ -204,6 +204,32 @@
       } else {
         loadApp();
       }
+    </script>
+
+    <!-- Script de secours final -->
+    <script>
+      // Vérifier après 5 secondes si l'application est chargée
+      setTimeout(function() {
+        if (!window.appConfig || !window.appConfig.mainScriptLoaded) {
+          console.error("L'application n'a pas été chargée après le délai d'attente");
+          // Afficher un message d'erreur à l'utilisateur
+          if (document.getElementById('root')) {
+            document.getElementById('root').innerHTML = `
+              <div style="padding: 30px; text-align: center; font-family: sans-serif; color: #d4af37; background-color: #111;">
+                <h2>Problème de chargement</h2>
+                <p>L'application n'a pas pu être chargée après plusieurs tentatives.</p>
+                <p>Veuillez essayer de:</p>
+                <ul style="list-style-type: none; padding: 0;">
+                  <li>Rafraîchir la page</li>
+                  <li>Vider le cache de votre navigateur</li>
+                  <li>Désactiver les bloqueurs de publicités</li>
+                </ul>
+                <button onclick="window.location.reload()" style="padding: 10px 20px; background: #d4af37; color: #111; border: none; border-radius: 4px; cursor: pointer; margin-top: 15px; font-weight: bold;">Rafraîchir la page</button>
+              </div>
+            `;
+          }
+        }
+      }, 5000);
     </script>
   </body>
 </html>

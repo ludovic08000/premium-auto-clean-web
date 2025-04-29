@@ -48,3 +48,19 @@ window.addEventListener('load', function() {
     initializeApp();
   }
 });
+
+// Ajouter un écouteur sur DOMContentLoaded pour une initialisation plus rapide
+document.addEventListener('DOMContentLoaded', function() {
+  if (!document.documentElement.classList.contains('js-loaded')) {
+    console.log("Initialisation via DOMContentLoaded...");
+    initializeApp();
+  }
+});
+
+// Système de secours supplémentaire - initialisation différée
+setTimeout(function() {
+  if (!document.documentElement.classList.contains('js-loaded')) {
+    console.log("Initialisation différée après délai...");
+    initializeApp();
+  }
+}, 1000);
