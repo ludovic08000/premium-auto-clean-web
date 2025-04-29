@@ -2,7 +2,8 @@
 # Forcer HTTPS
 http://*  https://:splat  301!
 
-# Redirection de .fr vers .com
+# Redirection de .fr vers .com - spécifique pour premiumautoclean.fr sans 's'
+http://premiumautoclean.fr/*  https://premiumautoclean.com/:splat  301!
 https://premiumautoclean.fr/*  https://premiumautoclean.com/:splat  301!
 
 # Support pour Ionos redirects

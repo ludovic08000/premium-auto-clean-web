@@ -8,7 +8,7 @@
   RewriteCond %{HTTPS} off
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
   
-  # Redirection de .fr vers .com
+  # Redirection de .fr vers .com - spécifique pour premiumautoclean.fr sans 's'
   RewriteCond %{HTTP_HOST} ^premiumautoclean\.fr [NC]
   RewriteRule ^(.*)$ https://premiumautoclean.com/$1 [R=301,L]
   
