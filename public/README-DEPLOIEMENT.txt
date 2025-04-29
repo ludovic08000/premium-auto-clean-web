@@ -24,7 +24,7 @@ Pour résoudre les problèmes de CORS et MIME types sur votre hébergement IONOS
 
 ÉTAPE 3: RÉSOUDRE LES PROBLÈMES DE CORS ET MIME
 =============================================
-1. Dans index.html, assurez-vous que ces deux lignes sont présentes :
+1. Dans index.html, assurez-vous que ces deux scripts sont présents :
    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
    <script src="/gpt-proxy.php"></script>
    
@@ -69,4 +69,3 @@ SOLUTIONS AUX PROBLÈMES COURANTS
    - Solution : Assurez-vous que le type="module" est utilisé seulement pour les vrais modules
 
 Pour toute question, n'hésitez pas à contacter votre développeur.
-
