@@ -1,12 +1,9 @@
 
-# Forcer HTTPS - priorité maximale
+# Forcer HTTPS (priorité maximale)
 http://*  https://:splat  301!
 
 # Support pour Ionos redirects
 /app/*  /:splat  301!
 
-# Explicit homepage redirection
-/  /index.html  200!
-
-# SPA fallback - dernière règle
+# SPA fallback
 /*  /index.html  200

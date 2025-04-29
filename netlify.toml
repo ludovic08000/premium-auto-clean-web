@@ -4,11 +4,11 @@
   publish = "dist"
   command = "npm ci && npm run build"
 
-# Redirection pour la page d'accueil (priorité maximale)
+# Forcer HTTPS (priorité maximale)
 [[redirects]]
-  from = "/"
-  to = "/index.html"
-  status = 200
+  from = "http://*"
+  to = "https://:splat"
+  status = 301
   force = true
   priority = 100
 
@@ -20,13 +20,13 @@
   force = true
   priority = 90
 
-# Forcer HTTPS
+# Redirection pour la page d'accueil
 [[redirects]]
-  from = "http://*"
-  to = "https://:splat"
-  status = 301
+  from = "/"
+  to = "/index.html"
+  status = 200
   force = true
-  priority = 95
+  priority = 80
 
 # Redirection pour SPA (tout le reste)
 [[redirects]]
@@ -35,29 +35,7 @@
   status = 200
   priority = 10
 
-# Configuration des en-têtes pour les types MIME corrects
-[[headers]]
-  for = "/*.js"
-  [headers.values]
-    Content-Type = "application/javascript"
-
-[[headers]]
-  for = "/*.mjs"
-  [headers.values]
-    Content-Type = "application/javascript"
-
-[[headers]]
-  for = "/*.css"
-  [headers.values]
-    Content-Type = "text/css"
-
-# Mise en cache du navigateur
-[[headers]]
-  for = "/assets/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000"
-
-# Configuration de sécurité pour SSL avec optimisations de connexion
+# Configuration des en-têtes pour la sécurité et les types MIME
 [[headers]]
   for = "/*"
   [headers.values]
@@ -66,9 +44,18 @@
     X-XSS-Protection = "1; mode=block"
     Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.gpteng.co https://*.emailjs.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://*.emailjs.com https://api.emailjs.com; font-src 'self'; object-src 'none'; upgrade-insecure-requests;"
     Referrer-Policy = "strict-origin-when-cross-origin"
-    Connection = "keep-alive"
 
-# Configuration SSL simplifiée
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Content-Type = "application/javascript"
+
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Content-Type = "text/css"
+
+# Configuration environnement production
 [context.production.environment]
   NODE_ENV = "production"
   HTTPS = "true"
