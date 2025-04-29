@@ -44,6 +44,9 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" />
     <meta name="theme-color" content="#111111" />
     
+    <!-- Script Lovable - IMPORTANT: Ne pas supprimer -->
+    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
+    
     <!-- Système amélioré de chargement Lovable -->
     <script>
       // Configuration pour la gestion des scripts
@@ -119,19 +122,20 @@
     <div id="root"></div>
     
     <!-- Chargement des scripts de l'application avec gestion améliorée des erreurs -->
-    <script>
+    <script type="module">
       // Configuration de chargement
       window.appConfig = {
         mainScriptLoaded: false,
         entryPoints: [
-          // Toujours utiliser le proxy PHP en premier pour garantir le bon MIME type
-          '/js-proxy.php?file=/dist/assets/index.js',
-          '/js-proxy.php?file=/dist/assets/main.js',
+          // Script principal direct
+          '/src/main.tsx',
+          '/src/main.jsx',
+          // Toujours utiliser le proxy PHP en second recours
           '/js-proxy.php?file=/src/main.tsx',
           '/js-proxy.php?file=/src/main.jsx',
           '/js-proxy.php?file=/main.tsx',
           '/js-proxy.php?file=/main.jsx',
-          // Chemins directs en dernier recours
+          // Chemins distribués en dernier recours
           '/dist/assets/index.js',
           '/dist/assets/main.js'
         ],
@@ -142,7 +146,7 @@
       function loadScript(url) {
         return new Promise((resolve, reject) => {
           const script = document.createElement('script');
-          script.type = url.endsWith('.tsx') || url.endsWith('.jsx') ? 'module' : 'text/javascript';
+          script.type = 'module';
           script.src = url;
           
           script.onload = () => {

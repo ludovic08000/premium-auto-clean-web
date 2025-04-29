@@ -27,6 +27,9 @@ function initializeApp() {
       );
       
       console.log("Application chargée avec succès");
+      window.appConfig = {
+        mainScriptLoaded: true
+      };
       return true;
     }
   } catch (error) {
