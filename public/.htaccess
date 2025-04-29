@@ -8,6 +8,10 @@
   RewriteCond %{HTTPS} off
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
   
+  # Redirection de .fr vers .com
+  RewriteCond %{HTTP_HOST} ^premiumautoclean\.fr [NC]
+  RewriteRule ^(.*)$ https://premiumautoclean.com/$1 [R=301,L]
+  
   # Redirection spéciale pour les chemins /app/
   RewriteRule ^app/(.*)$ /$1 [R=301,L]
   

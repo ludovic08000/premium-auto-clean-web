@@ -12,6 +12,14 @@
   force = true
   priority = 100
 
+# Redirection de .fr vers .com (nouvelle règle)
+[[redirects]]
+  from = "https://premiumautoclean.fr/*"
+  to = "https://premiumautoclean.com/:splat"
+  status = 301
+  force = true
+  priority = 95
+
 # Redirection spéciale pour app depuis Ionos
 [[redirects]]
   from = "/app/*"
@@ -19,14 +27,6 @@
   status = 301
   force = true
   priority = 90
-
-# Redirection pour la page d'accueil
-[[redirects]]
-  from = "/"
-  to = "/index.html"
-  status = 200
-  force = true
-  priority = 80
 
 # Redirection pour SPA (tout le reste)
 [[redirects]]
