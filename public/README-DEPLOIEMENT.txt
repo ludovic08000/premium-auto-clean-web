@@ -20,11 +20,12 @@ Pour résoudre les problèmes de CORS et MIME types sur votre hébergement IONOS
    - js-proxy.php
    - xml-proxy.php
    - gpt-proxy.php (proxy spécifique pour gptengineer.js)
-   - index.html (avec les modifications pour la gestion des erreurs CORS)
+   - index.html (avec les modifications pour la gestion des erreurs CORS et le script Lovable)
 
 ÉTAPE 3: RÉSOUDRE LES PROBLÈMES DE CORS ET MIME
 =============================================
-1. Dans index.html, assurez-vous d'utiliser le proxy local :
+1. Dans index.html, assurez-vous que ces deux lignes sont présentes :
+   <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
    <script src="/gpt-proxy.php"></script>
    
 2. Si vous avez des erreurs "Uncaught SyntaxError: Failed to execute 'appendChild' on 'Node': Unexpected token '<'", cela signifie que vos fichiers JavaScript sont servis avec un mauvais type MIME :
