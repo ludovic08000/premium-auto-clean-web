@@ -31,3 +31,14 @@
   for = "/assets/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000"
+
+# Configuration de sécurité pour SSL
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Content-Security-Policy = "upgrade-insecure-requests"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
