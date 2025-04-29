@@ -27,6 +27,8 @@ function initializeApp() {
       );
       
       console.log("Application chargée avec succès");
+      window.appConfig = window.appConfig || {};
+      window.appConfig.mainScriptLoaded = true;
       return true;
     }
   } catch (error) {
@@ -35,13 +37,26 @@ function initializeApp() {
   }
 }
 
-// Exécuter l'initialisation immédiatement pour l'environnement de prévisualisation
+// Exécuter l'initialisation immédiatement
 initializeApp();
 
-// Ajouter un écouteur d'événements pour s'assurer que l'application démarre également 
-// quand le DOM est complètement chargé (utile pour la production)
+// Ajouter plusieurs écouteurs d'événements pour s'assurer que l'application démarre
 document.addEventListener('DOMContentLoaded', () => {
   if (!document.documentElement.classList.contains('js-loaded')) {
+    console.log("Initialisation via DOMContentLoaded");
     initializeApp();
   }
 });
+
+window.addEventListener('load', () => {
+  if (!document.documentElement.classList.contains('js-loaded')) {
+    console.log("Initialisation via window.load");
+    initializeApp();
+  }
+});
+
+// Gestionnaire d'erreurs global
+window.onerror = function(message, source, lineno, colno, error) {
+  console.error("Erreur globale détectée:", message, source, error);
+  // Ne pas retourner true pour permettre la propagation normale des erreurs
+};

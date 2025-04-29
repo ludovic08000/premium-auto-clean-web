@@ -1,0 +1,20 @@
+
+# Empêcher l'accès au répertoire cache
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^(.*)$ - [F,L]
+</IfModule>
+
+# Configurer les en-têtes de sécurité pour le dossier cache
+<IfModule mod_headers.c>
+  # Empêcher l'accès aux fichiers du dossier cache
+  Header set X-Robots-Tag "noindex, nofollow, noarchive, nosnippet"
+  Header set X-Content-Type-Options "nosniff"
+  Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+</IfModule>
+
+# Interdire tout accès
+<FilesMatch ".*">
+  Order Allow,Deny
+  Deny from all
+</FilesMatch>

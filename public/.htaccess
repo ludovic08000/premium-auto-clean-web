@@ -28,8 +28,8 @@
   RewriteCond %{HTTP_HOST} !^localhost
   RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
   
-  # Traitement spécial pour le script gptengineer
-  RewriteRule ^gpt-proxy\.php$ - [L]
+  # Traitement spécial pour les proxys PHP
+  RewriteRule ^(gpt-proxy\.php|js-proxy\.php|xml-proxy\.php)$ - [L]
   
   # Traitement spécial pour les fichiers JavaScript
   RewriteCond %{REQUEST_URI} \.(js|mjs|jsx|tsx)$
@@ -54,6 +54,16 @@
   AddType application/javascript .jsx
   AddType application/javascript .tsx
   AddType text/xml .xml
+  
+  # Force le type MIME pour JavaScript
+  <FilesMatch "\.(js|mjs|jsx|tsx)$">
+    ForceType application/javascript
+  </FilesMatch>
+  
+  # Force le type MIME pour XML
+  <FilesMatch "\.(xml)$">
+    ForceType text/xml
+  </FilesMatch>
 </IfModule>
 
 # Configurer les en-têtes CORS et sécurité
@@ -68,9 +78,8 @@
     Header set Content-Type "application/javascript"
   </FilesMatch>
   
-  # En-tête spécifique pour gpt-proxy.php
-  <FilesMatch "gpt-proxy\.php$">
-    Header set Content-Type "application/javascript"
+  # En-tête spécifique pour les scripts proxy
+  <FilesMatch "(gpt-proxy|js-proxy|xml-proxy)\.php$">
     Header set Access-Control-Allow-Origin "*"
   </FilesMatch>
   

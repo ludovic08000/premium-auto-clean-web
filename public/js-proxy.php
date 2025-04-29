@@ -1,7 +1,7 @@
 
 <?php
 // Script amélioré pour gérer correctement les fichiers JavaScript
-// Version 2.1 - Correction des problèmes MIME et sécurisation avancée
+// Version 2.2 - Correction complète des problèmes MIME et sécurisation avancée
 
 // Prévenir toute sortie avant les en-têtes
 ob_start();
@@ -25,6 +25,7 @@ $requestPath = isset($_GET['file']) ? $_GET['file'] : $_SERVER['REQUEST_URI'];
 // Nettoyer et sécuriser le chemin
 $requestPath = str_replace(['../', '..\\', ':', '?', '&'], '', $requestPath);
 $requestPath = parse_url($requestPath, PHP_URL_PATH);
+$requestPath = preg_replace('/[?&].*$/', '', $requestPath); // Supprimer les paramètres d'URL
 
 // Mode de débogage (à commenter en production)
 $debug = isset($_GET['debug']) && $_GET['debug'] == '1';
@@ -32,6 +33,17 @@ $debug = isset($_GET['debug']) && $_GET['debug'] == '1';
 if ($debug) {
     echo "// Debug mode enabled\n";
     echo "// Requested path: $requestPath\n";
+}
+
+// Vérifier si le fichier est en cache
+$cacheFile = __DIR__ . '/cache/js_' . md5($requestPath) . '.js';
+$useCaching = false; // Mettre à true pour activer le cache
+
+if ($useCaching && file_exists($cacheFile) && (time() - filemtime($cacheFile) < 3600)) {
+    if ($debug) echo "// Serving from cache: $cacheFile\n";
+    readfile($cacheFile);
+    ob_end_flush();
+    exit;
 }
 
 // Rechercher le fichier dans différents emplacements
@@ -85,15 +97,19 @@ if ($filePath) {
     $content = file_get_contents($filePath);
     
     // Vérifier si le contenu n'est pas du HTML (éviter les erreurs "Unexpected token '<'")
-    if (strpos($content, '<!DOCTYPE html>') === 0 || strpos($content, '<html') === 0) {
+    if (strpos($content, '<!DOCTYPE html>') === 0 || 
+        strpos($content, '<html') === 0 || 
+        preg_match('/<\!DOCTYPE\s+html>/i', $content) || 
+        preg_match('/<html/i', substr($content, 0, 1000))) {
+            
         if ($debug) {
             echo "// WARNING: File appears to be HTML, not JavaScript\n";
             echo "// Serving fallback JavaScript instead\n";
         }
         
         // Générer un script de secours approprié
-        echo "console.error('Error loading JavaScript file. Received HTML instead of JavaScript.');";
-        echo "console.warn('File path requested: " . addslashes($requestPath) . "');";
+        echo "console.error('Erreur de chargement JavaScript: Contenu HTML détecté à la place du JavaScript.');";
+        echo "console.warn('Fichier demandé: " . addslashes($requestPath) . "');";
         
         // Script de secours pour la fonctionnalité minimale
         echo "if (typeof window.appLoaded === 'undefined') {";
@@ -107,6 +123,14 @@ if ($filePath) {
         echo "}";
     } else {
         // C'est du JavaScript valide, on l'envoie
+        if ($useCaching) {
+            // Sauvegarder dans le cache
+            if (!is_dir(__DIR__ . '/cache')) {
+                mkdir(__DIR__ . '/cache', 0755, true);
+            }
+            file_put_contents($cacheFile, $content);
+        }
+        
         echo $content;
     }
 } else {

@@ -124,12 +124,14 @@
       window.appConfig = {
         mainScriptLoaded: false,
         entryPoints: [
-          // Toujours essayer le proxy en premier pour éviter les erreurs MIME type
+          // Toujours utiliser le proxy PHP en premier pour garantir le bon MIME type
           '/js-proxy.php?file=/dist/assets/index.js',
           '/js-proxy.php?file=/dist/assets/main.js',
           '/js-proxy.php?file=/src/main.tsx',
           '/js-proxy.php?file=/src/main.jsx',
-          // Ensuite essayer les chemins directs comme solutions de secours
+          '/js-proxy.php?file=/main.tsx',
+          '/js-proxy.php?file=/main.jsx',
+          // Chemins directs en dernier recours
           '/dist/assets/index.js',
           '/dist/assets/main.js'
         ],
