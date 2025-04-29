@@ -25,126 +25,59 @@
   
   # Rediriger de HTTP vers HTTPS (si le serveur supporte HTTPS)
   RewriteCond %{HTTPS} off
+  RewriteCond %{HTTP_HOST} !^localhost
   RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
   
-  # Traitement spécial pour les fichiers XML (sitemap)
-  <FilesMatch "\.(xml)$">
-    ForceType text/xml
-    Header set Content-Type "text/xml"
-  </FilesMatch>
+  # Autoriser explicitement les requêtes CORS pour cdn.gpteng.co
+  <IfModule mod_headers.c>
+    SetEnvIfNoCase Origin "https://cdn.gpteng.co" CORS_ALLOW_ORIGIN=$0
+    Header always set Access-Control-Allow-Origin %{CORS_ALLOW_ORIGIN}e env=CORS_ALLOW_ORIGIN
+    Header always set Access-Control-Allow-Methods "GET, POST, OPTIONS"
+    Header always set Access-Control-Allow-Headers "Origin, Content-Type, Accept"
+  </IfModule>
   
   # Traitement spécial pour les fichiers JavaScript
   RewriteCond %{REQUEST_URI} \.(js|mjs|jsx|tsx)$
   RewriteRule ^(.*)$ js-proxy.php?file=$1 [L,QSA]
   
-  # Traiter les fichiers .js et .mjs correctement (spécifique à IONOS)
-  RewriteCond %{REQUEST_URI} \.(js|mjs)$
-  RewriteCond %{HTTP:Accept-Encoding} gzip
-  RewriteCond %{REQUEST_FILENAME}.gz -f
-  RewriteRule ^(.*)$ $1.gz [L]
-  
-  # Correction spécifique à IONOS pour les fichiers JavaScript
-  <FilesMatch "\.(js|mjs|jsx|tsx)$">
-    SetHandler application/javascript
-  </FilesMatch>
+  # Traitement spécial pour les fichiers XML
+  RewriteCond %{REQUEST_URI} \.(xml)$
+  RewriteRule ^(.*)$ xml-proxy.php?file=$1 [L,QSA]
   
   # Ne pas appliquer les règles aux fichiers et dossiers existants
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   
-  # Si le fichier n'existe pas directement, essayer avec d'autres extensions
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME}.tsx -f
-  RewriteRule ^(.*)$ $1.tsx [L]
-  
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME}.jsx -f
-  RewriteRule ^(.*)$ $1.jsx [L]
-  
   # Rediriger toutes les autres requêtes vers index.html
   RewriteRule ^(.*) index.html [L]
 </IfModule>
 
-# Configuration des types MIME pour JavaScript et XML
+# Configuration des types MIME
 <IfModule mod_mime.c>
-  # Définir correctement les types MIME pour JavaScript
   AddType application/javascript .js
   AddType application/javascript .mjs
   AddType application/javascript .jsx
   AddType application/javascript .tsx
-  
-  # Définir correctement le type MIME pour XML
   AddType text/xml .xml
-  
-  # Forcer le type MIME pour JavaScript même avec d'autres extensions
-  <FilesMatch "\.(js|mjs|jsx|tsx)$">
-    ForceType application/javascript
-    Header set Content-Type "application/javascript"
-  </FilesMatch>
-  
-  # Forcer le type MIME pour XML
-  <FilesMatch "\.(xml)$">
-    ForceType text/xml
-    Header set Content-Type "text/xml"
-  </FilesMatch>
-  
-  # Configuration pour fichiers compressés
-  AddEncoding gzip .gz
-  <FilesMatch "\.js\.gz$">
-    ForceType application/javascript
-    Header set Content-Encoding gzip
-    Header append Vary Accept-Encoding
-  </FilesMatch>
 </IfModule>
 
 # Configurer les en-têtes CORS et sécurité
 <IfModule mod_headers.c>
-  # En-têtes CORS pour les ressources spécifiques
-  <FilesMatch "\.(html|js|jsx|tsx|css|mjs)$">
-    Header set Access-Control-Allow-Origin "*"
-    Header set Content-Type "application/javascript" env=IS_JS
-  </FilesMatch>
+  # En-têtes CORS pour toutes les ressources
+  Header set Access-Control-Allow-Origin "*"
+  Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
+  Header set Access-Control-Allow-Headers "Content-Type, Authorization"
   
-  # En-têtes spécifiques pour XML
-  <FilesMatch "\.(xml)$">
-    Header set Access-Control-Allow-Origin "*"
-    Header set Content-Type "text/xml"
-  </FilesMatch>
-  
-  # Définir une variable d'environnement pour les fichiers JavaScript
-  SetEnvIf Request_URI "\.js$" IS_JS
-  SetEnvIf Request_URI "\.mjs$" IS_JS
-  SetEnvIf Request_URI "\.jsx$" IS_JS
-  SetEnvIf Request_URI "\.tsx$" IS_JS
-  
-  # En-têtes de sécurité
-  Header always set X-Content-Type-Options "nosniff"
-  Header always set X-XSS-Protection "1; mode=block"
-  Header always set X-Frame-Options "SAMEORIGIN"
-  Header always set Referrer-Policy "strict-origin-when-cross-origin"
-  
-  # Content Security Policy (CSP) mise à jour pour autoriser Google Fonts et scripts
-  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.gpteng.co https://*.emailjs.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; connect-src 'self' https://*.emailjs.com https://api.emailjs.com https://www.google-analytics.com; font-src 'self' https://fonts.gstatic.com; frame-src 'none'; object-src 'none';"
-  
-  # Strict Transport Security (HSTS) - Activer HTTPS strict
-  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
-
-  # Définir le bon type MIME pour les fichiers JavaScript
+  # En-têtes pour JavaScript
   <FilesMatch "\.(js|jsx|tsx|mjs)$">
     Header set Content-Type "application/javascript"
   </FilesMatch>
+  
+  # En-têtes pour XML
+  <FilesMatch "\.(xml)$">
+    Header set Content-Type "text/xml"
+  </FilesMatch>
+  
+  # Modifier la CSP pour autoriser cdn.gpteng.co
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.gpteng.co https://*.emailjs.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; connect-src 'self' https://*.emailjs.com https://api.emailjs.com https://www.google-analytics.com https://cdn.gpteng.co; font-src 'self' https://fonts.gstatic.com; frame-src 'none'; object-src 'none';"
 </IfModule>
-
-# Protection contre les attaques par clickjacking
-Header always append X-Frame-Options SAMEORIGIN
-
-# Utiliser PHP pour servir les scripts JavaScript
-<FilesMatch "\.(js|mjs|jsx|tsx)$">
-  SetHandler application/x-httpd-php
-  Action application/javascript /js-proxy.php
-</FilesMatch>
-
-# Traitement spécial pour les fichiers XML
-<FilesMatch "\.(xml)$">
-  SetHandler text/xml
-</FilesMatch>

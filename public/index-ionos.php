@@ -3,6 +3,9 @@
 // Script amélioré pour IONOS - à renommer en index.php sur l'hébergement
 // Gère tous les problèmes de MIME types en servant les fichiers via PHP
 
+// Activer le débogage - à commenter en production
+$debug = isset($_GET['debug']) ? true : false;
+
 // Définir les types MIME par extension
 $mimeTypes = [
     'js' => 'application/javascript',
@@ -29,23 +32,41 @@ $requestUri = $_SERVER['REQUEST_URI'];
 $requestPath = parse_url($requestUri, PHP_URL_PATH);
 $fileExtension = strtolower(pathinfo($requestPath, PATHINFO_EXTENSION));
 
-// Debug mode - commenter ou supprimer en production
-if (isset($_GET['debug'])) {
+// Gérer les requêtes CORS préliminaires (preflight)
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    header('Access-Control-Allow-Origin: *');
+    header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+    header('Access-Control-Allow-Headers: Content-Type, Authorization');
+    header('Access-Control-Max-Age: 86400');
+    exit(0);
+}
+
+// Debug mode
+if ($debug) {
     header('Content-Type: text/plain');
     echo "URI demandée: " . $requestUri . "\n";
+    echo "Chemin: " . $requestPath . "\n";
     echo "Extension: " . $fileExtension . "\n";
     echo "MIME attendu: " . (isset($mimeTypes[$fileExtension]) ? $mimeTypes[$fileExtension] : "non spécifié") . "\n";
     exit;
 }
 
-// Traitement spécial pour XML et JS
+// Traitement spécial pour XML
 if ($fileExtension === 'xml') {
     include __DIR__ . '/xml-proxy.php';
     exit;
 }
 
+// Traitement spécial pour JS
 if (in_array($fileExtension, ['js', 'mjs', 'jsx', 'tsx'])) {
     include __DIR__ . '/js-proxy.php';
+    exit;
+}
+
+// Traitement spécial pour cdn.gpteng.co
+if (strpos($requestUri, 'gptengineer.js') !== false) {
+    // Rediriger vers le proxy de script
+    header('Location: https://cdn.gpteng.co/gptengineer.js');
     exit;
 }
 
@@ -62,6 +83,19 @@ if (isset($mimeTypes[$fileExtension])) {
         
         // Envoyer le contenu
         readfile($filePath);
+        exit;
+    }
+    
+    // Chercher dans le dossier dist si le fichier n'est pas trouvé à la racine
+    $distPath = __DIR__ . '/dist' . $requestPath;
+    if (file_exists($distPath)) {
+        // Définir le bon type MIME
+        header('Content-Type: ' . $mimeTypes[$fileExtension]);
+        header('Access-Control-Allow-Origin: *');
+        header('Cache-Control: max-age=86400');
+        
+        // Envoyer le contenu
+        readfile($distPath);
         exit;
     }
 }

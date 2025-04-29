@@ -43,6 +43,26 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" />
     <meta name="theme-color" content="#111111" />
+    
+    <!-- Fix for CORS issues -->
+    <script>
+      // Fix for CORS issues with external scripts
+      window.addEventListener('error', function(e) {
+        if (e.target.tagName === 'SCRIPT' && e.target.src && e.target.src.includes('cdn.gpteng.co')) {
+          console.log('Tentative de récupération du script externe...');
+          var xhr = new XMLHttpRequest();
+          xhr.open('GET', e.target.src, true);
+          xhr.onload = function() {
+            if (xhr.status === 200) {
+              var script = document.createElement('script');
+              script.text = xhr.responseText;
+              document.head.appendChild(script);
+            }
+          };
+          xhr.send();
+        }
+      }, true);
+    </script>
   </head>
 
   <body>
@@ -52,64 +72,103 @@
     <!-- End Google Tag Manager (noscript) -->
     
     <div id="root"></div>
-    <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
-    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
+    
+    <!-- Chargement de script avec gestion des erreurs -->
     <script>
-      // Script pour détecter et charger le bon fichier d'entrée
-      (function() {
-        const possibleEntrypoints = ['/src/main.tsx', '/src/main.jsx'];
-        
-        // Fonction pour essayer de charger un script
-        function tryLoadScript(src) {
-          return new Promise((resolve, reject) => {
+      // Fonction pour charger un script de façon robuste
+      function loadScript(url, type = 'text/javascript') {
+        return new Promise((resolve, reject) => {
+          try {
             const script = document.createElement('script');
-            script.type = 'module';
-            script.src = src;
+            script.type = type;
+            script.src = url;
+            script.async = true;
+            
+            // Gestionnaire de succès
             script.onload = () => {
-              console.log(`Script chargé avec succès: ${src}`);
+              console.log(`Script chargé avec succès: ${url}`);
               resolve(true);
             };
+            
+            // Gestionnaire d'erreur avec tentative directe via XHR
             script.onerror = () => {
-              console.warn(`Échec du chargement: ${src}`);
-              resolve(false);
+              console.warn(`Échec du chargement direct: ${url}, tentative via XHR...`);
+              
+              // Tenter de charger via XHR
+              const xhr = new XMLHttpRequest();
+              xhr.open('GET', url, true);
+              xhr.onload = () => {
+                if (xhr.status === 200) {
+                  console.log(`Script récupéré via XHR: ${url}`);
+                  const inlineScript = document.createElement('script');
+                  inlineScript.type = type;
+                  inlineScript.textContent = xhr.responseText;
+                  document.body.appendChild(inlineScript);
+                  resolve(true);
+                } else {
+                  console.error(`Échec XHR: ${url} (${xhr.status})`);
+                  reject();
+                }
+              };
+              xhr.onerror = () => {
+                console.error(`Échec XHR total: ${url}`);
+                reject();
+              };
+              xhr.send();
             };
+            
             document.body.appendChild(script);
-          });
-        }
-        
-        // Essayer de charger chaque point d'entrée potentiel
-        async function loadApp() {
-          for (const entrypoint of possibleEntrypoints) {
-            const success = await tryLoadScript(entrypoint);
-            if (success) {
-              document.documentElement.classList.add('js-loaded');
-              break;
+          } catch (e) {
+            console.error(`Erreur lors du chargement: ${url}`, e);
+            reject(e);
+          }
+        });
+      }
+      
+      // Initialisation de l'application
+      async function initApp() {
+        try {
+          // Marquer le début du chargement
+          document.documentElement.classList.add('loading');
+          
+          // Charger le script gptengineer.js
+          await loadScript('https://cdn.gpteng.co/gptengineer.js', 'module')
+            .catch(() => console.log('Application chargée sans gptengineer.js'));
+          
+          // Essayer de charger les points d'entrée principaux
+          const entrypoints = [
+            '/dist/assets/main.js',
+            '/assets/main.js',
+            '/src/main.tsx',
+            '/src/main.jsx'
+          ];
+          
+          let success = false;
+          for (const entry of entrypoints) {
+            try {
+              success = await loadScript(entry);
+              if (success) {
+                console.log(`Application chargée via: ${entry}`);
+                document.documentElement.classList.add('js-loaded');
+                document.documentElement.classList.remove('loading');
+                break;
+              }
+            } catch (e) {
+              console.warn(`Échec du point d'entrée: ${entry}`);
             }
           }
-        }
-        
-        loadApp();
-      })();
-    </script>
-    
-    <!-- Fallback pour détecter les problèmes de chargement -->
-    <script>
-      window.addEventListener('DOMContentLoaded', function() {
-        // Vérifier si l'application a été chargée correctement
-        setTimeout(function() {
-          if (!document.documentElement.classList.contains('js-loaded')) {
-            console.log('Problème de chargement détecté, tentative de récupération...');
-            document.documentElement.classList.add('js-loaded');
-            // Essayer les deux extensions
-            ['/src/main.tsx', '/src/main.jsx'].forEach(function(src) {
-              var script = document.createElement('script');
-              script.type = "module";
-              script.src = src;
-              document.body.appendChild(script);
-            });
+          
+          if (!success) {
+            console.error("Tous les points d'entrée ont échoué");
+            document.getElementById('root').innerHTML = '<div style="padding: 20px; text-align: center;"><h2>Erreur de chargement</h2><p>L\'application n\'a pas pu être chargée. Veuillez rafraîchir la page ou contacter le support.</p></div>';
           }
-        }, 3000); // Vérifier après 3 secondes
-      });
+        } catch (e) {
+          console.error("Erreur critique d'initialisation:", e);
+        }
+      }
+      
+      // Lancer l'initialisation
+      window.addEventListener('DOMContentLoaded', initApp);
     </script>
   </body>
 </html>
