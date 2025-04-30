@@ -1,5 +1,6 @@
 
 import { useEffect } from "react";
+import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Services from "@/components/Services";
@@ -15,40 +16,16 @@ const Index = () => {
   useEffect(() => {
     // Configuration d'un délai d'expiration de session de 30 minutes
     setupSessionTimeout(30);
-    
-    // Ajout des données structurées pour le SEO local
-    const jsonLd = {
-      "@context": "https://schema.org",
-      "@type": "LocalBusiness",
-      "name": "Premium Auto Clean",
-      "description": "Service professionnel de nettoyage automobile et à domicile",
-      "url": window.location.href,
-      "areaServed": [
-        {
-          "@type": "City",
-          "name": "Charleville-Mézières"
-        },
-        {
-          "@type": "City",
-          "name": "Reims"
-        }
-      ],
-      "priceRange": "€€",
-      "servesCuisine": "Nettoyage automobile"
-    };
-    
-    const script = document.createElement('script');
-    script.type = 'application/ld+json';
-    script.text = JSON.stringify(jsonLd);
-    document.head.appendChild(script);
-    
-    return () => {
-      document.head.removeChild(script);
-    };
   }, []);
   
   return (
     <div className="min-h-screen bg-dark text-gold">
+      <Helmet>
+        <title>Premium Auto Clean - Service de nettoyage automobile professionnel</title>
+        <meta name="description" content="Service professionnel de nettoyage automobile et à domicile à Charleville-Mézières et Reims. Nettoyage complet, intérieur et extérieur." />
+        <link rel="canonical" href="https://premiumautoclean.com/" />
+      </Helmet>
+      
       <Navbar />
       <main className="animate-fade-in">
         <Hero />
