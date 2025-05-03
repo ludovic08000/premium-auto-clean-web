@@ -182,7 +182,7 @@ const Abonnements = () => {
           initial={{ opacity: 0, y: -20 }}
           animate={animateHeading ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7 }}
-          className="section-heading text-center"
+          className="section-heading text-center text-3xl md:text-4xl font-serif font-bold mb-12 text-gold"
         >
           Nos Formules d'Abonnement
         </motion.h2>

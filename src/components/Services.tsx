@@ -17,10 +17,10 @@ const Services = () => {
   return (
     <section id="services" className="py-20 bg-dark">
       <div className="container mx-auto px-4">
-        <h2 className="section-heading text-center">Nos Services</h2>
+        <h2 className="section-heading text-center text-3xl md:text-4xl font-serif font-bold mb-12 text-gold">Nos Services</h2>
         
         <div className="mb-16">
-          <h3 className="text-2xl font-serif font-bold text-gold mb-6 text-center">Services Principaux</h3>
+          <h2 className="text-2xl font-serif font-bold text-gold mb-6 text-center">Services Principaux</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <ServiceCard
               title="Nettoyage Complet"
@@ -46,7 +46,7 @@ const Services = () => {
         </div>
         
         <div className="mb-16">
-          <h3 className="text-2xl font-serif font-bold text-gold mb-6 text-center">Services Additionnels</h3>
+          <h2 className="text-2xl font-serif font-bold text-gold mb-6 text-center">Services Additionnels</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="card-premium">
               <h4 className="font-bold mb-2">Nettoyage des jantes</h4>
@@ -76,7 +76,7 @@ const Services = () => {
         </div>
         
         <div>
-          <h3 className="text-2xl font-serif font-bold text-gold mb-6 text-center">Services Spéciaux</h3>
+          <h2 className="text-2xl font-serif font-bold text-gold mb-6 text-center">Services Spéciaux</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="card-premium">
               <h4 className="font-bold mb-2">Nettoyage des taches</h4>

@@ -30,10 +30,10 @@ const Tarifs = () => {
   return (
     <section id="tarifs" className="py-20 bg-dark-light">
       <div className="container mx-auto px-4">
-        <h2 className="section-heading text-center">Nos Tarifs</h2>
+        <h2 className="section-heading text-center text-3xl md:text-4xl font-serif font-bold mb-12 text-gold">Nos Tarifs</h2>
         
         <div className="mb-16">
-          <h3 className="text-2xl font-serif font-bold text-gold mb-6 text-center">Forfaits Nettoyage Complet</h3>
+          <h2 className="text-2xl font-serif font-bold text-gold mb-6 text-center">Forfaits Nettoyage Complet</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <PriceCard
               title="Véhicules Classiques"
@@ -55,7 +55,7 @@ const Tarifs = () => {
         </div>
         
         <div>
-          <h3 className="text-2xl font-serif font-bold text-gold mb-6 text-center">Services Additionnels</h3>
+          <h2 className="text-2xl font-serif font-bold text-gold mb-6 text-center">Services Additionnels</h2>
           <div className="max-w-3xl mx-auto bg-dark p-6 rounded-lg border border-gold/30">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10">
               <div>
