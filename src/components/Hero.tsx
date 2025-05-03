@@ -53,6 +53,24 @@ const Hero = () => {
           <ArrowDown size={20} />
         </a>
       </div>
+
+      {/* Données structurées spécifiques à cette section (WebPage) */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Premium Auto Clean - Service de nettoyage automobile professionnel",
+        "description": "Spécialistes en détailing automobile depuis plus de 8 ans à Charleville-Mézières et Reims. Nettoyage intérieur, extérieur et services personnalisés.",
+        "url": "https://premiumautoclean.com/",
+        "mainEntity": {
+          "@type": "Service",
+          "name": "Nettoyage Automobile Professionnel",
+          "description": "Services de nettoyage automobile complet, intérieur et extérieur, avec des produits haut de gamme et des techniques innovantes.",
+          "provider": {
+            "@type": "LocalBusiness",
+            "name": "Premium Auto Clean"
+          }
+        }
+      })} } />
     </section>
   );
 };
