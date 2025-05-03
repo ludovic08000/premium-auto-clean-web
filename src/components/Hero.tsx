@@ -21,6 +21,20 @@ const Hero = () => {
           <p className="text-lg font-light text-gold/70 mb-10">
             À Charleville-Mézières et Reims
           </p>
+          
+          <div className="mx-auto max-w-3xl mb-10 text-gold/80">
+            <p className="mb-4">
+              Redonnez vie et éclat à votre véhicule grâce à nos services de nettoyage professionnel. 
+              Spécialistes en détailing automobile depuis plus de 8 ans, nous proposons des prestations 
+              sur mesure adaptées à tous types de véhicules.
+            </p>
+            <p>
+              Notre équipe qualifiée utilise des produits haut de gamme et des techniques innovantes 
+              pour offrir des résultats exceptionnels. Du nettoyage extérieur minutieux au traitement 
+              complet de l'habitacle, nous garantissons une finition impeccable et une satisfaction totale.
+            </p>
+          </div>
+          
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a href="#services" className="btn-gold">
               Découvrir nos services

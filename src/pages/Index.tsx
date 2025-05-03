@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
+import AboutUs from "@/components/AboutUs";
 import Services from "@/components/Services";
 import Tarifs from "@/components/Tarifs";
 import Abonnements from "@/components/Abonnements";
@@ -21,14 +22,16 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-dark text-gold">
       <Helmet>
-        <title>Premium Auto Clean - Service de nettoyage automobile professionnel</title>
-        <meta name="description" content="Service professionnel de nettoyage automobile et à domicile à Charleville-Mézières et Reims. Nettoyage complet, intérieur et extérieur." />
+        <title>Premium Auto Clean - Service de nettoyage automobile professionnel à Charleville-Mézières et Reims</title>
+        <meta name="description" content="Service professionnel de nettoyage automobile et à domicile à Charleville-Mézières et Reims. Nettoyage complet, intérieur et extérieur, traitement cuir, rénovation phares et services sur mesure." />
+        <meta name="keywords" content="nettoyage automobile, lavage voiture, détailing, Charleville-Mézières, Reims, nettoyage intérieur, rénovation phares, traitement cuir, désinfection vapeur, service domicile" />
         <link rel="canonical" href="https://premiumautoclean.com/" />
       </Helmet>
       
       <Navbar />
       <main className="animate-fade-in">
         <Hero />
+        <AboutUs />
         <Services />
         <Tarifs />
         <Abonnements />
