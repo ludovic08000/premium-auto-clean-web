@@ -24,4 +24,8 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  // Ajouter une option optimizeDeps pour aider avec les conflits potentiels
+  optimizeDeps: {
+    force: true
+  }
 }));
