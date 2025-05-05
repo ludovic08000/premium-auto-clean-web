@@ -2,7 +2,7 @@
 # Configuration Netlify pour SPA React
 [build]
   publish = "dist"
-  command = "npm install && npm install vite@5.0.0 --save-dev && npx vite build"
+  command = "npm ci && npx vite build"
 
 # Forcer HTTPS (priorité maximale)
 [[redirects]]
