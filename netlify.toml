@@ -2,7 +2,7 @@
 # Configuration Netlify pour SPA React
 [build]
   publish = "dist"
- command = "npm install && npm run build"
+  command = "npm install && npm install vite@latest --legacy-peer-deps && npm run build"
 
 # Forcer HTTPS (priorité maximale)
 [[redirects]]
@@ -55,8 +55,9 @@
   [headers.values]
     Content-Type = "text/css"
 
-# Configuration environnement production
+# Configuration environnement production avec forçage de Node 18
 [context.production.environment]
   NODE_ENV = "production"
   HTTPS = "true"
+  NODE_VERSION = "18"
   NPM_FLAGS = "--legacy-peer-deps"
