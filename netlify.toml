@@ -6,7 +6,7 @@ NODE_VERSION = "18"
 
 [build]
   publish = "dist"
-  command = "npm ci && npm install vite@latest terser@latest --save-dev && NODE_ENV=production npx vite build"
+command = "npm install && npm run build"
 
 # Variables d'environnement pour la production
 [context.production.environment]
