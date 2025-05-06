@@ -1,18 +1,16 @@
 
-# Configuration Netlify optimisée pour React SPA
+# Configuration Netlify optimisée pour React SPA avec Vite 6.3.5
 
 [build]
+  command = "npm install && npm run build"
   publish = "dist"
-  command = "npm ci && npm install vite@latest terser@latest --save-dev && NODE_ENV=production npx vite build"
 
-# Variables d'environnement pour la production
 [context.production.environment]
   NODE_ENV = "production"
   HTTPS = "true"
   NODE_VERSION = "18"
   NPM_FLAGS = "--legacy-peer-deps"
 
-# Forcer HTTPS (priorité maximale)
 [[redirects]]
   from = "http://*"
   to = "https://:splat"
@@ -20,7 +18,6 @@
   force = true
   priority = 100
 
-# Redirection de .fr vers .com
 [[redirects]]
   from = "https://premiumautoclean.fr/*"
   to = "https://premiumautoclean.com/:splat"
@@ -28,7 +25,6 @@
   force = true
   priority = 95
 
-# Redirection spéciale pour app depuis Ionos
 [[redirects]]
   from = "/app/*"
   to = "/:splat"
@@ -36,14 +32,12 @@
   force = true
   priority = 90
 
-# Redirection pour SPA (fallback pour React Router)
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
   priority = 10
 
-# Configuration des en-têtes de sécurité
 [[headers]]
   for = "/*"
   [headers.values]
