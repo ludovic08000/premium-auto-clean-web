@@ -1,0 +1,24 @@
+
+# Premium Auto Clean robots.txt
+User-agent: *
+Allow: /
+
+# Restrict crawling where needed
+Disallow: /private/
+Disallow: /admin/
+
+# Sitemap
+Sitemap: https://premiumautoclean.com/sitemap.xml
+
+# Specific bots
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
