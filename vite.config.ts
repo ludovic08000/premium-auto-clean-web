@@ -3,17 +3,31 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 
+// https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
   },
-  base: "/", // Important pour Netlify SPA
+  base: "/", // Essentiel pour Netlify SPA et routes React Router
   build: {
-    outDir: "dist",
-    emptyOutDir: true,
+    outDir: "dist", // Correspond au 'publish' dans netlify.toml
+    emptyOutDir: true, 
     sourcemap: mode === "development",
-    assetsInlineLimit: 0, // Évite les base64 inutiles
+    minify: "terser", // Meilleure minification
+    terserOptions: {
+      compress: {
+        drop_console: mode === "production", // Supprime console.log en production
+      }
+    },
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          react: ["react", "react-dom"],
+          router: ["react-router-dom"],
+        }
+      }
+    }
   },
   plugins: [react()],
   resolve: {
@@ -21,8 +35,8 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  // Optionnel : supprime force (utile si conflits, mais à éviter si tout va bien)
+  // Optimisation des dépendances pour Netlify
   optimizeDeps: {
-    include: ["react", "react-dom"]
+    include: ["react", "react-dom", "react-router-dom"]
   }
 }));

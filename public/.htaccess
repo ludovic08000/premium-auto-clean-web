@@ -1,5 +1,5 @@
 
-# Active la réécriture d'URL
+# Règles simplifiées pour compatibilité Apache/Netlify
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
@@ -8,30 +8,20 @@
   RewriteCond %{HTTPS} off
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
   
-  # Redirection de .fr vers .com - spécifique pour premiumautoclean.fr sans 's'
+  # Redirection de .fr vers .com
   RewriteCond %{HTTP_HOST} ^premiumautoclean\.fr [NC]
   RewriteRule ^(.*)$ https://premiumautoclean.com/$1 [R=301,L]
-  
-  # Redirection spéciale pour les chemins /app/
-  RewriteRule ^app/(.*)$ /$1 [R=301,L]
   
   # Ne pas appliquer les règles aux fichiers et dossiers existants
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   
-  # Rediriger toutes les autres requêtes vers index.html
+  # Rediriger toutes les autres requêtes vers index.html (SPA)
   RewriteRule ^ index.html [L]
 </IfModule>
 
-# Définition des types MIME
-<IfModule mod_mime.c>
-  AddType application/javascript .js
-  AddType text/css .css
-</IfModule>
-
-# En-têtes de sécurité
+# En-têtes de sécurité pour plus de compatibilité
 <IfModule mod_headers.c>
-  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
   Header always set X-Content-Type-Options "nosniff"
   Header always set X-XSS-Protection "1; mode=block"
 </IfModule>
