@@ -14,12 +14,12 @@ export default defineConfig(({ mode }) => ({
     outDir: "dist", // Correspond au 'publish' dans netlify.toml
     emptyOutDir: true, 
     sourcemap: mode === "development",
-    minify: "terser", // Utilisation de Terser pour la minification
-    terserOptions: {
+    minify: mode === "production" ? "terser" : false, // Conditionnellement utiliser Terser en prod uniquement
+    terserOptions: mode === "production" ? {
       compress: {
-        drop_console: mode === "production", // Supprime console.log en production
+        drop_console: true, // Supprime console.log en production
       }
-    },
+    } : undefined,
     rollupOptions: {
       output: {
         manualChunks: {
