@@ -14,7 +14,7 @@ export default defineConfig(({ mode }) => ({
     outDir: "dist", // Correspond au 'publish' dans netlify.toml
     emptyOutDir: true, 
     sourcemap: mode === "development",
-    minify: "terser", // Meilleure minification
+    minify: "terser", // Utilisation de Terser pour la minification
     terserOptions: {
       compress: {
         drop_console: mode === "production", // Supprime console.log en production

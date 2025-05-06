@@ -3,7 +3,7 @@
 
 [build]
   publish = "dist"
-  command = "npm ci && npm install vite@5.0.0 --save-dev && npx vite build"
+  command = "npm ci && npm install vite@5.0.0 terser@latest --save-dev && npx vite build"
 
 # Variables d'environnement pour la production
 [context.production.environment]
