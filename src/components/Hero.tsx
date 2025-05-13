@@ -61,7 +61,7 @@ const Hero = () => {
         "name": "Premium Auto Clean - Service de nettoyage automobile professionnel",
         "description": "Spécialistes en détailing automobile depuis plus de 8 ans à Charleville-Mézières et Reims. Nettoyage intérieur, extérieur et services personnalisés.",
         "url": "https://premiumautoclean.com/",
-        "image": "https://premiumautoclean.com/og-image.jpg",
+        "image": "/lovable-uploads/124fed26-b942-4f5e-a6fa-14377a0a18eb.png",
         "mainEntity": {
           "@type": "Service",
           "name": "Nettoyage Automobile Professionnel",
