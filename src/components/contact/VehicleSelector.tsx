@@ -3,7 +3,7 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/comp
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { UseFormReturn } from "react-hook-form";
 import { ContactFormValues } from "@/schemas/contactFormSchema";
-import { Car } from "lucide-react";
+import { Monitor } from "lucide-react";
 
 interface VehicleSelectorProps {
   form: UseFormReturn<ContactFormValues>;
@@ -16,40 +16,52 @@ const VehicleSelector = ({ form }: VehicleSelectorProps) => {
       name="vehicule"
       render={({ field }) => (
         <FormItem>
-          <FormLabel className="text-gold flex items-center gap-2">
-            <Car className="h-4 w-4" />
-            <span>Type de véhicule</span>
+          <FormLabel className="text-foreground flex items-center gap-2">
+            <Monitor className="h-4 w-4 text-primary" />
+            <span>Type d'appareil</span>
           </FormLabel>
           <Select onValueChange={field.onChange} defaultValue={field.value}>
             <FormControl>
-              <SelectTrigger className="bg-dark-light border-gold/30 text-gold hover:border-gold/60 transition-all">
+              <SelectTrigger className="bg-card border-primary/30 text-foreground hover:border-primary/60 transition-all">
                 <SelectValue placeholder="Sélectionner" />
               </SelectTrigger>
             </FormControl>
-            <SelectContent className="bg-dark-light border-gold/30 text-gold max-h-60">
+            <SelectContent className="bg-card border-primary/30 text-foreground max-h-60">
               <SelectItem 
-                value="Citadine"
-                className="hover:bg-gold/10 focus:bg-gold/10 focus:text-gold"
+                value="PC Fixe"
+                className="hover:bg-primary/10 focus:bg-primary/10 focus:text-foreground"
               >
-                Citadine
+                PC Fixe
               </SelectItem>
               <SelectItem 
-                value="Berline"
-                className="hover:bg-gold/10 focus:bg-gold/10 focus:text-gold"
+                value="PC Portable"
+                className="hover:bg-primary/10 focus:bg-primary/10 focus:text-foreground"
               >
-                Berline
+                PC Portable
               </SelectItem>
               <SelectItem 
-                value="SUV"
-                className="hover:bg-gold/10 focus:bg-gold/10 focus:text-gold"
+                value="Mac"
+                className="hover:bg-primary/10 focus:bg-primary/10 focus:text-foreground"
               >
-                SUV
+                Mac / MacBook
               </SelectItem>
               <SelectItem 
-                value="Utilitaire"
-                className="hover:bg-gold/10 focus:bg-gold/10 focus:text-gold"
+                value="Smartphone"
+                className="hover:bg-primary/10 focus:bg-primary/10 focus:text-foreground"
               >
-                Utilitaire
+                Smartphone
+              </SelectItem>
+              <SelectItem 
+                value="Tablette"
+                className="hover:bg-primary/10 focus:bg-primary/10 focus:text-foreground"
+              >
+                Tablette
+              </SelectItem>
+              <SelectItem 
+                value="Autre"
+                className="hover:bg-primary/10 focus:bg-primary/10 focus:text-foreground"
+              >
+                Autre
               </SelectItem>
             </SelectContent>
           </Select>

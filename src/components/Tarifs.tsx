@@ -10,102 +10,104 @@ const PriceCard = ({
   description: string; 
   isHighlighted?: boolean;
 }) => (
-  <div className={`card-premium ${isHighlighted ? 'border-gold' : ''}`}>
-    <h3 className="text-xl font-bold mb-2">{title}</h3>
+  <div className={`card-premium ${isHighlighted ? 'border-primary ring-2 ring-primary/20' : ''}`}>
+    <h3 className="text-xl font-bold mb-2 text-foreground">{title}</h3>
     <div className="mb-4">
-      <span className="text-3xl font-bold gold-gradient-text">{price}</span>
+      <span className="text-3xl font-bold tech-gradient-text">{price}</span>
     </div>
-    <p className="text-gold/70">{description}</p>
+    <p className="text-foreground/70">{description}</p>
   </div>
 );
 
 const ServiceItem = ({ name, price }: { name: string; price: string }) => (
-  <div className="flex justify-between items-center py-2 border-b border-gold/20">
-    <span className="text-gold/80">{name}</span>
-    <span className="font-bold">{price}</span>
+  <div className="flex justify-between items-center py-3 border-b border-primary/20">
+    <span className="text-foreground/80">{name}</span>
+    <span className="font-bold text-primary">{price}</span>
   </div>
 );
 
 const Tarifs = () => {
   return (
-    <section id="tarifs" className="py-20 bg-dark-light">
+    <section id="tarifs" className="py-20 bg-card">
       <div className="container mx-auto px-4">
-        <h2 className="section-heading text-center text-3xl md:text-4xl font-serif font-bold mb-12 text-gold">Nos Tarifs</h2>
+        <h2 className="section-heading text-center">Nos Tarifs</h2>
         
         <div className="text-center max-w-3xl mx-auto mb-12">
-          <p className="text-gold/80">
-            Chez Premium Auto Clean, nous proposons des tarifs transparents adaptés à tous types de véhicules et à tous les budgets.
-            Nos formules sont conçues pour répondre à vos besoins spécifiques, que vous recherchiez un nettoyage complet ou des services ciblés.
+          <p className="text-foreground/70">
+            Des tarifs transparents et compétitifs pour tous vos besoins en réparation informatique.
+            Diagnostic gratuit pour toute réparation. Devis sans engagement.
           </p>
         </div>
         
         <div className="mb-16">
-          <h2 className="text-2xl font-serif font-bold text-gold mb-6 text-center">Forfaits Nettoyage Complet</h2>
-          <div className="text-center max-w-3xl mx-auto mb-8">
-            <p className="text-gold/80">
-              Nos forfaits de nettoyage complet comprennent un traitement intérieur et extérieur approfondi. 
-              Le tarif varie selon la taille et le type de votre véhicule.
-            </p>
-          </div>
+          <h2 className="text-2xl font-display font-bold text-primary mb-6 text-center">Forfaits Diagnostic</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <PriceCard
-              title="Véhicules Classiques"
-              price="80€"
-              description="Nettoyage complet intérieur et extérieur pour citadines et berlines compactes. Inclut le lavage carrosserie, l'aspiration complète, le traitement des surfaces intérieures et le nettoyage des vitres."
+              title="Diagnostic Express"
+              price="Gratuit"
+              description="Diagnostic rapide de votre appareil en 15 minutes. Identification du problème et devis détaillé sans engagement."
             />
             <PriceCard
-              title="SUV"
-              price="120€"
-              description="Nettoyage complet intérieur et extérieur pour SUV, crossovers et berlines familiales. Comprend toutes les prestations du forfait classique adaptées aux véhicules plus spacieux."
+              title="Diagnostic Complet"
+              price="29€"
+              description="Analyse approfondie de votre PC ou Mac. Tests matériels complets, rapport détaillé et recommandations personnalisées."
               isHighlighted
             />
             <PriceCard
-              title="Utilitaires"
-              price="150€"
-              description="Nettoyage complet intérieur et extérieur pour fourgons, camionnettes et grands monospaces. Un traitement adapté aux véhicules professionnels et aux espaces de chargement."
+              title="Diagnostic à domicile"
+              price="49€"
+              description="Un technicien se déplace chez vous pour diagnostiquer votre appareil. Inclut le déplacement et le rapport complet."
             />
           </div>
         </div>
         
         <div>
-          <h2 className="text-2xl font-serif font-bold text-gold mb-6 text-center">Services Additionnels</h2>
-          <div className="text-center max-w-3xl mx-auto mb-8">
-            <p className="text-gold/80">
-              Personnalisez votre expérience avec nos services additionnels. Ces prestations peuvent être 
-              réservées individuellement ou ajoutées à l'un de nos forfaits de nettoyage complet.
-            </p>
-          </div>
-          <div className="max-w-3xl mx-auto bg-dark p-6 rounded-lg border border-gold/30">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10">
+          <h2 className="text-2xl font-display font-bold text-primary mb-6 text-center">Tarifs Réparation</h2>
+          <div className="max-w-4xl mx-auto bg-background p-6 rounded-xl border border-primary/30">
+            <h3 className="text-lg font-bold text-foreground mb-4">PC & Mac</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 mb-8">
               <div>
-                <ServiceItem name="Nettoyage intérieur" price="30€" />
-                <ServiceItem name="Nettoyage extérieur" price="44€" />
-                <ServiceItem name="Nettoyage des jantes" price="25€" />
-                <ServiceItem name="Rénovation des phares" price="50€" />
-                <ServiceItem name="Traitement du cuir" price="25€" />
+                <ServiceItem name="Suppression virus / malware" price="49€" />
+                <ServiceItem name="Réinstallation Windows / macOS" price="59€" />
+                <ServiceItem name="Remplacement disque dur / SSD" price="à partir de 79€" />
+                <ServiceItem name="Upgrade RAM" price="à partir de 49€" />
               </div>
               <div>
-                <ServiceItem name="Traitement hydrophobe des vitres" price="20€" />
-                <ServiceItem name="Nettoyage des taches" price="20€" />
-                <ServiceItem name="Désinfection à la vapeur" price="25€" />
-                <ServiceItem name="Service à domicile" price="à partir de 15€" />
+                <ServiceItem name="Remplacement écran laptop" price="à partir de 129€" />
+                <ServiceItem name="Remplacement batterie laptop" price="à partir de 69€" />
+                <ServiceItem name="Récupération de données" price="à partir de 89€" />
+                <ServiceItem name="Nettoyage / changement pâte thermique" price="39€" />
               </div>
             </div>
+            
+            <h3 className="text-lg font-bold text-foreground mb-4">Smartphones & Tablettes</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10">
+              <div>
+                <ServiceItem name="Remplacement écran iPhone" price="à partir de 79€" />
+                <ServiceItem name="Remplacement écran Samsung" price="à partir de 89€" />
+                <ServiceItem name="Remplacement batterie smartphone" price="à partir de 39€" />
+              </div>
+              <div>
+                <ServiceItem name="Remplacement écran tablette" price="à partir de 99€" />
+                <ServiceItem name="Réparation connecteur de charge" price="à partir de 49€" />
+                <ServiceItem name="Déblocage / réinitialisation" price="29€" />
+              </div>
+            </div>
+            
             <div className="mt-8 text-center">
-              <p className="text-gold/70 text-sm">
-                Tous nos prix sont TTC. Des remises peuvent s'appliquer pour les clients fidèles et les formules d'abonnement.
-                Les tarifs peuvent varier légèrement selon l'état du véhicule et les traitements spécifiques nécessaires.
+              <p className="text-foreground/60 text-sm">
+                * Les prix incluent la main d'œuvre. Le prix des pièces peut varier selon le modèle de votre appareil.
+                Garantie de 6 mois sur toutes nos réparations.
               </p>
             </div>
           </div>
           
           <div className="mt-12 text-center">
-            <p className="text-gold/80 max-w-3xl mx-auto mb-6">
-              Pour obtenir un devis personnalisé adapté à votre véhicule et à vos besoins spécifiques, 
-              n'hésitez pas à nous contacter. Notre équipe sera ravie de vous conseiller sur la 
-              meilleure solution pour votre voiture.
+            <p className="text-foreground/70 max-w-3xl mx-auto mb-6">
+              Vous ne trouvez pas le service dont vous avez besoin ? Contactez-nous pour un devis personnalisé.
+              Nous intervenons sur tous types d'appareils et de problèmes.
             </p>
-            <a href="#contact" className="btn-gold inline-flex">Demander un devis gratuit</a>
+            <a href="#contact" className="btn-primary inline-flex">Demander un devis gratuit</a>
           </div>
         </div>
       </div>

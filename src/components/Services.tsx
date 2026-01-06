@@ -1,116 +1,110 @@
 
-import { Droplet, SprayCan, Wrench, CarFront, Settings, Shield } from "lucide-react";
+import { Monitor, Cpu, HardDrive, Wifi, Shield, Smartphone, Laptop, Database } from "lucide-react";
 
 const ServiceCard = ({ title, icon, description }: { title: string; icon: React.ReactNode; description: string }) => (
   <div className="card-premium group">
-    <div className="flex items-center mb-4 text-gold">
-      <div className="p-3 rounded-full bg-dark-lighter border border-gold/20 group-hover:border-gold/50 transition-all">
+    <div className="flex items-center mb-4 text-primary">
+      <div className="p-3 rounded-xl bg-secondary border border-primary/20 group-hover:border-primary/50 transition-all">
         {icon}
       </div>
     </div>
-    <h3 className="text-xl font-bold mb-2">{title}</h3>
-    <p className="text-gold/70">{description}</p>
+    <h3 className="text-xl font-bold mb-2 text-foreground">{title}</h3>
+    <p className="text-foreground/70">{description}</p>
   </div>
 );
 
 const Services = () => {
   return (
-    <section id="services" className="py-20 bg-dark">
+    <section id="services" className="py-20 bg-background">
       <div className="container mx-auto px-4">
-        <h2 className="section-heading text-center text-3xl md:text-4xl font-serif font-bold mb-12 text-gold">Nos Services</h2>
+        <h2 className="section-heading text-center">Nos Services</h2>
         
         <div className="text-center max-w-3xl mx-auto mb-12">
-          <p className="text-gold/80">
-            Premium Auto Clean vous propose une gamme complète de services de nettoyage automobile professionnel. 
-            Notre expertise et notre attention aux détails garantissent des résultats exceptionnels pour 
-            tous types de véhicules, des citadines aux utilitaires en passant par les SUV et les véhicules de luxe.
+          <p className="text-foreground/70">
+            Tech Repair Pro vous propose une gamme complète de services de réparation et maintenance informatique. 
+            Que ce soit pour un problème matériel ou logiciel, notre équipe d'experts est là pour vous aider.
           </p>
         </div>
         
         <div className="mb-16">
-          <h2 className="text-2xl font-serif font-bold text-gold mb-6 text-center">Services Principaux</h2>
+          <h2 className="text-2xl font-display font-bold text-primary mb-6 text-center">Réparation PC & Mac</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <ServiceCard
-              title="Nettoyage Complet"
-              icon={<CarFront size={24} />}
-              description="Traitement intérieur et extérieur pour une voiture comme neuve. Inclut le lavage carrosserie, shampooing tissus, traitement des plastiques et des vitres pour une finition parfaite."
+              title="Diagnostic Complet"
+              icon={<Monitor size={24} />}
+              description="Analyse approfondie de votre appareil pour identifier tous les problèmes matériels et logiciels. Rapport détaillé et devis gratuit."
             />
             <ServiceCard
-              title="Nettoyage Intérieur"
-              icon={<Settings size={24} />}
-              description="Aspirateur, shampooing des tissus, traitement des plastiques, nettoyage approfondi des surfaces de contact, suppression des taches tenaces et désodorisation complète."
+              title="Réparation Matérielle"
+              icon={<Cpu size={24} />}
+              description="Remplacement de composants défectueux : écran, clavier, batterie, carte mère, RAM, processeur et plus encore."
             />
             <ServiceCard
-              title="Nettoyage Extérieur"
-              icon={<Droplet size={24} />}
-              description="Lavage à la main, décontamination, protection carrosserie, traitement des jantes et des pneus, lustrage de la peinture et finition brillante durable."
+              title="Récupération de Données"
+              icon={<HardDrive size={24} />}
+              description="Récupération de vos fichiers précieux sur disques durs endommagés, clés USB ou cartes mémoire corrompues."
             />
             <ServiceCard
-              title="Service Personnalisé"
-              icon={<Wrench size={24} />}
-              description="Solutions adaptées selon votre type de véhicule et vos besoins spécifiques. Consultez-nous pour un devis sur mesure adapté à votre situation particulière."
+              title="Suppression Virus"
+              icon={<Shield size={24} />}
+              description="Élimination de virus, malwares, ransomwares et logiciels espions. Installation d'antivirus professionnel."
             />
           </div>
         </div>
         
         <div className="mb-16">
-          <h2 className="text-2xl font-serif font-bold text-gold mb-6 text-center">Services Additionnels</h2>
-          <p className="text-gold/80 text-center max-w-3xl mx-auto mb-8">
-            En complément de nos forfaits standards, nous proposons des services spécialisés pour répondre à tous vos besoins de nettoyage automobile. 
-            Ces options peuvent être ajoutées à tout service principal ou réservées individuellement.
-          </p>
+          <h2 className="text-2xl font-display font-bold text-primary mb-6 text-center">Smartphones & Tablettes</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="card-premium">
-              <h4 className="font-bold mb-2">Nettoyage des jantes</h4>
-              <p className="text-gold/70">Élimination des résidus de freins et protection. Notre traitement spécifique pour jantes élimine les poussières de frein incrustées et applique une couche protectrice qui facilite les nettoyages ultérieurs.</p>
+              <div className="flex items-center gap-3 mb-3">
+                <Smartphone className="text-primary" size={24} />
+                <h4 className="font-bold text-foreground">Réparation d'écran</h4>
+              </div>
+              <p className="text-foreground/70">Remplacement d'écran cassé ou fissuré pour iPhone, Samsung, Huawei et autres marques. Pièces de qualité garantie.</p>
             </div>
             <div className="card-premium">
-              <h4 className="font-bold mb-2">Rénovation des phares</h4>
-              <p className="text-gold/70">Restauration de la transparence et de la luminosité. Nous traitons vos phares ternis ou jaunis par les UV pour retrouver leur clarté d'origine et améliorer votre visibilité nocturne.</p>
+              <div className="flex items-center gap-3 mb-3">
+                <Database className="text-primary" size={24} />
+                <h4 className="font-bold text-foreground">Remplacement batterie</h4>
+              </div>
+              <p className="text-foreground/70">Votre téléphone ne tient plus la charge ? Nous remplaçons la batterie par une batterie neuve de haute qualité.</p>
             </div>
             <div className="card-premium">
-              <h4 className="font-bold mb-2">Traitement du cuir</h4>
-              <p className="text-gold/70">Nettoyage, hydratation et protection des cuirs. Notre traitement professionnel nettoie en profondeur, hydrate et protège tous types de cuirs pour prolonger leur durée de vie.</p>
-            </div>
-            <div className="card-premium">
-              <h4 className="font-bold mb-2">Traitement hydrophobe</h4>
-              <p className="text-gold/70">Application sur les vitres pour améliorer la visibilité. Ce traitement repousse l'eau et facilite l'évacuation des gouttes de pluie, améliorant considérablement la visibilité par temps de pluie.</p>
-            </div>
-            <div className="card-premium">
-              <h4 className="font-bold mb-2">Désinfection à la vapeur</h4>
-              <p className="text-gold/70">Élimination des bactéries et odeurs sans produits chimiques. Notre méthode de désinfection à la vapeur sèche élimine 99% des bactéries, virus et allergènes tout en respectant l'environnement.</p>
-            </div>
-            <div className="card-premium">
-              <h4 className="font-bold mb-2">Service à domicile</h4>
-              <p className="text-gold/70">Intervention sur site pour plus de confort. Nous nous déplaçons chez vous, à votre bureau ou à l'endroit de votre choix avec tout l'équipement nécessaire pour un service complet.</p>
+              <div className="flex items-center gap-3 mb-3">
+                <Wifi className="text-primary" size={24} />
+                <h4 className="font-bold text-foreground">Problèmes logiciels</h4>
+              </div>
+              <p className="text-foreground/70">Réinitialisation, mise à jour système, déblocage et récupération de données sur tous types d'appareils mobiles.</p>
             </div>
           </div>
         </div>
         
         <div>
-          <h2 className="text-2xl font-serif font-bold text-gold mb-6 text-center">Services Spéciaux</h2>
-          <p className="text-gold/80 text-center max-w-3xl mx-auto mb-8">
-            Premium Auto Clean étend son expertise au-delà de l'automobile pour répondre à tous vos besoins de nettoyage professionnel.
-          </p>
+          <h2 className="text-2xl font-display font-bold text-primary mb-6 text-center">Services Additionnels</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="card-premium">
-              <h4 className="font-bold mb-2">Nettoyage des taches</h4>
-              <p className="text-gold/70">Traitement spécifique pour les taches tenaces. Notre équipe dispose de solutions adaptées à chaque type de tache (café, encre, graisse, etc.) pour un résultat impeccable sans endommager les tissus.</p>
+              <div className="flex items-center gap-3 mb-3">
+                <Laptop className="text-primary" size={24} />
+                <h4 className="font-bold text-foreground">Optimisation PC</h4>
+              </div>
+              <p className="text-foreground/70">Nettoyage système, désinstallation de programmes inutiles, optimisation du démarrage et mise à jour des drivers pour un PC plus rapide.</p>
             </div>
             <div className="card-premium">
-              <h4 className="font-bold mb-2">Nettoyage canapés et matelas</h4>
-              <p className="text-gold/70">Extension de nos services pour votre intérieur. Utilisez notre expertise en nettoyage professionnel pour rafraîchir vos meubles rembourrés, éliminer les acariens et neutraliser les odeurs désagréables.</p>
+              <div className="flex items-center gap-3 mb-3">
+                <Wifi className="text-primary" size={24} />
+                <h4 className="font-bold text-foreground">Installation réseau</h4>
+              </div>
+              <p className="text-foreground/70">Configuration de votre box internet, installation de répéteurs WiFi, création de réseau sécurisé pour particuliers et professionnels.</p>
             </div>
           </div>
         </div>
         
         <div className="mt-16 text-center">
-          <p className="text-gold/80 max-w-3xl mx-auto mb-6">
-            Tous nos services utilisent des produits professionnels respectueux de l'environnement et sont réalisés 
-            par une équipe formée aux dernières techniques de nettoyage automobile. La satisfaction de nos clients 
-            est notre priorité absolue, c'est pourquoi nous garantissons un résultat à la hauteur de vos attentes.
+          <p className="text-foreground/70 max-w-3xl mx-auto mb-6">
+            Tous nos services sont réalisés par des techniciens certifiés avec des pièces de qualité. 
+            Nous garantissons nos réparations et offrons un suivi personnalisé pour chaque client.
           </p>
-          <a href="#contact" className="btn-gold inline-flex">Demander un devis personnalisé</a>
+          <a href="#contact" className="btn-primary inline-flex">Demander un devis gratuit</a>
         </div>
       </div>
     </section>

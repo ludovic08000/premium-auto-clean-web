@@ -1,5 +1,5 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -7,44 +7,44 @@
 
 @layer base {
   :root {
-    --background: 0 0% 7%;
-    --foreground: 48 55% 52%;
+    --background: 222 47% 6%;
+    --foreground: 210 40% 96%;
 
-    --card: 0 0% 10%;
-    --card-foreground: 48 55% 52%;
+    --card: 222 47% 9%;
+    --card-foreground: 210 40% 96%;
 
-    --popover: 0 0% 10%;
-    --popover-foreground: 48 55% 52%;
+    --popover: 222 47% 9%;
+    --popover-foreground: 210 40% 96%;
 
-    --primary: 48 55% 52%;
-    --primary-foreground: 0 0% 7%;
+    --primary: 199 89% 48%;
+    --primary-foreground: 222 47% 6%;
 
-    --secondary: 0 0% 10%;
-    --secondary-foreground: 48 55% 52%;
+    --secondary: 222 47% 12%;
+    --secondary-foreground: 210 40% 96%;
 
-    --muted: 0 0% 15%;
-    --muted-foreground: 48 20% 40%;
+    --muted: 222 47% 15%;
+    --muted-foreground: 210 20% 60%;
 
-    --accent: 48 55% 52%;
-    --accent-foreground: 0 0% 7%;
+    --accent: 199 89% 48%;
+    --accent-foreground: 222 47% 6%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 48 30% 40%;
-    --input: 48 30% 40%;
-    --ring: 48 55% 52%;
+    --border: 199 30% 30%;
+    --input: 199 30% 30%;
+    --ring: 199 89% 48%;
 
     --radius: 0.5rem;
 
-    --sidebar-background: 0 0% 7%;
-    --sidebar-foreground: 48 55% 52%;
-    --sidebar-primary: 48 55% 52%;
-    --sidebar-primary-foreground: 0 0% 7%;
-    --sidebar-accent: 0 0% 15%;
-    --sidebar-accent-foreground: 48 55% 52%;
-    --sidebar-border: 48 30% 40%;
-    --sidebar-ring: 48 55% 52%;
+    --sidebar-background: 222 47% 6%;
+    --sidebar-foreground: 210 40% 96%;
+    --sidebar-primary: 199 89% 48%;
+    --sidebar-primary-foreground: 222 47% 6%;
+    --sidebar-accent: 222 47% 15%;
+    --sidebar-accent-foreground: 210 40% 96%;
+    --sidebar-border: 199 30% 30%;
+    --sidebar-ring: 199 89% 48%;
   }
 }
 
@@ -54,54 +54,69 @@
   }
 
   body {
-    @apply bg-dark text-gold font-sans;
-    background-color: #111111;
+    @apply bg-background text-foreground;
+    font-family: 'Inter', sans-serif;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-serif font-bold;
+    font-family: 'Space Grotesk', sans-serif;
+    @apply font-bold;
   }
 }
 
 @layer components {
+  .tech-gradient-text {
+    @apply bg-clip-text text-transparent bg-[length:200%_auto] animate-shine;
+    background-image: linear-gradient(135deg, hsl(199, 89%, 48%), hsl(217, 91%, 60%), hsl(199, 89%, 48%));
+  }
+  
   .gold-gradient-text {
-    @apply bg-gradient-gold bg-clip-text text-transparent bg-[length:200%_auto] animate-shine;
+    @apply bg-clip-text text-transparent bg-[length:200%_auto] animate-shine;
+    background-image: linear-gradient(135deg, hsl(199, 89%, 48%), hsl(217, 91%, 60%), hsl(199, 89%, 48%));
   }
   
   .section-heading {
-    @apply text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-gold mb-6 lg:mb-10 gold-gradient-text;
+    @apply text-3xl md:text-4xl lg:text-5xl font-bold mb-6 lg:mb-10 tech-gradient-text;
   }
   
   .card-premium {
-    @apply bg-dark-light border border-gold/30 rounded-lg p-6 transition-all duration-300 hover:border-gold/80 hover:shadow-[0_0_15px_rgba(212,175,55,0.2)];
+    @apply bg-card border border-primary/30 rounded-xl p-6 transition-all duration-300 hover:border-primary/80 hover:shadow-[0_0_20px_rgba(14,165,233,0.2)];
+  }
+  
+  .btn-primary {
+    @apply font-semibold px-6 py-3 rounded-lg transition-all hover:shadow-[0_0_20px_rgba(14,165,233,0.5)] duration-300 bg-[length:200%_auto];
+    background-image: linear-gradient(135deg, hsl(199, 89%, 48%), hsl(217, 91%, 60%), hsl(199, 89%, 48%));
+    color: hsl(222, 47%, 6%);
   }
   
   .btn-gold {
-    @apply bg-gradient-gold text-dark font-medium px-6 py-3 rounded-md transition-all hover:shadow-[0_0_15px_rgba(212,175,55,0.5)] duration-300 bg-[length:200%_auto];
+    @apply font-semibold px-6 py-3 rounded-lg transition-all hover:shadow-[0_0_20px_rgba(14,165,233,0.5)] duration-300 bg-[length:200%_auto];
+    background-image: linear-gradient(135deg, hsl(199, 89%, 48%), hsl(217, 91%, 60%), hsl(199, 89%, 48%));
+    color: hsl(222, 47%, 6%);
   }
 
-  .input-gold {
-    @apply bg-dark-light border-gold/30 text-gold resize-none hover:border-gold/60 focus:border-gold/80 transition-all focus:ring-gold/30 placeholder:text-gold/40;
+  .input-tech {
+    @apply bg-card border-primary/30 text-foreground resize-none hover:border-primary/60 focus:border-primary/80 transition-all focus:ring-primary/30 placeholder:text-muted-foreground;
   }
   
-  .label-gold {
-    @apply text-gold flex items-center gap-2 font-medium;
+  .label-tech {
+    @apply text-foreground flex items-center gap-2 font-medium;
   }
 
-  .link-gold {
-    @apply text-gold hover:text-gold/80 transition-colors duration-200;
+  .link-tech {
+    @apply text-foreground hover:text-primary transition-colors duration-200;
   }
 
   .nav-link {
-    @apply relative text-gold hover:text-gold/80 transition-all duration-200 after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-gold after:bottom-0 after:left-0 hover:after:w-full after:transition-all after:duration-300;
+    @apply relative text-foreground hover:text-primary transition-all duration-200 after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-primary after:bottom-0 after:left-0 hover:after:w-full after:transition-all after:duration-300;
   }
   
-  .hover-gold {
-    @apply hover:border-gold/80 hover:shadow-[0_0_15px_rgba(212,175,55,0.2)] transition-all duration-300;
+  .hover-tech {
+    @apply hover:border-primary/80 hover:shadow-[0_0_20px_rgba(14,165,233,0.2)] transition-all duration-300;
   }
 }
 
-/* Animation for gold gradient text */
+/* Animation for gradient text */
 @keyframes shine {
   0% {
     background-position: 200% center;
@@ -114,4 +129,3 @@
 .animate-shine {
   animation: shine 3s linear infinite;
 }
-
