@@ -63,7 +63,6 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Legacy color aliases for compatibility
 				dark: {
 					DEFAULT: 'hsl(var(--background))',
 					light: 'hsl(var(--card))',
@@ -72,12 +71,8 @@ export default {
 				gold: 'hsl(var(--primary))'
 			},
 			fontFamily: {
-				sans: ['Inter', 'sans-serif'],
-				serif: ['Space Grotesk', 'sans-serif']
-			},
-			backgroundImage: {
-				'gradient-tech': 'linear-gradient(135deg, hsl(199, 89%, 48%), hsl(217, 91%, 60%), hsl(199, 89%, 48%))',
-				'gradient-gold': 'linear-gradient(135deg, hsl(199, 89%, 48%), hsl(217, 91%, 60%), hsl(199, 89%, 48%))'
+				sans: ['DM Sans', 'sans-serif'],
+				serif: ['Outfit', 'sans-serif']
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -96,17 +91,12 @@ export default {
 				'fade-in': {
 					'0%': { opacity: '0', transform: 'translateY(10px)' },
 					'100%': { opacity: '1', transform: 'translateY(0)' }
-				},
-				'shine': {
-					'0%': { backgroundPosition: '200% center' },
-					'100%': { backgroundPosition: '-200% center' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
-				'fade-in': 'fade-in 0.5s ease-out forwards',
-				'shine': 'shine 3s linear infinite'
+				'fade-in': 'fade-in 0.4s ease-out forwards'
 			}
 		}
 	},

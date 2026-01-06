@@ -13,7 +13,7 @@ import ServiceSelector from "@/components/contact/ServiceSelector";
 import DateSelector from "@/components/contact/DateSelector";
 import TimeSelector from "@/components/contact/TimeSelector";
 import MessageField from "@/components/contact/MessageField";
-import { Send } from "lucide-react";
+import { Send, Phone, Mail, MapPin } from "lucide-react";
 import { toast } from "sonner";
 
 const ContactForm = () => {
@@ -60,51 +60,89 @@ const ContactForm = () => {
   };
 
   return (
-    <div id="contact" className="container py-16">
-      <h2 className="section-heading text-center">
-        Demandez un rendez-vous
-      </h2>
-      <p className="text-center text-foreground/70 max-w-2xl mx-auto mb-8">
-        Décrivez votre problème et nous vous recontacterons rapidement pour fixer un rendez-vous.
-        Diagnostic gratuit pour toute demande de réparation.
-      </p>
-      <div className="card-premium p-6 md:p-8 max-w-4xl mx-auto">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <input type="hidden" name="csrf_token" value={csrfToken} />
+    <section id="contact" className="py-20 bg-secondary/30">
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          {/* Contact Info */}
+          <div>
+            <h2 className="section-heading">Contactez-nous</h2>
+            <p className="text-muted-foreground mb-8">
+              Décrivez votre problème et on vous rappelle rapidement pour en discuter.
+            </p>
             
-            <PersonalInfoFields form={form} />
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <VehicleSelector form={form} />
-              <ServiceSelector form={form} />
+            <div className="space-y-6">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center">
+                  <Phone className="text-primary" size={20} />
+                </div>
+                <div>
+                  <div className="text-sm text-muted-foreground">Téléphone</div>
+                  <a href="tel:0649754342" className="font-semibold hover:text-primary">06 49 75 43 42</a>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center">
+                  <Mail className="text-primary" size={20} />
+                </div>
+                <div>
+                  <div className="text-sm text-muted-foreground">Email</div>
+                  <a href="mailto:ludovic43@msn.com" className="font-semibold hover:text-primary">ludovic43@msn.com</a>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center">
+                  <MapPin className="text-primary" size={20} />
+                </div>
+                <div>
+                  <div className="text-sm text-muted-foreground">Horaires</div>
+                  <div className="font-semibold">Lun-Ven : 9h-18h</div>
+                </div>
+              </div>
             </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <DateSelector form={form} />
-              <TimeSelector form={form} />
+          </div>
+          
+          {/* Form */}
+          <div className="lg:col-span-2">
+            <div className="bg-card rounded-2xl p-6 md:p-8 shadow-sm border border-border">
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                  <input type="hidden" name="csrf_token" value={csrfToken} />
+                  
+                  <PersonalInfoFields form={form} />
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <VehicleSelector form={form} />
+                    <ServiceSelector form={form} />
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <DateSelector form={form} />
+                    <TimeSelector form={form} />
+                  </div>
+                  
+                  <MessageField form={form} />
+                  
+                  <Button
+                    type="submit"
+                    className="w-full btn-primary"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? "Envoi en cours..." : (
+                      <span className="flex items-center justify-center gap-2">
+                        <Send size={18} />
+                        Envoyer ma demande
+                      </span>
+                    )}
+                  </Button>
+                </form>
+              </Form>
             </div>
-            
-            <div className="grid grid-cols-1">
-              <MessageField form={form} />
-            </div>
-            
-            <Button
-              type="submit"
-              className="w-full btn-primary"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? "Envoi en cours..." : (
-                <span className="flex items-center justify-center gap-2">
-                  <Send className="h-4 w-4" />
-                  Envoyer la demande
-                </span>
-              )}
-            </Button>
-          </form>
-        </Form>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 

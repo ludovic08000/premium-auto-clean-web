@@ -3,7 +3,6 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/comp
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { UseFormReturn } from "react-hook-form";
 import { ContactFormValues } from "@/schemas/contactFormSchema";
-import { Wrench } from "lucide-react";
 
 interface ServiceSelectorProps {
   form: UseFormReturn<ContactFormValues>;
@@ -11,14 +10,14 @@ interface ServiceSelectorProps {
 
 const ServiceSelector = ({ form }: ServiceSelectorProps) => {
   const services = [
-    "Diagnostic PC/Mac",
-    "Réparation écran",
-    "Suppression virus",
+    "Mon PC est lent",
+    "Virus / Arnaque",
+    "Écran cassé",
+    "Batterie HS",
     "Récupération de données",
-    "Remplacement batterie",
-    "Optimisation système",
-    "Installation réseau",
-    "Autre"
+    "Installation / Configuration",
+    "Problème WiFi",
+    "Autre problème"
   ];
   
   return (
@@ -27,29 +26,22 @@ const ServiceSelector = ({ form }: ServiceSelectorProps) => {
       name="service"
       render={({ field }) => (
         <FormItem>
-          <FormLabel className="text-foreground flex items-center gap-2">
-            <Wrench className="h-4 w-4 text-primary" />
-            <span>Service souhaité</span>
-          </FormLabel>
+          <FormLabel>Quel est le problème ?</FormLabel>
           <Select onValueChange={field.onChange} defaultValue={field.value}>
             <FormControl>
-              <SelectTrigger className="bg-card border-primary/30 text-foreground hover:border-primary/60 transition-all">
-                <SelectValue placeholder="Sélectionner un service" />
+              <SelectTrigger className="bg-background">
+                <SelectValue placeholder="Choisir..." />
               </SelectTrigger>
             </FormControl>
-            <SelectContent className="bg-card border-primary/30 text-foreground max-h-60">
+            <SelectContent>
               {services.map((service) => (
-                <SelectItem 
-                  key={service} 
-                  value={service}
-                  className="hover:bg-primary/10 focus:bg-primary/10 focus:text-foreground"
-                >
+                <SelectItem key={service} value={service}>
                   {service}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
-          <FormMessage className="text-red-400" />
+          <FormMessage />
         </FormItem>
       )}
     />
