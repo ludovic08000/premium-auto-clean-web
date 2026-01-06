@@ -7,7 +7,7 @@ import { ContactFormValues } from "@/schemas/contactFormSchema";
 import { validateCSRFToken } from "./CSRFService";
 
 // Initialize EmailJS avec la clé publique
-emailjs.init("bzjjpS39IdapP6Fpp");
+emailjs.init("redvFGSyeaJQqjO4kbWW_");
 
 export const sendEmail = async (values: any): Promise<boolean> => {
   console.log("Form submitted with values:", values);
