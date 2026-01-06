@@ -37,7 +37,7 @@ const Services = () => {
           <ServiceCard
             title="Écran cassé"
             icon={Smartphone}
-            description="Téléphone ou tablette avec l'écran fissuré ? On le remplace avec des pièces de qualité."
+            description="iPhone, iPad ou Mac avec l'écran fissuré ? On le remplace avec des pièces de qualité."
           />
           <ServiceCard
             title="Données perdues"

@@ -26,8 +26,8 @@ const VehicleSelector = ({ form }: VehicleSelectorProps) => {
               <SelectItem value="PC Fixe">Ordinateur fixe</SelectItem>
               <SelectItem value="PC Portable">PC Portable</SelectItem>
               <SelectItem value="Mac">Mac / MacBook</SelectItem>
-              <SelectItem value="Smartphone">Téléphone</SelectItem>
-              <SelectItem value="Tablette">Tablette</SelectItem>
+              <SelectItem value="iPhone">iPhone</SelectItem>
+              <SelectItem value="iPad">iPad</SelectItem>
               <SelectItem value="Autre">Autre</SelectItem>
             </SelectContent>
           </Select>
