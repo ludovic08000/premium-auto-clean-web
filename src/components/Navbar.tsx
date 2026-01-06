@@ -29,7 +29,6 @@ const Navbar = () => {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-6">
             <a href="#services" className="text-foreground/80 hover:text-primary transition-colors">Services</a>
-            <a href="#tarifs" className="text-foreground/80 hover:text-primary transition-colors">Tarifs</a>
             <a href="#about" className="text-foreground/80 hover:text-primary transition-colors">À propos</a>
             <a href="#contact" className="text-foreground/80 hover:text-primary transition-colors">Contact</a>
             <a href="tel:0600000000" className="flex items-center gap-2 btn-primary">
@@ -51,7 +50,6 @@ const Navbar = () => {
           <div className="container mx-auto px-4 py-4">
             <nav className="flex flex-col space-y-4">
               <a href="#services" className="text-foreground py-2 px-4 hover:bg-secondary rounded-md" onClick={toggleMobileMenu}>Services</a>
-              <a href="#tarifs" className="text-foreground py-2 px-4 hover:bg-secondary rounded-md" onClick={toggleMobileMenu}>Tarifs</a>
               <a href="#about" className="text-foreground py-2 px-4 hover:bg-secondary rounded-md" onClick={toggleMobileMenu}>À propos</a>
               <a href="#contact" className="text-foreground py-2 px-4 hover:bg-secondary rounded-md" onClick={toggleMobileMenu}>Contact</a>
               <a href="tel:0600000000" className="flex items-center gap-2 py-2 px-4 btn-primary">
