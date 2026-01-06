@@ -13,8 +13,9 @@ import ServiceSelector from "@/components/contact/ServiceSelector";
 import DateSelector from "@/components/contact/DateSelector";
 import TimeSelector from "@/components/contact/TimeSelector";
 import MessageField from "@/components/contact/MessageField";
-import { Send, Phone, Mail, MapPin } from "lucide-react";
+import { Send, Phone, Mail, MapPin, Terminal } from "lucide-react";
 import { toast } from "sonner";
+import { motion } from "framer-motion";
 
 const ContactForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -60,52 +61,94 @@ const ContactForm = () => {
   };
 
   return (
-    <section id="contact" className="py-20 bg-secondary/30">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+    <section id="contact" className="py-24 relative overflow-hidden">
+      {/* Background */}
+      <div className="absolute inset-0 cyber-grid opacity-30" />
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-neon-magenta/50 to-transparent" />
+      
+      <div className="container mx-auto px-4 relative z-10">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
+          <span className="text-neon-cyan text-sm uppercase tracking-widest font-mono mb-4 block">
+            // Contact
+          </span>
+          <h2 className="text-3xl md:text-4xl font-display font-bold uppercase tracking-wider">
+            Envoyez votre <span className="neon-text-cyan">demande</span>
+          </h2>
+        </motion.div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 max-w-6xl mx-auto">
           {/* Contact Info */}
-          <div>
-            <h2 className="section-heading">Contactez-nous</h2>
-            <p className="text-muted-foreground mb-8">
-              Décrivez votre problème et on vous rappelle rapidement pour en discuter.
-            </p>
-            
-            <div className="space-y-6">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center">
-                  <Phone className="text-primary" size={20} />
-                </div>
-                <div>
-                  <div className="text-sm text-muted-foreground">Téléphone</div>
-                  <a href="tel:0649754342" className="font-semibold hover:text-primary">06 49 75 43 42</a>
-                </div>
+          <motion.div 
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <div className="neon-card h-full">
+              <div className="flex items-center gap-2 mb-6">
+                <Terminal className="text-neon-cyan" size={20} />
+                <span className="font-mono text-sm text-neon-cyan">CONTACT_INFO</span>
               </div>
               
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center">
-                  <Mail className="text-primary" size={20} />
-                </div>
-                <div>
-                  <div className="text-sm text-muted-foreground">Email</div>
-                  <a href="mailto:ludovic43@msn.com" className="font-semibold hover:text-primary">ludovic43@msn.com</a>
-                </div>
-              </div>
+              <p className="text-muted-foreground mb-8 font-mono text-sm">
+                {">"} Décrivez votre problème<br />
+                {">"} On vous rappelle rapidement
+              </p>
               
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center">
-                  <MapPin className="text-primary" size={20} />
-                </div>
-                <div>
-                  <div className="text-sm text-muted-foreground">Horaires</div>
-                  <div className="font-semibold">Lun-Ven : 9h-18h</div>
+              <div className="space-y-6">
+                <a href="tel:0649754342" className="flex items-center gap-4 group">
+                  <div className="w-12 h-12 flex items-center justify-center border border-neon-cyan/30 group-hover:border-neon-cyan transition-colors">
+                    <Phone className="text-neon-cyan" size={20} />
+                  </div>
+                  <div>
+                    <div className="text-xs text-muted-foreground font-mono uppercase">Téléphone</div>
+                    <span className="font-display font-bold group-hover:neon-text-cyan transition-all">06 49 75 43 42</span>
+                  </div>
+                </a>
+                
+                <a href="mailto:ludovic43@msn.com" className="flex items-center gap-4 group">
+                  <div className="w-12 h-12 flex items-center justify-center border border-neon-magenta/30 group-hover:border-neon-magenta transition-colors">
+                    <Mail className="text-neon-magenta" size={20} />
+                  </div>
+                  <div>
+                    <div className="text-xs text-muted-foreground font-mono uppercase">Email</div>
+                    <span className="font-display font-bold group-hover:neon-text-magenta transition-all">ludovic43@msn.com</span>
+                  </div>
+                </a>
+                
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 flex items-center justify-center border border-neon-purple/30">
+                    <MapPin className="text-accent" size={20} />
+                  </div>
+                  <div>
+                    <div className="text-xs text-muted-foreground font-mono uppercase">Horaires</div>
+                    <span className="font-display font-bold">Lun-Ven : 9h-18h</span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
           
           {/* Form */}
-          <div className="lg:col-span-2">
-            <div className="bg-card rounded-2xl p-6 md:p-8 shadow-sm border border-border">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            viewport={{ once: true }}
+            className="lg:col-span-2"
+          >
+            <div className="neon-card">
+              <div className="flex items-center gap-2 mb-6">
+                <div className="w-3 h-3 rounded-full bg-neon-green animate-pulse" />
+                <span className="font-mono text-sm text-muted-foreground">FORM_ACTIVE</span>
+              </div>
+
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                   <input type="hidden" name="csrf_token" value={csrfToken} />
@@ -126,20 +169,25 @@ const ContactForm = () => {
                   
                   <Button
                     type="submit"
-                    className="w-full btn-primary"
+                    className="w-full btn-primary !py-4"
                     disabled={isSubmitting}
                   >
-                    {isSubmitting ? "Envoi en cours..." : (
-                      <span className="flex items-center justify-center gap-2">
+                    {isSubmitting ? (
+                      <span className="flex items-center gap-2 font-mono">
+                        <div className="w-4 h-4 border-2 border-neon-cyan border-t-transparent rounded-full animate-spin" />
+                        PROCESSING...
+                      </span>
+                    ) : (
+                      <span className="flex items-center justify-center gap-2 relative z-10">
                         <Send size={18} />
-                        Envoyer ma demande
+                        ENVOYER
                       </span>
                     )}
                   </Button>
                 </form>
               </Form>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>
