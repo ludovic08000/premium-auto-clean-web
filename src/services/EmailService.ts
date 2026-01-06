@@ -47,7 +47,7 @@ export const sendEmail = async (values: any): Promise<boolean> => {
     // Envoi de l'email avec EmailJS (notification admin)
     const adminResponse = await emailjs.send(
       "service_iw026g2",
-      "template_gw4kn1m",
+      "template_96jg6up",
       adminTemplateParams
     );
     
@@ -76,7 +76,7 @@ export const sendEmail = async (values: any): Promise<boolean> => {
     // Envoi de l'email de confirmation au client
     const clientResponse = await emailjs.send(
       "service_iw026g2",
-      "template_x6ttulj",
+      "template_96jg6up",
       clientTemplateParams
     );
     
