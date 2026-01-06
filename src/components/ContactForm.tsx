@@ -17,19 +17,12 @@ import { Send } from "lucide-react";
 import { toast } from "sonner";
 
 const ContactForm = () => {
-  console.log("ContactForm component is rendering");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [csrfToken, setCsrfToken] = useState("");
 
   useEffect(() => {
-    console.log("ContactForm component is mounted");
-    // Générer un token CSRF au chargement du composant
     const newToken = generateCSRFToken();
     setCsrfToken(newToken);
-    
-    return () => {
-      console.log("ContactForm component is unmounting");
-    };
   }, []);
 
   const form = useForm<ContactFormValues>({
@@ -40,16 +33,13 @@ const ContactForm = () => {
       telephone: "",
       vehicule: "",
       service: "",
-      date: new Date(), // Date par défaut nécessaire
+      date: new Date(),
       heure: "",
       message: "",
     },
   });
 
   const onSubmit = async (values: ContactFormValues) => {
-    console.log("Submitting form with values:", values);
-    
-    // Vérification du token CSRF
     if (!validateCSRFToken(csrfToken)) {
       toast.error("Erreur de sécurité: veuillez rafraîchir la page et réessayer.");
       return;
@@ -57,12 +47,10 @@ const ContactForm = () => {
     
     setIsSubmitting(true);
     try {
-      // Ajoute le token CSRF aux données envoyées
       const valuesWithCSRF = { ...values, csrfToken };
       const success = await sendEmail(valuesWithCSRF);
       if (success) {
         form.reset();
-        // Générer un nouveau token CSRF après soumission réussie
         const newToken = generateCSRFToken();
         setCsrfToken(newToken);
       }
@@ -73,13 +61,16 @@ const ContactForm = () => {
 
   return (
     <div id="contact" className="container py-16">
-      <h2 className="text-3xl font-bold text-center mb-8 gold-gradient-text">
+      <h2 className="section-heading text-center">
         Demandez un rendez-vous
       </h2>
+      <p className="text-center text-foreground/70 max-w-2xl mx-auto mb-8">
+        Décrivez votre problème et nous vous recontacterons rapidement pour fixer un rendez-vous.
+        Diagnostic gratuit pour toute demande de réparation.
+      </p>
       <div className="card-premium p-6 md:p-8 max-w-4xl mx-auto">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            {/* Champ caché pour le token CSRF */}
             <input type="hidden" name="csrf_token" value={csrfToken} />
             
             <PersonalInfoFields form={form} />
@@ -100,7 +91,7 @@ const ContactForm = () => {
             
             <Button
               type="submit"
-              className="w-full bg-gradient-gold text-dark font-medium hover:shadow-[0_0_15px_rgba(212,175,55,0.5)] transition-all"
+              className="w-full btn-primary"
               disabled={isSubmitting}
             >
               {isSubmitting ? "Envoi en cours..." : (

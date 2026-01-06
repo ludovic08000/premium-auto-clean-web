@@ -14,7 +14,7 @@ export const sendEmail = async (values: any): Promise<boolean> => {
   
   // Vérifie le token CSRF
   const csrfToken = values.csrfToken;
-  delete values.csrfToken; // Supprime le token des données à envoyer
+  delete values.csrfToken;
   
   if (!csrfToken || !validateCSRFToken(csrfToken)) {
     console.error("CSRF token invalid or missing");
@@ -28,7 +28,7 @@ export const sendEmail = async (values: any): Promise<boolean> => {
     
     // Préparation des données pour l'envoi par EmailJS (notification admin)
     const adminTemplateParams = {
-      to_name: "Administration Premium Auto Clean",
+      to_name: "Tech Repair Pro",
       from_name: values.nom,
       reply_to: values.email,
       subject: `Nouvelle demande de ${values.service}`,
@@ -39,7 +39,7 @@ export const sendEmail = async (values: any): Promise<boolean> => {
       service: values.service,
       date: formattedDateTime,
       message: values.message || "",
-      to_email: "contact@premiumautoclean.com",
+      to_email: "ludovic43@msn.com",
     };
     
     console.log("Préparation des données pour EmailJS:", adminTemplateParams);
@@ -57,14 +57,14 @@ export const sendEmail = async (values: any): Promise<boolean> => {
     const clientTemplateParams = {
       to_name: values.nom || "Client",
       to_email: values.email,
-      reply_to: "contact@premiumautoclean.com",
-      from_name: "Premium Auto Clean",
-      from_email: "contact@premiumautoclean.com",
+      reply_to: "ludovic43@msn.com",
+      from_name: "Tech Repair Pro",
+      from_email: "ludovic43@msn.com",
       service: values.service || "Service demandé",
-      vehicule: values.vehicule || "Véhicule",
+      vehicule: values.vehicule || "Appareil",
       date: formattedDateTime,
       date_souhaitee: formattedDateTime,
-      subject: "✅ Confirmation RDV - Premium Auto Clean",
+      subject: "✅ Confirmation de votre demande - Tech Repair Pro",
       email: values.email,
       nom: values.nom,
       telephone: values.telephone,
@@ -73,7 +73,7 @@ export const sendEmail = async (values: any): Promise<boolean> => {
     
     console.log("Envoi de confirmation au client:", clientTemplateParams);
     
-    // Envoi de l'email de confirmation au client avec le template auto-reply
+    // Envoi de l'email de confirmation au client
     const clientResponse = await emailjs.send(
       "premium_smtp",
       "template_x6ttulj",
@@ -91,7 +91,6 @@ export const sendEmail = async (values: any): Promise<boolean> => {
     }
   } catch (error) {
     console.error("Erreur lors de l'envoi de l'email:", error, typeof error);
-    // Affichage d'informations plus détaillées sur l'erreur
     if (error instanceof Error) {
       toast.error(`Erreur: ${error.message}`);
     } else {
