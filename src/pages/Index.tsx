@@ -5,7 +5,6 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import AboutUs from "@/components/AboutUs";
 import Services from "@/components/Services";
-import Tarifs from "@/components/Tarifs";
 import ContactForm from "@/components/ContactForm";
 import Footer from "@/components/Footer";
 import { setupSessionTimeout } from "@/services/CSRFService";
@@ -49,63 +48,8 @@ const Index = () => {
       <main className="animate-fade-in">
         <Hero />
         <Services />
-        <Tarifs />
         <AboutUs />
         <ContactForm />
-
-        <script type="application/ld+json">{`
-          {
-            "@context": "https://schema.org",
-            "@type": "ItemList",
-            "itemListElement": [
-              {
-                "@type": "Service",
-                "position": 1,
-                "name": "Diagnostic PC/Mac",
-                "description": "Analyse complète de votre appareil pour identifier tous les problèmes matériels et logiciels.",
-                "provider": {
-                  "@type": "LocalBusiness",
-                  "name": "Tech Repair Pro"
-                },
-                "offers": {
-                  "@type": "Offer",
-                  "price": "29.00",
-                  "priceCurrency": "EUR"
-                }
-              },
-              {
-                "@type": "Service",
-                "position": 2,
-                "name": "Suppression Virus",
-                "description": "Élimination de virus, malwares, ransomwares et logiciels espions.",
-                "provider": {
-                  "@type": "LocalBusiness",
-                  "name": "Tech Repair Pro"
-                },
-                "offers": {
-                  "@type": "Offer",
-                  "price": "49.00",
-                  "priceCurrency": "EUR"
-                }
-              },
-              {
-                "@type": "Service",
-                "position": 3,
-                "name": "Récupération de données",
-                "description": "Récupération de fichiers sur disques durs endommagés ou corrompus.",
-                "provider": {
-                  "@type": "LocalBusiness",
-                  "name": "Tech Repair Pro"
-                },
-                "offers": {
-                  "@type": "Offer",
-                  "price": "89.00",
-                  "priceCurrency": "EUR"
-                }
-              }
-            ]
-          }
-        `}</script>
       </main>
       <Footer />
     </div>
