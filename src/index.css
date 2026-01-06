@@ -66,35 +66,14 @@
 
 @layer components {
   .section-heading {
-    @apply text-3xl md:text-4xl font-semibold mb-6 lg:mb-10 text-foreground;
-  }
-  
-  .card-service {
-    @apply bg-card rounded-2xl p-6 shadow-sm border border-border/50 transition-all duration-300 hover:shadow-md hover:border-primary/30;
+    @apply text-2xl md:text-3xl font-semibold mb-6 text-foreground;
   }
   
   .btn-primary {
-    @apply bg-primary text-primary-foreground font-medium px-6 py-3 rounded-xl transition-all duration-200 hover:bg-primary/90 shadow-sm hover:shadow-md;
+    @apply bg-primary text-primary-foreground font-medium px-6 py-3 rounded-lg transition-colors hover:bg-primary/90;
   }
   
   .btn-secondary {
-    @apply bg-secondary text-secondary-foreground font-medium px-6 py-3 rounded-xl transition-all duration-200 hover:bg-secondary/80 border border-border;
-  }
-
-  /* Legacy aliases */
-  .card-premium {
-    @apply card-service;
-  }
-  
-  .btn-gold {
-    @apply btn-primary;
-  }
-  
-  .tech-gradient-text {
-    @apply text-primary;
-  }
-  
-  .gold-gradient-text {
-    @apply text-primary;
+    @apply bg-white text-foreground font-medium px-6 py-3 rounded-lg transition-colors hover:bg-secondary border border-border;
   }
 }
