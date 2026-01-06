@@ -19,7 +19,7 @@ const AboutUs = () => {
         
         <div className="max-w-4xl mx-auto mb-16">
           <p className="text-foreground/70 text-center mb-8">
-            Bienvenue chez Tech Repair Pro, votre expert en réparation informatique de confiance. 
+            Bienvenue chez Nevexo, votre expert en réparation informatique de confiance. 
             Depuis plus de 10 ans, nous accompagnons particuliers et professionnels dans la résolution 
             de tous leurs problèmes informatiques.
           </p>
