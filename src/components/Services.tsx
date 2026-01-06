@@ -21,13 +21,13 @@ const Services = () => {
         
         <div className="text-center max-w-3xl mx-auto mb-12">
           <p className="text-foreground/70">
-            Tech Repair Pro vous propose une gamme complète de services de réparation et maintenance informatique. 
+            Nevexo vous propose une gamme complète de services de réparation et maintenance informatique. 
             Que ce soit pour un problème matériel ou logiciel, notre équipe d'experts est là pour vous aider.
           </p>
         </div>
         
         <div className="mb-16">
-          <h2 className="text-2xl font-display font-bold text-primary mb-6 text-center">Réparation PC & Mac</h2>
+          <h2 className="text-2xl font-bold text-primary mb-6 text-center">Réparation PC & Mac</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <ServiceCard
               title="Diagnostic Complet"
@@ -53,7 +53,7 @@ const Services = () => {
         </div>
         
         <div className="mb-16">
-          <h2 className="text-2xl font-display font-bold text-primary mb-6 text-center">Smartphones & Tablettes</h2>
+          <h2 className="text-2xl font-bold text-primary mb-6 text-center">Smartphones & Tablettes</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="card-premium">
               <div className="flex items-center gap-3 mb-3">
@@ -80,7 +80,7 @@ const Services = () => {
         </div>
         
         <div>
-          <h2 className="text-2xl font-display font-bold text-primary mb-6 text-center">Services Additionnels</h2>
+          <h2 className="text-2xl font-bold text-primary mb-6 text-center">Services Additionnels</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="card-premium">
               <div className="flex items-center gap-3 mb-3">

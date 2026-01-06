@@ -28,7 +28,7 @@ export const sendEmail = async (values: any): Promise<boolean> => {
     
     // Préparation des données pour l'envoi par EmailJS (notification admin)
     const adminTemplateParams = {
-      to_name: "Tech Repair Pro",
+      to_name: "Nevexo",
       from_name: values.nom,
       reply_to: values.email,
       subject: `Nouvelle demande de ${values.service}`,
@@ -58,13 +58,13 @@ export const sendEmail = async (values: any): Promise<boolean> => {
       to_name: values.nom || "Client",
       to_email: values.email,
       reply_to: "ludovic43@msn.com",
-      from_name: "Tech Repair Pro",
+      from_name: "Nevexo",
       from_email: "ludovic43@msn.com",
       service: values.service || "Service demandé",
       vehicule: values.vehicule || "Appareil",
       date: formattedDateTime,
       date_souhaitee: formattedDateTime,
-      subject: "✅ Confirmation de votre demande - Tech Repair Pro",
+      subject: "✅ Confirmation de votre demande - Nevexo",
       email: values.email,
       nom: values.nom,
       telephone: values.telephone,

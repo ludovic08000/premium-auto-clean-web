@@ -17,19 +17,20 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Helmet>
-        <title>Tech Repair Pro - Réparation Informatique Professionnelle</title>
+        <title>Nevexo - Réparation Informatique Professionnelle</title>
         <meta name="description" content="Service professionnel de réparation informatique. PC, Mac, smartphones et tablettes. Diagnostic gratuit, devis transparent, garantie 6 mois sur toutes nos réparations." />
-        <meta name="keywords" content="réparation informatique, réparation PC, réparation Mac, réparation smartphone, dépannage informatique, récupération données, suppression virus" />
-        <link rel="canonical" href="https://techrepairpro.com/" />
+        <meta name="keywords" content="réparation informatique, réparation PC, réparation Mac, réparation smartphone, dépannage informatique, récupération données, suppression virus, Nevexo" />
+        <link rel="canonical" href="https://nevexo.fr/" />
         
         <script type="application/ld+json">{`
           {
             "@context": "https://schema.org",
             "@type": "LocalBusiness",
-            "name": "Tech Repair Pro",
-            "url": "https://techrepairpro.com",
+            "name": "Nevexo",
+            "url": "https://nevexo.fr",
             "description": "Service professionnel de réparation informatique. PC, Mac, smartphones et tablettes.",
             "email": "ludovic43@msn.com",
+            "telephone": "+33649754342",
             "priceRange": "€€",
             "openingHoursSpecification": [
               {
