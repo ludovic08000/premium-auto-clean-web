@@ -30,8 +30,8 @@ const AboutUs = () => {
             <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
               <Clock className="text-primary" size={24} />
             </div>
-            <h4 className="font-medium mb-2">Réparation sous 48h</h4>
-            <p className="text-muted-foreground text-sm">La plupart des réparations sont rapides.</p>
+            <h4 className="font-medium mb-2">Réparation rapide</h4>
+            <p className="text-muted-foreground text-sm">Dès que j'ai les pièces, c'est fait.</p>
           </div>
         </div>
       </div>
